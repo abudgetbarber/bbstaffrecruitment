@@ -122,9 +122,10 @@
 /* ── PHOTO LIGHTBOX ───────────────────────────────────── */
 .lightbox {
   position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000;
-  display: none; align-items: center; justify-content: center; padding: 20px; flex-direction: column; gap: 12px;
+  display: none; pointer-events: none;
+  align-items: center; justify-content: center; padding: 20px; flex-direction: column; gap: 12px;
 }
-.lightbox.open { display: flex; }
+.lightbox.open { display: flex; pointer-events: all; }
 .lightbox img { max-width: 90vw; max-height: 80vh; border-radius: 10px; object-fit: contain; }
 .lightbox-close { position: absolute; top: 20px; right: 24px; font-size: 2rem; color: white; cursor: pointer; background: none; border: none; }
 .lightbox-caption { color: rgba(255,255,255,0.6); font-size: 0.82rem; }
@@ -188,7 +189,7 @@
 <body>
 
 <!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+<div class="lightbox" id="lightbox" onclick="closeLightbox()" style="display:none; pointer-events:none;">
   <button class="lightbox-close" onclick="closeLightbox()">×</button>
   <img id="lb-img" src="" alt="">
   <div class="lightbox-caption" id="lb-cap"></div>
@@ -549,11 +550,19 @@ function getPin(gid) {
 
 // ── LIGHTBOX ──────────────────────────────────────────────────
 function openLB(src, cap) {
+  const lb = document.getElementById('lightbox');
   document.getElementById('lb-img').src = src;
   document.getElementById('lb-cap').textContent = cap || '';
-  document.getElementById('lightbox').classList.add('open');
+  lb.style.display = 'flex';
+  lb.style.pointerEvents = 'all';
+  lb.classList.add('open');
 }
-function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+function closeLightbox() {
+  const lb = document.getElementById('lightbox');
+  lb.style.display = 'none';
+  lb.style.pointerEvents = 'none';
+  lb.classList.remove('open');
+}
 
 // ── VIEW HELPERS ──────────────────────────────────────────────
 function show(id) {
