@@ -165,37 +165,97 @@
 
   <!-- ── RECRUITERS TAB ── -->
   <div class="tab-pane" id="adm-recruiters">
-    <div class="filter-bar">
-      <input type="text" class="filter-search" id="f_rec_search" placeholder="🔍 Search salon, email, location…" oninput="renderRecruiterTable()">
-      <select id="f_rec_plan" onchange="renderRecruiterTable()">
-        <option value="">All Plans</option>
-        <option value="basic">Basic</option>
-        <option value="premium">Premium</option>
-      </select>
-      <button class="btn btn-primary btn-sm" onclick="openModal('create-rec-modal')">+ Create Recruiter Account</button>
+    <div class="tab-bar" id="rec-subtabs" style="border-bottom:1px solid var(--border); padding:0 20px; margin-bottom:0;">
+      <button class="tab-btn active" data-tab="rst-all" onclick="switchTab('rec-subtabs','rst-all')">All Recruiters</button>
+      <button class="tab-btn" data-tab="rst-pending" onclick="switchTab('rec-subtabs','rst-pending')">
+        ⏳ Upgrade Requests <span id="pending-count" style="background:var(--red);color:white;font-size:0.6rem;padding:1px 6px;border-radius:10px;margin-left:4px;font-weight:800;"></span>
+      </button>
+      <button class="tab-btn" data-tab="rst-payments" onclick="switchTab('rec-subtabs','rst-payments')">💳 Payment Config</button>
     </div>
-    <div class="table-area">
-      <div class="data-table-wrap">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Salon Name</th>
-              <th>Email</th>
-              <th>Location</th>
-              <th>Franchise</th>
-              <th>Plan</th>
-              <th>Registered</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="rec-tbody"></tbody>
-        </table>
+
+    <!-- All Recruiters subtab -->
+    <div class="tab-pane active" id="rst-all">
+      <div class="filter-bar">
+        <input type="text" class="filter-search" id="f_rec_search" placeholder="🔍 Search salon, phone, location…" oninput="renderRecruiterTable()">
+        <select id="f_rec_plan" onchange="renderRecruiterTable()">
+          <option value="">All Plans</option>
+          <option value="basic">Basic</option>
+          <option value="premium">Premium</option>
+        </select>
+        <button class="btn btn-primary btn-sm" onclick="openModal('create-rec-modal')">+ Create Account</button>
+      </div>
+      <div class="table-area">
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th><th>Salon Name</th><th>Phone</th><th>Location</th>
+                <th>Franchise</th><th>Plan</th><th>Expiry</th><th>Registered</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rec-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Upgrade Requests -->
+    <div class="tab-pane" id="rst-pending">
+      <div class="table-area" style="padding-top:16px;">
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Salon Name</th><th>Phone</th><th>Location</th>
+                <th>Pay Method</th><th>UTR / Ref</th><th>Request Date</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="pending-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Config subtab -->
+    <div class="tab-pane" id="rst-payments">
+      <div style="padding:24px; max-width:560px;">
+        <div class="card">
+          <div class="card-header"><span style="font-size:1.3rem;">💳</span><div><h2>Payment Configuration</h2><span>भुगतान सेटअप — configure how recruiters pay</span></div></div>
+          <div class="card-body">
+            <div class="section-label">Razorpay / रेज़रपे</div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">Razorpay API Key</label>
+              <input type="text" id="cfg_rzp_key" placeholder="rzp_live_XXXXXXXXXX">
+              <div class="form-hint">Leave blank to hide Razorpay option from recruiters</div>
+            </div>
+            <div class="section-label" style="margin-top:16px;">Cashfree / कैशफ्री</div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">Cashfree App ID</label>
+              <input type="text" id="cfg_cf_appid" placeholder="Cashfree App ID">
+              <div class="form-hint">Leave blank to hide Cashfree option</div>
+            </div>
+            <div class="section-label" style="margin-top:16px;">UPI Direct / UPI ID</div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">UPI ID</label>
+              <input type="text" id="cfg_upi" placeholder="yourname@upi or 9876543210@paytm">
+              <div class="form-hint">Recruiters can copy &amp; pay directly to this UPI ID</div>
+            </div>
+            <div class="section-label" style="margin-top:16px;">QR Code / क्यूआर कोड</div>
+            <div class="form-group" style="margin-bottom:16px;">
+              <label class="form-label">QR Code Image URL</label>
+              <input type="url" id="cfg_qr_url" placeholder="https://your-qr-image-url.com/qr.png">
+              <div class="form-hint">Paste the URL of your payment QR code image. Recruiters will scan it.</div>
+            </div>
+            <div id="qr-preview" style="text-align:center; margin-bottom:14px; display:none;">
+              <img id="qr-preview-img" style="max-width:160px; border-radius:8px; border:1px solid var(--border);" alt="QR Preview">
+              <div style="font-size:0.7rem; color:var(--text-light); margin-top:4px;">QR Preview</div>
+            </div>
+            <button class="btn btn-primary btn-block" onclick="savePayConfig()">💾 Save Payment Config</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
-</div>
 
 <!-- ══════════════════ MODALS ══════════════════ -->
 
@@ -229,12 +289,12 @@
           <input type="text" id="nr_salon" placeholder="Salon Name">
         </div>
         <div class="form-group">
-          <label class="form-label">Email <span class="req">*</span></label>
-          <input type="email" id="nr_email" placeholder="Email">
+          <label class="form-label">Phone Number <span class="req">*</span></label>
+          <input type="tel" id="nr_phone" placeholder="10-digit mobile" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'')">
         </div>
         <div class="form-group">
-          <label class="form-label">Password <span class="req">*</span></label>
-          <input type="password" id="nr_pass" placeholder="Password">
+          <label class="form-label">6-Digit PIN <span class="req">*</span></label>
+          <input type="password" id="nr_pin" placeholder="Set 6-digit PIN" maxlength="6" inputmode="numeric">
         </div>
         <div class="form-group">
           <label class="form-label">Location</label>
@@ -247,12 +307,16 @@
             <option value="yes">Yes</option>
           </select>
         </div>
-        <div class="form-group" style="grid-column:1/-1;">
+        <div class="form-group">
           <label class="form-label">Plan</label>
-          <select id="nr_plan">
+          <select id="nr_plan" onchange="toggleExpiry()">
             <option value="basic">Basic — Phone numbers hidden</option>
-            <option value="premium">Premium — Full access to phone numbers</option>
+            <option value="premium">Premium — Full access</option>
           </select>
+        </div>
+        <div class="form-group" id="expiry-group" style="display:none;">
+          <label class="form-label">Premium Expiry Date</label>
+          <input type="date" id="nr_expiry">
         </div>
       </div>
     </div>
@@ -300,6 +364,7 @@ function doLogout() {
 function showDashboard() {
   show('view-dashboard');
   document.getElementById('btn-admin-logout').style.display = 'inline-flex';
+  loadPayConfig();
   refreshAll();
 }
 
@@ -431,24 +496,29 @@ function doExport() {
 function renderRecruiterTable() {
   const search = document.getElementById('f_rec_search')?.value.toLowerCase() || '';
   const plan   = document.getElementById('f_rec_plan')?.value || '';
-
   let all = getRecruiters();
   if (search) all = all.filter(r =>
     r.salon_name.toLowerCase().includes(search) ||
-    r.email.toLowerCase().includes(search) ||
+    (r.phone||'').includes(search) ||
     (r.location||'').toLowerCase().includes(search)
   );
   if (plan) all = all.filter(r => r.plan === plan);
 
   const tbody = document.getElementById('rec-tbody');
-  tbody.innerHTML = all.length ? all.map(r => `
+  tbody.innerHTML = all.length ? all.map(r => {
+    const exp = r.plan_expiry ? new Date(r.plan_expiry) : null;
+    const daysLeft = exp ? Math.ceil((exp - new Date()) / 86400000) : null;
+    const expiryTxt = exp ? `${exp.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})} (${daysLeft}d)` : '—';
+    const expClass = daysLeft !== null && daysLeft <= 7 ? 'color:var(--red);font-weight:700;' : '';
+    return `
     <tr>
       <td><code>${r.id}</code></td>
       <td><strong>${r.salon_name}</strong></td>
-      <td>${r.email}</td>
+      <td>${r.phone||'—'}</td>
       <td>${r.location||'—'}</td>
       <td>${r.franchise === 'yes' ? 'Yes' : 'No'}</td>
       <td><span class="badge ${r.plan === 'premium' ? 'badge-premium' : 'badge-basic'}">${r.plan.toUpperCase()}</span></td>
+      <td style="font-size:0.72rem;${expClass}">${expiryTxt}</td>
       <td style="font-size:0.72rem; color:var(--text-light);">${r.created_at ? new Date(r.created_at).toLocaleDateString('en-IN') : '—'}</td>
       <td>
         <div class="tbl-actions">
@@ -458,49 +528,139 @@ function renderRecruiterTable() {
           <button class="act-delete" onclick="deleteRecruiter('${r.id}')">🗑</button>
         </div>
       </td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--text-light);">No recruiters found</td></tr>`;
+
+  // Also render pending
+  renderPendingRequests();
+}
+
+function renderPendingRequests() {
+  const pending = getRecruiters().filter(r => r.plan_requested && r.plan !== 'premium');
+  const badge = document.getElementById('pending-count');
+  if (badge) badge.textContent = pending.length > 0 ? pending.length : '';
+  const tbody = document.getElementById('pending-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = pending.length ? pending.map(r => `
+    <tr>
+      <td><strong>${r.salon_name}</strong></td>
+      <td>${r.phone||'—'}</td>
+      <td>${r.location||'—'}</td>
+      <td><span class="badge badge-basic">${(r.plan_request_method||'manual').toUpperCase()}</span></td>
+      <td style="font-family:monospace; font-size:0.78rem;">${r.plan_request_ref||'—'}</td>
+      <td style="font-size:0.72rem;">${r.plan_request_date ? new Date(r.plan_request_date).toLocaleString('en-IN') : '—'}</td>
+      <td>
+        <div class="tbl-actions">
+          <button class="act-premium" onclick="activatePremium('${r.id}')">⭐ Activate Premium</button>
+          <button class="act-delete" onclick="dismissRequest('${r.id}')">✗ Dismiss</button>
+        </div>
+      </td>
     </tr>
-  `).join('') : `<tr><td colspan="8" style="text-align:center; padding:28px; color:var(--text-light);">No recruiters found</td></tr>`;
+  `).join('') : `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--text-light);">No pending upgrade requests</td></tr>`;
+}
+
+function activatePremium(id) {
+  const all = getRecruiters();
+  const r   = all.find(rec => rec.id === id);
+  if (!r) return;
+  // Set expiry to 30 days from today
+  const expiry = new Date(Date.now() + 30*86400000).toISOString();
+  r.plan = 'premium'; r.plan_expiry = expiry; r.plan_requested = false;
+  saveRecruiters(all); refreshAll();
+  showToast(`Premium activated for ${r.salon_name} — valid 30 days`, 'success');
+}
+
+function dismissRequest(id) {
+  const all = getRecruiters();
+  const r   = all.find(rec => rec.id === id);
+  if (r) { r.plan_requested = false; saveRecruiters(all); refreshAll(); showToast('Request dismissed', 'info'); }
+}
+
+function toggleExpiry() {
+  const plan = document.getElementById('nr_plan')?.value;
+  document.getElementById('expiry-group').style.display = plan === 'premium' ? 'block' : 'none';
+  if (plan === 'premium' && !document.getElementById('nr_expiry').value) {
+    // Default 30 days
+    const d = new Date(Date.now() + 30*86400000);
+    document.getElementById('nr_expiry').value = d.toISOString().slice(0,10);
+  }
 }
 
 function togglePlan(id) {
   const all = getRecruiters();
-  const r = all.find(rec => rec.id === id);
-  if (r) {
-    r.plan = r.plan === 'premium' ? 'basic' : 'premium';
-    saveRecruiters(all);
-    refreshAll();
-    showToast(`Plan updated → ${r.plan.toUpperCase()}`, 'success');
+  const r   = all.find(rec => rec.id === id);
+  if (!r) return;
+  if (r.plan === 'premium') {
+    r.plan = 'basic'; r.plan_expiry = null;
+  } else {
+    r.plan = 'premium';
+    r.plan_expiry = new Date(Date.now() + 30*86400000).toISOString();
+    r.plan_requested = false;
   }
+  saveRecruiters(all); refreshAll();
+  showToast(`Plan updated → ${r.plan.toUpperCase()} ${r.plan === 'premium' ? '(30 days)' : ''}`, 'success');
 }
 
 function deleteRecruiter(id) {
   if (!confirm('Delete this recruiter account?')) return;
   saveRecruiters(getRecruiters().filter(r => r.id !== id));
-  refreshAll();
-  showToast('Recruiter deleted', 'info');
+  refreshAll(); showToast('Recruiter deleted', 'info');
 }
 
 function createRecruiter() {
   const salon = document.getElementById('nr_salon').value.trim();
-  const email = document.getElementById('nr_email').value.trim();
-  const pass  = document.getElementById('nr_pass').value;
-  if (!salon || !email || !pass) { showToast('Please fill required fields', 'error'); return; }
+  const phone = document.getElementById('nr_phone').value.trim();
+  const pin   = document.getElementById('nr_pin').value.trim();
+  if (!salon || !phone) { showToast('Please fill required fields', 'error'); return; }
+  if (phone.length < 10) { showToast('Enter valid 10-digit phone', 'error'); return; }
+  if (!pin || pin.length !== 6) { showToast('Enter a 6-digit PIN', 'error'); return; }
   const all = getRecruiters();
-  if (all.find(r => r.email === email)) { showToast('Email already exists', 'error'); return; }
+  if (all.find(r => r.phone === phone)) { showToast('Phone already registered', 'error'); return; }
+  const plan   = document.getElementById('nr_plan').value;
+  const expiry = plan === 'premium' ? (document.getElementById('nr_expiry').value ? new Date(document.getElementById('nr_expiry').value).toISOString() : new Date(Date.now()+30*86400000).toISOString()) : null;
   all.push({
-    id: 'REC-' + Date.now(),
-    salon_name: salon, email, password: pass,
+    id: 'REC-' + Date.now(), salon_name: salon, phone, pin,
     location: document.getElementById('nr_loc').value,
     franchise: document.getElementById('nr_franchise').value,
-    plan: document.getElementById('nr_plan').value,
+    plan, plan_expiry: expiry, plan_requested: false,
     created_at: new Date().toISOString()
   });
-  saveRecruiters(all);
-  refreshAll();
-  closeModal('create-rec-modal');
+  saveRecruiters(all); refreshAll(); closeModal('create-rec-modal');
   showToast('Recruiter account created!', 'success');
-  // Clear form
-  ['nr_salon','nr_email','nr_pass','nr_loc'].forEach(id => document.getElementById(id).value = '');
+  ['nr_salon','nr_phone','nr_pin','nr_loc'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+}
+
+// ── PAYMENT CONFIG ────────────────────────────────────────────
+function loadPayConfig() {
+  try {
+    const cfg = JSON.parse(localStorage.getItem('bb_payment_config') || '{}');
+    document.getElementById('cfg_rzp_key').value  = cfg.razorpay_key   || '';
+    document.getElementById('cfg_cf_appid').value = cfg.cashfree_appid || '';
+    document.getElementById('cfg_upi').value       = cfg.upi_id         || '';
+    document.getElementById('cfg_qr_url').value    = cfg.qr_image_url   || '';
+    if (cfg.qr_image_url) showQRPreview(cfg.qr_image_url);
+    // Live preview on QR URL change
+    document.getElementById('cfg_qr_url').addEventListener('input', e => {
+      if (e.target.value) showQRPreview(e.target.value); else document.getElementById('qr-preview').style.display = 'none';
+    });
+  } catch(e) { console.warn(e); }
+}
+
+function showQRPreview(url) {
+  const pv = document.getElementById('qr-preview');
+  document.getElementById('qr-preview-img').src = url;
+  pv.style.display = 'block';
+}
+
+function savePayConfig() {
+  const cfg = {
+    razorpay_key:   document.getElementById('cfg_rzp_key').value.trim(),
+    cashfree_appid: document.getElementById('cfg_cf_appid').value.trim(),
+    upi_id:         document.getElementById('cfg_upi').value.trim(),
+    qr_image_url:   document.getElementById('cfg_qr_url').value.trim(),
+  };
+  localStorage.setItem('bb_payment_config', JSON.stringify(cfg));
+  showToast('Payment config saved! / भुगतान सेटअप सहेजा गया', 'success');
 }
 </script>
 </body>

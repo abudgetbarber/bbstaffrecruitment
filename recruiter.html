@@ -6,6 +6,7 @@
 <title>Recruiter Portal — Budget Barber</title>
 <link rel="stylesheet" href="shared.css">
 <style>
+
 /* ── AUTH ─────────────────────────────────────────────── */
 .auth-page {
   min-height: calc(100vh - 60px);
@@ -15,89 +16,183 @@
 }
 .auth-box {
   background: white; border-radius: 20px;
-  padding: 40px 36px; max-width: 420px; width: 100%;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border);
+  padding: 36px 32px; max-width: 420px; width: 100%;
+  box-shadow: var(--shadow-lg); border: 1px solid var(--border);
 }
-.auth-icon { font-size: 3rem; text-align: center; margin-bottom: 8px; }
+.auth-icon { font-size: 2.8rem; text-align: center; margin-bottom: 8px; }
 .auth-title {
-  font-family: var(--font-display);
-  font-size: 1.8rem; font-weight: 900;
-  color: var(--green-800); text-align: center;
-  margin-bottom: 4px;
+  font-family: var(--font-display); font-size: 1.8rem; font-weight: 900;
+  color: var(--green-800); text-align: center; margin-bottom: 4px;
 }
-.auth-sub { text-align: center; color: var(--text-light); font-family: var(--font-hindi); font-size: 0.82rem; margin-bottom: 28px; }
-.auth-divider { text-align: center; margin: 16px 0; color: var(--text-light); font-size: 0.75rem; }
-.auth-switch { text-align: center; margin-top: 16px; }
+.auth-sub { text-align: center; color: var(--text-light); font-family: var(--font-hindi); font-size: 0.82rem; margin-bottom: 24px; }
+.auth-switch { text-align: center; margin-top: 14px; }
 .auth-switch button {
   background: none; border: none; color: var(--green-700);
   font-size: 0.8rem; cursor: pointer; font-family: var(--font-body);
-  font-weight: 600; text-decoration: underline;
+  font-weight: 600; text-decoration: underline; line-height: 1.7;
 }
+.pin-inputs { display: flex; gap: 8px; justify-content: center; margin-top: 6px; }
+.pin-inputs input {
+  width: 44px; height: 48px; text-align: center; font-size: 1.3rem;
+  font-weight: 700; border-radius: var(--radius-sm);
+  border: 2px solid var(--border); font-family: var(--font-display); padding: 0;
+  transition: border-color 0.15s;
+}
+.pin-inputs input:focus { border-color: var(--green-700); box-shadow: 0 0 0 3px rgba(46,125,90,0.12); outline: none; }
+.demo-hint { background: var(--bg); border-radius: var(--radius-sm); padding: 10px; text-align: center; font-size: 0.72rem; color: var(--text-light); margin-top: 14px; line-height: 1.7; }
 
-/* ── CANDIDATE CARDS ──────────────────────────────────── */
+/* ── CANDIDATE GRID ───────────────────────────────────── */
 .candidates-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 18px; padding: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px; padding: 20px 24px;
 }
 .cand-card {
-  background: white; border-radius: 16px;
-  overflow: hidden; box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: white; border-radius: 16px; overflow: hidden;
+  box-shadow: var(--shadow); border: 1px solid var(--border);
+  transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column;
 }
-.cand-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.cand-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
 .cand-top {
   background: linear-gradient(130deg, var(--green-800), var(--green-600));
-  padding: 16px; display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; display: flex; align-items: center; gap: 12px;
 }
 .cand-avatar {
-  width: 58px; height: 58px; border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  border: 3px solid var(--yellow);
+  width: 56px; height: 56px; border-radius: 50%;
+  background: rgba(255,255,255,0.15); border: 3px solid var(--yellow);
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-size: 1.6rem;
-  color: white; flex-shrink: 0; overflow: hidden;
+  font-family: var(--font-display); font-size: 1.5rem;
+  color: white; flex-shrink: 0; overflow: hidden; cursor: pointer;
 }
 .cand-avatar img { width:100%; height:100%; object-fit:cover; }
-.cand-name {
-  color: white; font-family: var(--font-display);
-  font-size: 1.05rem; font-weight: 800;
+.cand-name { color: white; font-family: var(--font-display); font-size: 1rem; font-weight: 800; }
+.cand-meta { color: rgba(255,255,255,0.65); font-size: 0.7rem; margin-top: 2px; }
+.cand-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+
+/* Photos strip */
+.photos-strip {
+  display: flex; gap: 6px; padding: 10px 14px;
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  overflow-x: auto; align-items: center;
 }
-.cand-meta { color: rgba(255,255,255,0.65); font-size: 0.72rem; margin-top: 3px; }
-.cand-body { padding: 14px 16px; }
+.photo-thumb {
+  width: 56px; height: 56px; flex-shrink: 0; border-radius: 6px;
+  object-fit: cover; border: 1.5px solid var(--border); cursor: pointer;
+  transition: transform 0.15s;
+}
+.photo-thumb:hover { transform: scale(1.08); }
+.photo-placeholder {
+  width: 56px; height: 56px; flex-shrink: 0; border-radius: 6px;
+  border: 1.5px dashed var(--border); background: var(--bg2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+}
+.photos-label { font-size: 0.6rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; writing-mode: vertical-rl; transform: rotate(180deg); padding: 2px 0; }
+
+/* Card body */
+.cand-body { padding: 12px 16px; flex: 1; }
 .cand-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 5px 0; border-bottom: 1px solid var(--bg2);
-  font-size: 0.78rem;
+  padding: 4px 0; border-bottom: 1px solid var(--bg2); font-size: 0.78rem;
 }
 .cand-row:last-child { border-bottom: none; }
-.cand-key { font-weight: 700; color: var(--text-light); }
-.cand-val { font-weight: 500; color: var(--text); }
-.phone-blur { filter: blur(5px); user-select: none; transition: filter 0.3s; }
-.premium-lock {
-  background: var(--yellow-50); border: 1.5px dashed #FBBF24;
-  border-radius: var(--radius-sm); padding: 10px; text-align: center;
-  margin: 10px 0 4px;
-}
-.premium-lock p { font-size: 0.72rem; font-weight: 700; color: var(--green-800); }
-.premium-lock small { font-family: var(--font-hindi); font-size: 0.68rem; color: var(--text-light); }
-.cand-actions { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--bg2); }
+.cand-key { font-weight: 700; color: var(--text-light); font-size: 0.72rem; }
+.cand-val { font-weight: 500; color: var(--text); text-align: right; }
 
-/* ── PROFILE TAB ──────────────────────────────────────── */
-.profile-section { padding: 24px; max-width: 580px; }
+/* Locked */
+.locked { filter: blur(4px); user-select: none; pointer-events: none; font-size: 0.78rem; font-weight: 600; }
+.premium-cta-strip {
+  background: var(--yellow-50); border-top: 1.5px dashed #FBBF24;
+  padding: 8px 14px; font-size: 0.72rem; font-weight: 700; color: var(--green-800);
+}
+.premium-cta-strip small { display: block; font-family: var(--font-hindi); font-weight: 400; font-size: 0.68rem; color: var(--text-light); }
+
+/* Actions */
+.cand-actions { display: flex; gap: 6px; padding: 10px 14px; border-top: 1px solid var(--border); }
+
+/* SL/REJ badges */
+.badge-sl  { background: #D1FAE5; color: #065F46; }
+.badge-rej { background: #FEE2E2; color: #991B1B; }
+
+/* ── FILTER BAR ───────────────────────────────────────── */
+.filter-bar { background: white; padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.filter-bar input, .filter-bar select { padding: 7px 10px; font-size: 0.8rem; }
+.filter-search { flex: 1; min-width: 180px; }
+
+/* ── PHOTO LIGHTBOX ───────────────────────────────────── */
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000;
+  display: none; align-items: center; justify-content: center; padding: 20px; flex-direction: column; gap: 12px;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 90vw; max-height: 80vh; border-radius: 10px; object-fit: contain; }
+.lightbox-close { position: absolute; top: 20px; right: 24px; font-size: 2rem; color: white; cursor: pointer; background: none; border: none; }
+.lightbox-caption { color: rgba(255,255,255,0.6); font-size: 0.82rem; }
+
+/* ── PROFILE ──────────────────────────────────────────── */
+.profile-wrap { padding: 24px; max-width: 660px; }
+.plan-box { border-radius: var(--radius); padding: 20px; border: 2px solid; margin-bottom: 0; }
+.plan-box.basic   { background: var(--yellow-50); border-color: var(--yellow); }
+.plan-box.premium { background: #ECFDF5; border-color: #6EE7B7; }
+.plan-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 900; }
+.plan-price { font-family: var(--font-display); font-size: 2rem; font-weight: 900; color: var(--green-800); }
+.plan-features { list-style: none; margin: 10px 0 14px; }
+.plan-features li { font-size: 0.82rem; padding: 3px 0; }
+.validity-row {
+  background: white; border-radius: var(--radius-sm); padding: 10px 14px;
+  display: flex; align-items: center; justify-content: space-between; margin-top: 12px;
+  border: 1px solid var(--border);
+}
+.validity-lbl { font-size: 0.68rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+.validity-val { font-weight: 700; font-size: 0.85rem; }
+.expiring { color: var(--red); }
+.active-val { color: var(--success); }
+
+/* ── UPGRADE MODAL ────────────────────────────────────── */
+.upgrade-hero {
+  background: linear-gradient(135deg, var(--green-800), var(--green-700));
+  border-radius: var(--radius); padding: 20px; color: white; margin-bottom: 16px;
+}
+.upgrade-hero h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 900; margin-bottom: 4px; }
+.upgrade-price { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; color: var(--yellow); line-height: 1; }
+.upgrade-hero ul { list-style: none; margin: 10px 0 0; }
+.upgrade-hero ul li { font-size: 0.8rem; padding: 2px 0; opacity: 0.9; }
+.upgrade-hero ul li::before { content: "✓ "; color: var(--yellow); font-weight: 700; }
+.pay-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.pay-btn {
+  border: 2px solid var(--border); border-radius: var(--radius); padding: 14px 10px;
+  text-align: center; cursor: pointer; transition: all 0.18s; background: white;
+}
+.pay-btn:hover { border-color: var(--green-700); background: var(--green-50); }
+.pay-btn.active { border-color: var(--green-700); background: var(--green-50); }
+.pay-btn .p-icon { font-size: 1.6rem; margin-bottom: 5px; }
+.pay-btn .p-name { font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; color: var(--green-800); }
+.pay-btn .p-sub  { font-size: 0.65rem; color: var(--text-light); margin-top: 1px; }
+.pay-info { background: var(--bg); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; }
+.upi-id-box { background: white; border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; font-family: monospace; font-size: 1rem; font-weight: 700; text-align: center; margin: 8px 0; letter-spacing: 1px; }
+.qr-wrap { text-align: center; }
+.qr-wrap img { max-width: 180px; border-radius: 8px; border: 1px solid var(--border); }
+.qr-empty { width: 180px; height: 180px; border: 2px dashed var(--border); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 0.75rem; color: var(--text-light); text-align: center; padding: 16px; }
+
+/* ── TAB COUNTS ───────────────────────────────────────── */
+.tcnt { background: var(--yellow); color: var(--green-800); font-size: 0.6rem; padding: 1px 6px; border-radius: 10px; margin-left: 4px; font-weight: 900; vertical-align: middle; }
 
 /* ── EMPTY STATE ──────────────────────────────────────── */
-.empty-state {
-  text-align: center; padding: 60px 24px;
-}
-.empty-icon { font-size: 3.5rem; margin-bottom: 16px; }
-.empty-state h3 { font-family: var(--font-display); font-size: 1.3rem; color: var(--text-mid); }
-.empty-state p { color: var(--text-light); font-size: 0.82rem; margin-top: 6px; font-family: var(--font-hindi); }
+.empty-state { text-align: center; padding: 60px 24px; grid-column: 1/-1; }
+.empty-icon  { font-size: 3.5rem; margin-bottom: 14px; }
+.empty-state h3 { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-mid); }
+.empty-state p  { color: var(--text-light); font-size: 0.82rem; margin-top: 6px; font-family: var(--font-hindi); }
+
 </style>
 </head>
 <body>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <img id="lb-img" src="" alt="">
+  <div class="lightbox-caption" id="lb-cap"></div>
+</div>
 
 <!-- HEADER -->
 <header class="app-header">
@@ -105,59 +200,80 @@
     <div class="bb-logo sm"><span class="bb-logo-budget">BUDGET</span><span class="bb-logo-barber">BARBER</span></div>
     <div class="header-title"><h1>Recruiter Portal</h1><span>भर्तीकर्ता पोर्टल</span></div>
   </div>
-  <div class="header-right" id="header-right">
-    <span id="hdr-name" style="color:var(--yellow); font-size:0.8rem; font-weight:600; display:none;"></span>
+  <div class="header-right">
+    <span id="hdr-name" style="color:var(--yellow); font-size:0.78rem; font-weight:700; display:none;"></span>
+    <span id="hdr-plan" style="display:none; margin-left:6px;"></span>
     <button class="btn btn-ghost btn-sm" id="btn-logout" onclick="doLogout()" style="display:none;">Logout</button>
     <a href="index.html" class="back-link">← Home</a>
   </div>
 </header>
 
-<!-- ══════════════════ AUTH VIEWS ══════════════════ -->
+<!-- ══════════════════ LOGIN ══════════════════ -->
 <div id="view-login">
   <div class="auth-page">
     <div class="auth-box anim">
       <div class="auth-icon">🏪</div>
       <div class="auth-title">Sign In</div>
-      <div class="auth-sub">भर्तीकर्ता लॉगिन — Recruiter Portal</div>
-      <div class="form-group mb-16">
-        <label class="form-label">Email / ईमेल</label>
-        <input type="email" id="l_email" placeholder="salon@email.com">
+      <div class="auth-sub">फ़ोन नंबर और 6 अंकों का PIN डालें</div>
+
+      <div class="form-group" style="margin-bottom:14px;">
+        <label class="form-label">Phone Number <span class="hn">फ़ोन नंबर</span></label>
+        <input type="tel" id="l_phone" placeholder="10-digit mobile number" maxlength="10"
+               oninput="this.value=this.value.replace(/\D/g,'')"
+               onkeydown="if(event.key==='Enter') document.getElementById('login-pins').querySelector('input').focus()">
       </div>
-      <div class="form-group mb-16" style="margin-bottom:20px;">
-        <label class="form-label">Password / पासवर्ड</label>
-        <input type="password" id="l_pass" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()">
+
+      <div class="form-group" style="margin-bottom:22px;">
+        <label class="form-label">6-Digit PIN <span class="hn">6 अंकों का PIN</span></label>
+        <div class="pin-inputs" id="login-pins">
+          <input type="password" maxlength="1" inputmode="numeric"
+                 oninput="pinMove(this,'login-pins')" onkeydown="pinBack(event,this,'login-pins')">
+          <input type="password" maxlength="1" inputmode="numeric"
+                 oninput="pinMove(this,'login-pins')" onkeydown="pinBack(event,this,'login-pins')">
+          <input type="password" maxlength="1" inputmode="numeric"
+                 oninput="pinMove(this,'login-pins')" onkeydown="pinBack(event,this,'login-pins')">
+          <input type="password" maxlength="1" inputmode="numeric"
+                 oninput="pinMove(this,'login-pins')" onkeydown="pinBack(event,this,'login-pins');if(event.key==='Enter') doLogin()">
+          <input type="password" maxlength="1" inputmode="numeric"
+                 oninput="pinMove(this,'login-pins')" onkeydown="pinBack(event,this,'login-pins');if(event.key==='Enter') doLogin()">
+          <input type="password" maxlength="1" inputmode="numeric"
+                 oninput="pinMove(this,'login-pins')" onkeydown="pinBack(event,this,'login-pins');if(event.key==='Enter') doLogin()">
+        </div>
       </div>
+
       <button class="btn btn-primary btn-block btn-lg" onclick="doLogin()">Login / लॉगिन करें</button>
-      <div class="auth-divider">— or —</div>
+
+      <div style="text-align:center; margin:12px 0; color:var(--text-light); font-size:0.75rem;">— or —</div>
       <div class="auth-switch">
-        <button onclick="show('view-register')">New Recruiter? Register here<br><span style="font-family:var(--font-hindi); font-weight:400;">नए भर्तीकर्ता? यहाँ पंजीकरण करें</span></button>
+        <button onclick="show('view-register')">
+          New Recruiter? Register here<br>
+          <span style="font-family:var(--font-hindi); font-weight:400;">नए भर्तीकर्ता? यहाँ पंजीकरण करें</span>
+        </button>
       </div>
-      <div style="margin-top:16px; background:var(--bg); border-radius:var(--radius-sm); padding:10px; font-size:0.72rem; color:var(--text-light); text-align:center;">
-        Demo: <strong>recruiter@demo.com</strong> / <strong>demo123</strong><br>
-        Premium demo: <strong>recruiter@demo.com</strong>
+      <div class="demo-hint">
+        Demo Basic: Phone <strong>9876543000</strong> · PIN <strong>123456</strong><br>
+        Demo Premium: Phone <strong>9876543001</strong> · PIN <strong>123456</strong>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ══════════════════ REGISTER ══════════════════ -->
 <div id="view-register" style="display:none;">
   <div class="auth-page">
-    <div class="auth-box anim" style="max-width:480px;">
+    <div class="auth-box anim" style="max-width:500px;">
       <div class="auth-icon">🏪</div>
       <div class="auth-title">Register</div>
-      <div class="auth-sub">नया भर्तीकर्ता खाता बनाएं — Create your salon account</div>
+      <div class="auth-sub">नया भर्तीकर्ता खाता बनाएं</div>
       <div class="grid-2">
-        <div class="form-group col-span-2">
+        <div class="form-group col-span-2" style="grid-column:1/-1;">
           <label class="form-label">Salon Name <span class="req">*</span></label>
           <input type="text" id="reg_salon" placeholder="Your Salon Name">
         </div>
         <div class="form-group">
-          <label class="form-label">Email <span class="req">*</span></label>
-          <input type="email" id="reg_email" placeholder="salon@email.com">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Password <span class="req">*</span></label>
-          <input type="password" id="reg_pass" placeholder="Create password">
+          <label class="form-label">Phone Number <span class="req">*</span></label>
+          <input type="tel" id="reg_phone" placeholder="10-digit mobile" maxlength="10"
+                 oninput="this.value=this.value.replace(/\D/g,'')">
         </div>
         <div class="form-group">
           <label class="form-label">Franchise? <span class="hn">फ्रैंचाइज़ी?</span></label>
@@ -170,15 +286,33 @@
           <label class="form-label">City / Location <span class="req">*</span></label>
           <input type="text" id="reg_loc" placeholder="City, State">
         </div>
-        <div class="form-group col-span-2">
-          <label class="form-label">Full Salon Address <span class="req">*</span></label>
-          <textarea id="reg_addr" placeholder="Complete salon address" style="min-height:60px;"></textarea>
+        <div class="form-group col-span-2" style="grid-column:1/-1;">
+          <label class="form-label">Full Salon Address</label>
+          <textarea id="reg_addr" placeholder="Complete salon address" style="min-height:56px;"></textarea>
+        </div>
+        <div class="form-group col-span-2" style="grid-column:1/-1;">
+          <label class="form-label">Set 6-Digit PIN <span class="req">*</span> <span class="hn">6 अंकों का PIN सेट करें</span></label>
+          <div class="pin-inputs" id="reg-pins">
+            <input type="password" maxlength="1" inputmode="numeric"
+                   oninput="pinMove(this,'reg-pins')" onkeydown="pinBack(event,this,'reg-pins')">
+            <input type="password" maxlength="1" inputmode="numeric"
+                   oninput="pinMove(this,'reg-pins')" onkeydown="pinBack(event,this,'reg-pins')">
+            <input type="password" maxlength="1" inputmode="numeric"
+                   oninput="pinMove(this,'reg-pins')" onkeydown="pinBack(event,this,'reg-pins')">
+            <input type="password" maxlength="1" inputmode="numeric"
+                   oninput="pinMove(this,'reg-pins')" onkeydown="pinBack(event,this,'reg-pins')">
+            <input type="password" maxlength="1" inputmode="numeric"
+                   oninput="pinMove(this,'reg-pins')" onkeydown="pinBack(event,this,'reg-pins')">
+            <input type="password" maxlength="1" inputmode="numeric"
+                   oninput="pinMove(this,'reg-pins')" onkeydown="pinBack(event,this,'reg-pins')">
+          </div>
+          <div class="form-hint" style="margin-top:5px;">यह PIN आपका लॉगिन पासवर्ड होगा — This PIN logs you in</div>
         </div>
       </div>
-      <button class="btn btn-primary btn-block btn-lg mt-16" onclick="doRegister()" style="margin-top:18px;">Create Account / खाता बनाएं</button>
-      <div class="auth-switch">
-        <button onclick="show('view-login')">Already have an account? Sign in</button>
-      </div>
+      <button class="btn btn-primary btn-block btn-lg" style="margin-top:18px;" onclick="doRegister()">
+        Create Account / खाता बनाएं
+      </button>
+      <div class="auth-switch"><button onclick="show('view-login')">Already have an account? Sign in</button></div>
     </div>
   </div>
 </div>
@@ -187,30 +321,72 @@
 <div id="view-dashboard" style="display:none;">
 
   <div class="tab-bar" id="rec-tabs">
-    <button class="tab-btn active" data-tab="tab-browse" onclick="switchTab('rec-tabs','tab-browse')">✂️ Browse Candidates <span id="cand-count-badge" style="background:var(--yellow); color:var(--green-800); font-size:0.65rem; padding:2px 7px; border-radius:10px; margin-left:6px; font-weight:800;"></span></button>
-    <button class="tab-btn" data-tab="tab-profile" onclick="switchTab('rec-tabs','tab-profile')">🏪 My Profile</button>
+    <button class="tab-btn active" data-tab="tab-all" onclick="switchTab('rec-tabs','tab-all')">
+      ✂️ All Candidates <span class="tcnt" id="cnt-all">0</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-shortlisted" onclick="switchTab('rec-tabs','tab-shortlisted')">
+      ★ Shortlisted <span class="tcnt" id="cnt-sl">0</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-rejected" onclick="switchTab('rec-tabs','tab-rejected')">
+      ✗ Rejected <span class="tcnt" id="cnt-rj">0</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-profile" onclick="switchTab('rec-tabs','tab-profile'); renderProfile()">
+      🏪 My Profile
+    </button>
   </div>
 
-  <!-- Browse Tab -->
-  <div class="tab-pane active" id="tab-browse">
+  <!-- ALL CANDIDATES -->
+  <div class="tab-pane active" id="tab-all">
     <div class="filter-bar">
-      <input type="text" class="filter-search" id="f_search" placeholder="🔍 Search by name, location…" oninput="renderCandidates()">
-      <select id="f_exp" onchange="renderCandidates()">
+      <input class="filter-search" type="text" id="f_search" placeholder="🔍 Search name, location…" oninput="renderAll()">
+      <select id="f_exp" onchange="renderAll()">
         <option value="">All Experience</option>
         <option value="less1">Less than 1 yr</option>
         <option value="1-2">1–2 years</option>
-        <option value="2-4">2–4 years</option>
-        <option value="4-6">4–6 years</option>
-        <option value="6-8">6–8 years</option>
-        <option value="8-10">8–10 years</option>
-        <option value="10+">10+ years</option>
+        <option value="2-3">2–3 years</option>
+        <option value="3-5">3–5 years</option>
+        <option value="5+">5+ years</option>
       </select>
-      <select id="f_avail" onchange="renderCandidates()">
+      <select id="f_avail" onchange="renderAll()">
         <option value="">All Availability</option>
         <option value="true">Available Now</option>
         <option value="false">Not Available</option>
       </select>
-      <select id="f_join" onchange="renderCandidates()">
+      <select id="f_join" onchange="renderAll()">
+        <option value="">Any Joining</option>
+        <option value="immediate">Immediate</option>
+        <option value="1month">1 Month</option>
+        <option value="2months">2 Months</option>
+        <option value="3months">3 Months</option>
+      </select>
+      <select id="f_billing" onchange="renderAll()">
+        <option value="">Any Billing</option>
+        <option value="30000">₹30k+</option>
+        <option value="50000">₹50k+</option>
+        <option value="70000">₹70k+</option>
+      </select>
+    </div>
+    <div class="candidates-grid" id="grid-all"></div>
+  </div>
+
+  <!-- SHORTLISTED -->
+  <div class="tab-pane" id="tab-shortlisted">
+    <div class="filter-bar">
+      <input class="filter-search" type="text" id="sl_search" placeholder="🔍 Search shortlisted…" oninput="renderShortlisted()">
+      <select id="sl_exp" onchange="renderShortlisted()">
+        <option value="">All Experience</option>
+        <option value="less1">Less than 1 yr</option>
+        <option value="1-2">1–2 years</option>
+        <option value="2-3">2–3 years</option>
+        <option value="3-5">3–5 years</option>
+        <option value="5+">5+ years</option>
+      </select>
+      <select id="sl_avail" onchange="renderShortlisted()">
+        <option value="">All Availability</option>
+        <option value="true">Available Now</option>
+        <option value="false">Not Available</option>
+      </select>
+      <select id="sl_join" onchange="renderShortlisted()">
         <option value="">Any Joining</option>
         <option value="immediate">Immediate</option>
         <option value="1month">1 Month</option>
@@ -218,231 +394,671 @@
         <option value="3months">3 Months</option>
       </select>
     </div>
-    <div class="candidates-grid" id="cands-grid"></div>
+    <div class="candidates-grid" id="grid-sl"></div>
   </div>
 
-  <!-- Profile Tab -->
-  <div class="tab-pane" id="tab-profile">
-    <div class="profile-section">
-      <div class="card anim">
-        <div class="card-header"><span style="font-size:1.3rem">🏪</span><div><h2>Salon Profile</h2><span>सैलून प्रोफ़ाइल</span></div></div>
-        <div class="card-body" id="salon-profile-body"></div>
-      </div>
-      <div class="card mt-16 anim anim-d1">
-        <div class="card-header"><span style="font-size:1.3rem">⭐</span><div><h2>Account Plan</h2><span>खाता प्लान</span></div></div>
-        <div class="card-body" id="plan-body"></div>
-      </div>
+  <!-- REJECTED -->
+  <div class="tab-pane" id="tab-rejected">
+    <div class="filter-bar">
+      <input class="filter-search" type="text" id="rj_search" placeholder="🔍 Search rejected…" oninput="renderRejected()">
+      <select id="rj_exp" onchange="renderRejected()">
+        <option value="">All Experience</option>
+        <option value="less1">Less than 1 yr</option>
+        <option value="1-2">1–2 years</option>
+        <option value="2-3">2–3 years</option>
+        <option value="3-5">3–5 years</option>
+        <option value="5+">5+ years</option>
+      </select>
+      <select id="rj_avail" onchange="renderRejected()">
+        <option value="">All Availability</option>
+        <option value="true">Available Now</option>
+        <option value="false">Not Available</option>
+      </select>
     </div>
+    <div class="candidates-grid" id="grid-rj"></div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="tab-pane" id="tab-profile">
+    <div class="profile-wrap" id="profile-wrap"></div>
   </div>
 
 </div>
 
-<!-- Candidate Detail Modal -->
+<!-- ══════ CANDIDATE DETAIL MODAL ══════ -->
 <div class="modal-backdrop" id="cand-modal">
-  <div class="modal">
+  <div class="modal" style="max-width:600px;">
     <div class="modal-header">
-      <h3 id="modal-title">Candidate Profile</h3>
+      <h3 id="cm-title">Profile</h3>
       <button class="modal-close" onclick="closeModal('cand-modal')">×</button>
     </div>
-    <div class="modal-body" id="modal-body"></div>
-    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('cand-modal')">Close</button></div>
+    <div class="modal-body" id="cm-body"></div>
+    <div class="modal-footer" id="cm-footer"></div>
+  </div>
+</div>
+
+<!-- ══════ UPGRADE MODAL ══════ -->
+<div class="modal-backdrop" id="upgrade-modal">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-header">
+      <h3>⭐ Upgrade to Premium</h3>
+      <button class="modal-close" onclick="closeModal('upgrade-modal')">×</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="upgrade-hero">
+        <h3>Premium Recruiter Plan</h3>
+        <div class="upgrade-price">₹1,000 <span style="font-size:1rem; font-weight:500; color:rgba(255,255,255,0.7);">/ month</span></div>
+        <ul>
+          <li>Access to verified phone numbers of all available staff</li>
+          <li>View Aadhaar card details of hairstylists</li>
+          <li>View Instagram profiles of all candidates</li>
+          <li>Shortlist &amp; manage candidates with full info</li>
+          <li>Priority recruiter status &amp; direct call option</li>
+        </ul>
+        <div style="font-family:var(--font-hindi); font-size:0.75rem; opacity:0.75;">₹1,000/माह में सभी फ़ोन नंबर, आधार और इंस्टाग्राम देखें</div>
+      </div>
+
+      <div style="font-family:var(--font-display); font-size:0.75rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-light); margin-bottom:10px;">
+        Choose Payment Method / भुगतान का तरीका चुनें
+      </div>
+
+      <div class="pay-methods">
+        <div class="pay-btn" id="pbtn-razorpay" onclick="selectPay('razorpay')">
+          <div class="p-icon">💳</div>
+          <div class="p-name">Razorpay</div>
+          <div class="p-sub">Cards, UPI, Netbanking</div>
+        </div>
+        <div class="pay-btn" id="pbtn-cashfree" onclick="selectPay('cashfree')">
+          <div class="p-icon">🏦</div>
+          <div class="p-name">Cashfree</div>
+          <div class="p-sub">UPI, Wallets, Cards</div>
+        </div>
+        <div class="pay-btn" id="pbtn-upi" onclick="selectPay('upi')">
+          <div class="p-icon">📱</div>
+          <div class="p-name">UPI Direct</div>
+          <div class="p-sub">GPay, PhonePe, Paytm</div>
+        </div>
+        <div class="pay-btn" id="pbtn-qr" onclick="selectPay('qr')">
+          <div class="p-icon">🔲</div>
+          <div class="p-name">QR Code</div>
+          <div class="p-sub">Scan &amp; Pay</div>
+        </div>
+      </div>
+
+      <div id="pay-info-area" style="display:none;" class="pay-info"></div>
+
+      <div style="background:var(--yellow-50); border:1.5px solid var(--yellow); border-radius:var(--radius-sm); padding:11px 13px; font-size:0.77rem; margin-bottom:12px;">
+        <strong>📌 After payment:</strong> Your plan will be activated by admin within 24 hours after payment verification.<br>
+        <span style="font-family:var(--font-hindi); font-size:0.7rem; color:var(--text-light);">भुगतान के बाद 24 घंटे में एडमिन द्वारा प्रीमियम सक्रिय किया जाएगा।</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Payment Reference / UTR Number</label>
+        <input type="text" id="pay-ref" placeholder="Enter transaction ID / UTR for faster activation">
+        <div class="form-hint">भुगतान का UTR नंबर डालें — जल्दी सक्रिय होगा</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('upgrade-modal')">Cancel</button>
+      <button class="btn btn-yellow" onclick="submitUpgrade()">📩 Submit Payment Request</button>
+    </div>
   </div>
 </div>
 
 <script src="shared.js"></script>
 <script>
-let currentRec = null;
+
+// ── GLOBALS ───────────────────────────────────────────────────
+let CR = null;         // current recruiter
+let RCA = {};          // recruiter candidate actions { id: 'shortlisted'|'rejected' }
+let detailId = null;
+let selPay = null;
+
+// ── SEED DEMO DATA ────────────────────────────────────────────
+(function() {
+  const recs = getRecruiters();
+  let ch = false;
+  recs.forEach(r => {
+    if (!r.phone) { r.phone = r.id === 'REC-001' ? '9876543000' : '9876543001'; ch = true; }
+    if (!r.pin)   { r.pin = '123456'; ch = true; }
+    if (r.plan_requested === undefined) { r.plan_requested = false; ch = true; }
+  });
+  if (ch) saveRecruiters(recs);
+})();
+
+// ── PIN HELPERS ───────────────────────────────────────────────
+function pinMove(el, gid) {
+  el.value = el.value.replace(/\D/,'');
+  if (el.value.length === 1) {
+    const all = [...document.getElementById(gid).querySelectorAll('input')];
+    const i = all.indexOf(el);
+    if (i < all.length - 1) all[i+1].focus();
+  }
+}
+function pinBack(e, el, gid) {
+  if (e.key === 'Backspace' && !el.value) {
+    const all = [...document.getElementById(gid).querySelectorAll('input')];
+    const i = all.indexOf(el);
+    if (i > 0) all[i-1].focus();
+  }
+}
+function getPin(gid) {
+  return [...document.getElementById(gid).querySelectorAll('input')].map(i => i.value).join('');
+}
+
+// ── LIGHTBOX ──────────────────────────────────────────────────
+function openLB(src, cap) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-cap').textContent = cap || '';
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+
+// ── VIEW HELPERS ──────────────────────────────────────────────
+function show(id) {
+  ['view-login','view-register','view-dashboard'].forEach(v =>
+    document.getElementById(v).style.display = v === id ? 'block' : 'none');
+}
 
 // ── BOOT ─────────────────────────────────────────────────────
 window.addEventListener('load', () => {
   const saved = getRecruiterSession();
-  if (saved) { currentRec = saved; showDashboard(); }
+  if (saved) { CR = saved; loadRCA(); showDash(); }
   else show('view-login');
 });
 
-function show(id) {
-  ['view-login','view-register','view-dashboard'].forEach(v => {
-    document.getElementById(v).style.display = v === id ? 'block' : 'none';
-  });
-}
-
-// ── LOGIN ────────────────────────────────────────────────────
+// ── AUTH ─────────────────────────────────────────────────────
 function doLogin() {
-  const email = document.getElementById('l_email').value.trim();
-  const pass  = document.getElementById('l_pass').value;
-  if (!email || !pass) { showToast('Please fill email and password', 'error'); return; }
-  const recs = getRecruiters();
-  const rec  = recs.find(r => r.email === email && r.password === pass);
-  if (!rec) { showToast('Invalid credentials / गलत जानकारी', 'error'); return; }
-  currentRec = rec;
-  setRecruiterSession(rec);
-  showDashboard();
+  const phone = document.getElementById('l_phone').value.trim();
+  const pin   = getPin('login-pins');
+  if (!phone || phone.length < 10) { showToast('Enter valid 10-digit phone / फ़ोन नंबर डालें', 'error'); return; }
+  if (pin.length !== 6) { showToast('Enter 6-digit PIN / 6 अंकों का PIN डालें', 'error'); return; }
+  const rec = getRecruiters().find(r => r.phone === phone && r.pin === pin);
+  if (!rec) { showToast('Invalid phone or PIN / गलत फ़ोन या PIN', 'error'); return; }
+  CR = rec; setRecruiterSession(rec); loadRCA(); showDash();
 }
 
-// ── REGISTER ─────────────────────────────────────────────────
 function doRegister() {
   const salon = document.getElementById('reg_salon').value.trim();
-  const email = document.getElementById('reg_email').value.trim();
-  const pass  = document.getElementById('reg_pass').value;
+  const phone = document.getElementById('reg_phone').value.trim();
   const loc   = document.getElementById('reg_loc').value.trim();
-  const addr  = document.getElementById('reg_addr').value.trim();
-  if (!salon || !email || !pass || !loc) { showToast('Please fill all required fields', 'error'); return; }
-
+  const pin   = getPin('reg-pins');
+  if (!salon || !phone || !loc) { showToast('Fill all required fields', 'error'); return; }
+  if (phone.length < 10)        { showToast('Enter valid 10-digit phone', 'error'); return; }
+  if (pin.length !== 6)         { showToast('Set a 6-digit PIN', 'error'); return; }
   const recs = getRecruiters();
-  if (recs.find(r => r.email === email)) { showToast('Email already registered', 'error'); return; }
-
-  const newRec = {
-    id: 'REC-' + Date.now(),
-    salon_name: salon, email, password: pass,
-    location: loc, address: addr,
+  if (recs.find(r => r.phone === phone)) { showToast('Phone already registered / पहले से पंजीकृत', 'error'); return; }
+  const nr = {
+    id: 'REC-' + Date.now(), salon_name: salon, phone, pin,
+    location: loc, address: document.getElementById('reg_addr').value,
     franchise: document.getElementById('reg_franchise').value,
-    plan: 'basic',
+    plan: 'basic', plan_expiry: null, plan_requested: false,
     created_at: new Date().toISOString()
   };
-  recs.push(newRec);
-  saveRecruiters(recs);
-  currentRec = newRec;
-  setRecruiterSession(newRec);
-  showToast('Account created! Welcome / खाता बन गया', 'success');
-  showDashboard();
+  recs.push(nr); saveRecruiters(recs);
+  CR = nr; setRecruiterSession(nr); loadRCA();
+  showToast('Account created! Welcome 🎉', 'success'); showDash();
 }
 
-// ── LOGOUT ───────────────────────────────────────────────────
 function doLogout() {
-  clearRecruiterSession();
-  currentRec = null;
-  document.getElementById('hdr-name').style.display = 'none';
-  document.getElementById('btn-logout').style.display = 'none';
+  clearRecruiterSession(); CR = null; RCA = {};
+  ['hdr-name','hdr-plan','btn-logout'].forEach(id => document.getElementById(id).style.display = 'none');
   show('view-login');
 }
 
-// ── DASHBOARD ────────────────────────────────────────────────
-function showDashboard() {
-  show('view-dashboard');
-  document.getElementById('hdr-name').textContent = currentRec.salon_name;
-  document.getElementById('hdr-name').style.display = 'inline';
-  document.getElementById('btn-logout').style.display = 'inline-flex';
-  renderCandidates();
-  renderProfile();
+// ── RECRUITER CANDIDATE ACTIONS ───────────────────────────────
+function loadRCA() {
+  try { RCA = JSON.parse(localStorage.getItem('bb_rca_' + CR.id) || '{}'); } catch { RCA = {}; }
+}
+function saveRCA() { localStorage.setItem('bb_rca_' + CR.id, JSON.stringify(RCA)); }
+
+function setAction(sid, action) {
+  if (RCA[sid] === action) delete RCA[sid]; else RCA[sid] = action;
+  saveRCA(); refreshAll();
+  if (detailId === sid) rebuildModalFooter(sid);
 }
 
-function renderCandidates() {
-  const search = document.getElementById('f_search')?.value.toLowerCase() || '';
-  const exp    = document.getElementById('f_exp')?.value || '';
-  const avail  = document.getElementById('f_avail')?.value || '';
-  const join   = document.getElementById('f_join')?.value || '';
-  const isPrem = currentRec?.plan === 'premium';
+// ── DASHBOARD ────────────────────────────────────────────────
+function showDash() {
+  show('view-dashboard');
+  document.getElementById('hdr-name').textContent = CR.salon_name;
+  document.getElementById('hdr-name').style.display = 'inline';
+  const pe = document.getElementById('hdr-plan');
+  pe.innerHTML = CR.plan === 'premium'
+    ? `<span class="badge badge-premium">⭐ PREMIUM</span>`
+    : `<span class="badge badge-basic">BASIC</span>`;
+  pe.style.display = 'inline'; pe.style.marginLeft = '6px';
+  document.getElementById('btn-logout').style.display = 'inline-flex';
+  refreshAll();
+}
 
-  let all = getStylests().filter(s => s.status !== 'rejected');
+function refreshAll() { renderAll(); renderShortlisted(); renderRejected(); updateCounts(); }
 
-  if (search) all = all.filter(s =>
-    s.name.toLowerCase().includes(search) ||
-    (s.home_location||'').toLowerCase().includes(search) ||
-    (s.experience||'').includes(search)
-  );
-  if (exp)   all = all.filter(s => s.experience === exp);
-  if (avail) all = all.filter(s => String(s.available) === avail);
-  if (join)  all = all.filter(s => s.join_timeline === join);
+function updateCounts() {
+  const all = getStylests().filter(s => s.status !== 'rejected');
+  document.getElementById('cnt-all').textContent = all.filter(s => RCA[s.id] !== 'rejected').length;
+  document.getElementById('cnt-sl').textContent  = all.filter(s => RCA[s.id] === 'shortlisted').length;
+  document.getElementById('cnt-rj').textContent  = all.filter(s => RCA[s.id] === 'rejected').length;
+}
 
-  document.getElementById('cand-count-badge').textContent = all.length;
+// ── FILTER ────────────────────────────────────────────────────
+function applyFilters(list, prefix) {
+  const search  = document.getElementById(prefix + '_search')?.value.toLowerCase() || '';
+  const exp     = document.getElementById(prefix + '_exp')?.value || '';
+  const avail   = document.getElementById(prefix + '_avail')?.value || '';
+  const join    = document.getElementById(prefix + '_join')?.value || '';
+  const billing = document.getElementById(prefix + '_billing')?.value || '';
+  if (search)  list = list.filter(s => s.name.toLowerCase().includes(search) || (s.home_location||'').toLowerCase().includes(search));
+  if (exp)     list = list.filter(s => s.experience === exp);
+  if (avail)   list = list.filter(s => String(s.available) === avail);
+  if (join)    list = list.filter(s => s.join_timeline === join);
+  if (billing) list = list.filter(s => Number(s.max_billing) >= Number(billing));
+  return list;
+}
 
-  const grid = document.getElementById('cands-grid');
-  if (!all.length) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🔍</div><h3>No candidates found</h3><p>कोई उम्मीदवार नहीं मिला — try different filters</p></div>`;
+function renderAll() {
+  const base = getStylests().filter(s => s.status !== 'rejected' && RCA[s.id] !== 'rejected');
+  render(applyFilters(base, 'f'), 'grid-all', 'all');
+}
+function renderShortlisted() {
+  const base = getStylests().filter(s => s.status !== 'rejected' && RCA[s.id] === 'shortlisted');
+  render(applyFilters(base, 'sl'), 'grid-sl', 'sl');
+}
+function renderRejected() {
+  const base = getStylests().filter(s => RCA[s.id] === 'rejected');
+  render(applyFilters(base, 'rj'), 'grid-rj', 'rj');
+}
+
+// ── CARD BUILDER ──────────────────────────────────────────────
+function render(list, gridId, mode) {
+  const grid  = document.getElementById(gridId);
+  const isPrem = CR?.plan === 'premium';
+  if (!list.length) {
+    const msgs = {
+      all: ['🔍','No candidates found','फ़िल्टर बदलें या बाद में दोबारा देखें'],
+      sl:  ['★','No shortlisted candidates','किसी को शॉर्टलिस्ट नहीं किया — use ★ button'],
+      rj:  ['✗','No rejected candidates','कोई अस्वीकृत उम्मीदवार नहीं'],
+    };
+    const [ic,h,p] = msgs[mode] || msgs.all;
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">${ic}</div><h3>${h}</h3><p>${p}</p></div>`;
     return;
   }
-
-  grid.innerHTML = all.map(s => `
-    <div class="cand-card anim">
-      <div class="cand-top">
-        <div class="cand-avatar">${s.selfie_url ? `<img src="${s.selfie_url}">` : s.name.charAt(0).toUpperCase()}</div>
-        <div>
-          <div class="cand-name">${s.name}</div>
-          <div class="cand-meta">📍 ${s.home_location||'—'} &nbsp;|&nbsp; ${s.experience||'—'}</div>
-          <div style="margin-top:5px;">
-            <span class="badge ${s.available ? 'badge-available' : 'badge-busy'}">${s.available ? '✅ Available Now' : '⏳ Not Available'}</span>
-            <span class="badge ${s.status === 'verified' ? 'badge-verified' : 'badge-pending'}" style="margin-left:4px;">${s.status === 'verified' ? '✓ Verified' : 'Pending'}</span>
-          </div>
-        </div>
-      </div>
-      <div class="cand-body">
-        <div class="cand-row"><span class="cand-key">Age</span><span class="cand-val">${s.age||'—'} yrs</span></div>
-        <div class="cand-row"><span class="cand-key">Experience</span><span class="cand-val">${s.experience||'—'}</span></div>
-        <div class="cand-row"><span class="cand-key">Max Billing</span><span class="cand-val">${rupee(s.max_billing)}/mo</span></div>
-        <div class="cand-row"><span class="cand-key">Expected Salary</span><span class="cand-val">${rupee(s.exp_fixed)}/mo</span></div>
-        <div class="cand-row"><span class="cand-key">Incentive Expected</span><span class="cand-val">${s.exp_incentive||'—'}%</span></div>
-        <div class="cand-row"><span class="cand-key">Join In</span><span class="cand-val">${s.join_timeline||'—'}</span></div>
-        <div class="cand-row">
-          <span class="cand-key">Phone / फ़ोन</span>
-          <span class="cand-val ${isPrem ? '' : 'phone-blur'}">${isPrem ? s.phone : '98XXXXXXXX'}</span>
-        </div>
-        ${s.instagram ? `<div class="cand-row"><span class="cand-key">Instagram</span><span class="cand-val"><a href="${s.instagram}" target="_blank" style="color:var(--green-700); font-weight:600;">View ↗</a></span></div>` : ''}
-        ${!isPrem ? `<div class="premium-lock"><p>🔒 Phone number requires Premium</p><small>फ़ोन नंबर के लिए प्रीमियम अकाउंट लें</small></div>` : ''}
-      </div>
-      <div class="cand-actions">
-        <button class="btn btn-primary btn-sm" style="flex:1;" onclick="viewCandidate('${s.id}')">Full Profile</button>
-        ${isPrem ? `<a class="btn btn-yellow btn-sm" href="tel:${s.phone}">📞 Call</a>` : `<button class="btn btn-sm" style="background:var(--yellow-50); color:var(--green-800); border:1.5px dashed var(--yellow);" onclick="showToast('Contact admin for Premium / एडमिन से प्रीमियम लें')">⭐ Premium</button>`}
-      </div>
-    </div>
-  `).join('');
+  grid.innerHTML = list.map(s => buildCard(s, isPrem)).join('');
 }
 
-function viewCandidate(id) {
-  const s = getStylests().find(h => h.id === id);
-  if (!s) return;
-  const isPrem = currentRec?.plan === 'premium';
-  document.getElementById('modal-title').textContent = `${s.name} — ${s.id}`;
-  document.getElementById('modal-body').innerHTML = `
-    <div class="review-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
-      ${[
-        ['Name', s.name], ['Phone', isPrem ? s.phone : '🔒 Premium Only'],
-        ['Age', (s.age||'—')+' yrs'], ['Home Location', s.home_location||'—'],
-        ['Experience', s.experience||'—'], ['Max Billing', rupee(s.max_billing)+'/mo'],
-        ['Exp Fixed', rupee(s.exp_fixed)+'/mo'], ['Exp Incentive', (s.exp_incentive||'—')+'%'],
-        ['Room Required', s.exp_room||'—'], ['Food Required', s.exp_food||'—'],
-        ['Available', s.available ? '✅ Yes':'⏳ No'], ['Join Timeline', s.join_timeline||'—'],
-        ['Reference', s.ref_name||'—'], ['Prev Location', s.prev_location||'—'],
-        ['Instagram', s.instagram ? `<a href="${s.instagram}" target="_blank" style="color:var(--green-700)">View ↗</a>` : '—'], ['Status', s.status],
-      ].map(([k,v]) => `<div style="background:var(--bg); padding:8px 10px; border-radius:6px; font-size:0.78rem;"><div style="font-size:0.64rem; font-weight:700; color:var(--text-light); text-transform:uppercase; letter-spacing:0.5px;">${k}</div><div style="font-weight:600; margin-top:2px;">${v}</div></div>`).join('')}
+function buildCard(s, isPrem) {
+  const sl  = RCA[s.id] === 'shortlisted';
+  const rj  = RCA[s.id] === 'rejected';
+
+  // ── Photos strip ──
+  const selfie = s.selfie_url || '';
+  const fp     = s.full_photo_urls || [];
+  const wp     = s.work_photo_urls || [];
+
+  let pStrip = `<span class="photos-label">Photos</span>`;
+  // Selfie
+  pStrip += selfie
+    ? `<img class="photo-thumb" src="${selfie}" title="Selfie" onclick="event.stopPropagation();openLB('${selfie}','Selfie — ${s.name}')">`
+    : `<div class="photo-placeholder" title="No selfie">🤳</div>`;
+  // Full photos (2)
+  if (fp.length) {
+    fp.slice(0,2).forEach((u,i) => {
+      pStrip += `<img class="photo-thumb" src="${u}" title="Full photo" onclick="event.stopPropagation();openLB('${u}','Full Photo ${i+1} — ${s.name}')">`;
+    });
+  } else {
+    pStrip += `<div class="photo-placeholder" title="No full photos">📷</div>`;
+  }
+  // Work photos (3)
+  if (wp.length) {
+    wp.slice(0,3).forEach((u,i) => {
+      pStrip += `<img class="photo-thumb" src="${u}" title="Work photo" onclick="event.stopPropagation();openLB('${u}','Work ${i+1} — ${s.name}')">`;
+    });
+    if (wp.length > 3) {
+      pStrip += `<div class="photo-placeholder" style="cursor:pointer;font-size:0.8rem;font-weight:800;color:var(--green-700);" onclick="viewCand('${s.id}')">+${wp.length-3}<br><span style="font-size:0.6rem;">more</span></div>`;
+    }
+  } else {
+    pStrip += `<div class="photo-placeholder" title="No work photos">💈</div>`;
+  }
+
+  // ── Sensitive rows ──
+  const phoneRow = `<div class="cand-row"><span class="cand-key">Phone / फ़ोन</span><span class="cand-val">${isPrem ? `<a href="tel:${s.phone}" style="color:var(--green-700);font-weight:700;">${s.phone}</a>` : `<span class="locked">98XXXXXXXX</span>`}</span></div>`;
+  const aadharRow = `<div class="cand-row"><span class="cand-key">Aadhaar</span><span class="cand-val">${isPrem ? `<span style="color:var(--success);font-weight:700;font-size:0.72rem;">✅ On File</span>` : `<span class="locked">🔒 Hidden</span>`}</span></div>`;
+  const instaRow = s.instagram
+    ? `<div class="cand-row"><span class="cand-key">Instagram</span><span class="cand-val">${isPrem ? `<a href="${s.instagram}" target="_blank" style="color:var(--green-700);font-weight:600;">View ↗</a>` : `<span class="locked">🔒 Hidden</span>`}</span></div>`
+    : '';
+  const premLock = !isPrem
+    ? `<div class="premium-cta-strip">🔒 Phone, Aadhaar &amp; Instagram require Premium<small>प्रीमियम में अपग्रेड करें — ₹1,000/month</small></div>`
+    : '';
+
+  return `
+  <div class="cand-card anim">
+    <div class="cand-top">
+      <div class="cand-avatar" onclick="viewCand('${s.id}')">
+        ${selfie ? `<img src="${selfie}" alt="${s.name}">` : s.name.charAt(0).toUpperCase()}
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="cand-name">${s.name}</div>
+        <div class="cand-meta">📍 ${s.home_location||'—'} · ${s.experience||'—'}</div>
+        <div class="cand-badges">
+          <span class="badge ${s.available?'badge-available':'badge-busy'}">${s.available?'✅ Available':'⏳ Not Available'}</span>
+          <span class="badge ${s.status==='verified'?'badge-verified':'badge-pending'}">${s.status==='verified'?'✓ Verified':'Pending'}</span>
+          ${sl  ? `<span class="badge badge-sl">★ Shortlisted</span>` : ''}
+          ${rj  ? `<span class="badge badge-rej">✗ Rejected</span>` : ''}
+        </div>
+      </div>
     </div>
-    <div style="background:var(--bg2); border-radius:var(--radius-sm); padding:10px; font-size:0.75rem;">
-      <strong>Commitments / प्रतिबद्धताएं:</strong><br>
-      ${s.no_gutka?'✅ No Gutka':'❌ Gutka'} &nbsp;
-      ${s.no_weed?'✅ No Weed':'❌ Weed'} &nbsp;
-      ${s.no_alcohol?'✅ No Alcohol':'❌ Alcohol'} &nbsp;
-      ${s.performance_target?'✅ ₹60k Target':'❌ No Target'} &nbsp;
+
+    <div class="photos-strip">${pStrip}</div>
+
+    <div class="cand-body">
+      <div class="cand-row"><span class="cand-key">Age</span><span class="cand-val">${s.age||'—'} yrs</span></div>
+      <div class="cand-row"><span class="cand-key">Experience</span><span class="cand-val">${s.experience||'—'}</span></div>
+      <div class="cand-row"><span class="cand-key">Max Billing</span><span class="cand-val">${rupee(s.max_billing)}/mo</span></div>
+      <div class="cand-row"><span class="cand-key">Expected Salary</span><span class="cand-val">${rupee(s.exp_fixed)}/mo + ${s.exp_incentive||'—'}%</span></div>
+      <div class="cand-row"><span class="cand-key">Room / Food Exp.</span><span class="cand-val">${s.exp_room||'—'} / ${rupee(s.exp_food)}</span></div>
+      <div class="cand-row"><span class="cand-key">Join In</span><span class="cand-val">${s.join_timeline||'—'}</span></div>
+      ${phoneRow}${aadharRow}${instaRow}
+    </div>
+
+    ${premLock}
+
+    <div class="cand-actions">
+      <button class="btn btn-primary btn-sm" style="flex:1;" onclick="viewCand('${s.id}')">Full Profile</button>
+      <button class="btn btn-sm" style="background:${sl?'#D1FAE5':'var(--bg2)'};color:${sl?'#065F46':'var(--text-mid)'};border:1.5px solid ${sl?'#6EE7B7':'var(--border)'};font-weight:800;"
+        onclick="setAction('${s.id}','shortlisted')">
+        ${sl ? '★ SL' : '☆ SL'}
+      </button>
+      <button class="btn btn-sm" style="background:${rj?'#FEE2E2':'var(--bg2)'};color:${rj?'#991B1B':'var(--text-mid)'};border:1.5px solid ${rj?'#FCA5A5':'var(--border)'};font-weight:800;"
+        onclick="setAction('${s.id}','rejected')">
+        ✗
+      </button>
+    </div>
+  </div>`;
+}
+
+// ── DETAIL MODAL ──────────────────────────────────────────────
+function viewCand(id) {
+  detailId = id;
+  const s     = getStylests().find(h => h.id === id);
+  if (!s) return;
+  const isPrem = CR?.plan === 'premium';
+  const selfie = s.selfie_url || '';
+  const fp     = s.full_photo_urls || [];
+  const wp     = s.work_photo_urls || [];
+
+  document.getElementById('cm-title').textContent = `${s.name} — ${s.id}`;
+
+  // Photo gallery
+  const allPh = [
+    ...(selfie ? [{u:selfie,l:'Selfie'}] : []),
+    ...fp.map((u,i)=>({u,l:`Full ${i+1}`})),
+    ...wp.map((u,i)=>({u,l:`Work ${i+1}`})),
+  ];
+  const gallery = allPh.length
+    ? `<div style="margin-bottom:14px;">
+        <div style="font-size:0.65rem;font-weight:800;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Photos / फ़ोटो</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          ${allPh.map(p=>`<div style="text-align:center;">
+            <img src="${p.u}" onclick="openLB('${p.u}','${p.l} — ${s.name}')"
+              style="width:72px;height:72px;border-radius:8px;object-fit:cover;border:2px solid var(--border);cursor:pointer;" title="${p.l}">
+            <div style="font-size:0.58rem;color:var(--text-light);margin-top:2px;">${p.l}</div>
+          </div>`).join('')}
+        </div>
+      </div>` : '';
+
+  document.getElementById('cm-body').innerHTML = `
+    ${gallery}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+      ${[
+        ['Name', s.name],
+        ['Phone', isPrem ? `<a href="tel:${s.phone}" style="color:var(--green-700);font-weight:700;">${s.phone}</a>` : '🔒 Premium Only'],
+        ['Age', (s.age||'—')+' yrs'],
+        ['Home Location', s.home_location||'—'],
+        ['Aadhaar', isPrem ? '✅ Verified (on file)' : '🔒 Premium Only'],
+        ['Instagram', isPrem ? (s.instagram?`<a href="${s.instagram}" target="_blank" style="color:var(--green-700);">View ↗</a>`:'—') : '🔒 Premium Only'],
+        ['Experience', s.experience||'—'],
+        ['Max Billing', rupee(s.max_billing)+'/mo'],
+        ['Expected Fixed', rupee(s.exp_fixed)+'/mo'],
+        ['Expected Incentive', (s.exp_incentive||'—')+'%'],
+        ['Room Required', s.exp_room||'—'],
+        ['Food Allowance Exp.', rupee(s.exp_food)],
+        ['Prev Fixed', rupee(s.prev_fixed)+'/mo'],
+        ['Prev Incentive', (s.prev_incentive||'—')+'%'],
+        ['Prev Food Allowance', rupee(s.prev_pfood)],
+        ['Available', s.available?'✅ Yes':'⏳ No'],
+        ['Join Timeline', s.join_timeline||'—'],
+        ['Prev Location', s.prev_location||'—'],
+        ['Reference', s.ref_name||'—'],
+        ['Status', s.status],
+      ].map(([k,v])=>`<div style="background:var(--bg);padding:8px 10px;border-radius:6px;font-size:0.78rem;">
+        <div style="font-size:0.61rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">${k}</div>
+        <div style="font-weight:600;margin-top:2px;">${v}</div>
+      </div>`).join('')}
+    </div>
+    <div style="background:var(--bg2);border-radius:var(--radius-sm);padding:10px;font-size:0.75rem;margin-bottom:${isPrem?0:10}px;">
+      <strong>Commitments:</strong>&nbsp;
+      ${s.no_gutka?'✅ No Gutka':'❌ Gutka'}&nbsp;
+      ${s.no_weed?'✅ No Weed':'❌ Weed'}&nbsp;
+      ${s.no_alcohol?'✅ No Alcohol':'❌ Alcohol'}&nbsp;
+      ${s.performance_target?'✅ ₹60k Target':'❌ No Target'}&nbsp;
       ${[s.wear_uniform,s.stay_neat,s.follow_timing,s.respect_customers,s.keep_clean,s.no_nuisance].every(Boolean)?'✅ All Rules':'⚠️ Partial Rules'}
     </div>
-    ${s.all_locations ? `<div style="margin-top:10px; font-size:0.78rem;"><strong>All Previous Locations:</strong> ${s.all_locations}</div>` : ''}
+    ${!isPrem?`<div style="background:var(--yellow-50);border:1.5px dashed var(--yellow);border-radius:var(--radius-sm);padding:11px;text-align:center;">
+      <div style="font-weight:800;color:var(--green-800);">🔒 Upgrade for full contact access</div>
+      <div style="font-family:var(--font-hindi);font-size:0.7rem;color:var(--text-light);margin-top:3px;">फ़ोन, आधार और इंस्टाग्राम के लिए प्रीमियम लें</div>
+      <button class="btn btn-yellow btn-sm" style="margin-top:10px;" onclick="closeModal('cand-modal');openUpgrade()">⭐ Upgrade — ₹1,000/month</button>
+    </div>`:''}
   `;
+  rebuildModalFooter(id);
   openModal('cand-modal');
 }
 
-function renderProfile() {
-  if (!currentRec) return;
-  const isPrem = currentRec.plan === 'premium';
-  document.getElementById('salon-profile-body').innerHTML = `
-    <div class="info-row"><span class="info-key">Salon Name</span><span class="info-val"><strong>${currentRec.salon_name}</strong></span></div>
-    <div class="info-row"><span class="info-key">Email</span><span class="info-val">${currentRec.email}</span></div>
-    <div class="info-row"><span class="info-key">Location</span><span class="info-val">${currentRec.location||'—'}</span></div>
-    <div class="info-row"><span class="info-key">Franchise</span><span class="info-val">${currentRec.franchise === 'yes' ? 'Yes / हाँ' : 'No / नहीं'}</span></div>
-    <div class="info-row"><span class="info-key">Address</span><span class="info-val">${currentRec.address||'—'}</span></div>
+function rebuildModalFooter(id) {
+  const sl = RCA[id] === 'shortlisted';
+  const rj = RCA[id] === 'rejected';
+  document.getElementById('cm-footer').innerHTML = `
+    <button class="btn btn-sm" style="background:${sl?'#D1FAE5':'var(--bg2)'};color:${sl?'#065F46':'var(--text-mid)'};border:1.5px solid ${sl?'#6EE7B7':'var(--border)'};font-weight:800;"
+      onclick="setAction('${id}','shortlisted')">
+      ${sl ? '★ Shortlisted' : '☆ Shortlist'}
+    </button>
+    <button class="btn btn-sm" style="background:${rj?'#FEE2E2':'var(--bg2)'};color:${rj?'#991B1B':'var(--text-mid)'};border:1.5px solid ${rj?'#FCA5A5':'var(--border)'};font-weight:800;"
+      onclick="setAction('${id}','rejected')">
+      ${rj ? '✗ Rejected' : '✗ Reject'}
+    </button>
+    <button class="btn btn-outline btn-sm" onclick="closeModal('cand-modal')" style="margin-left:auto;">Close</button>
   `;
-  document.getElementById('plan-body').innerHTML = isPrem
-    ? `<div style="background:#ECFDF5; border:1.5px solid #6EE7B7; border-radius:var(--radius); padding:16px; text-align:center;">
-        <div style="font-size:2rem; margin-bottom:6px;">⭐</div>
-        <div style="font-family:var(--font-display); font-size:1.1rem; font-weight:900; color:#065F46;">Premium Account Active</div>
-        <div style="font-size:0.78rem; color:#047857; margin-top:4px;">Full access — all phone numbers visible</div>
-        <div style="font-family:var(--font-hindi); font-size:0.75rem; color:#059669; margin-top:3px;">सभी फ़ोन नंबर और विवरण देखने की सुविधा</div>
-      </div>`
-    : `<div style="background:var(--yellow-50); border:2px dashed var(--yellow); border-radius:var(--radius); padding:16px; text-align:center;">
-        <div style="font-size:2rem; margin-bottom:6px;">🔓</div>
-        <div style="font-family:var(--font-display); font-size:1.1rem; font-weight:900; color:var(--green-800);">Basic Account</div>
-        <div style="font-size:0.78rem; color:var(--text-light); margin-top:4px;">Phone numbers are hidden. Contact admin to upgrade.</div>
-        <div style="font-family:var(--font-hindi); font-size:0.75rem; color:var(--text-light); margin-top:3px;">फ़ोन नंबर देखने के लिए एडमिन से प्रीमियम अकाउंट लें</div>
-        <div style="margin-top:12px; font-size:0.72rem; background:white; border-radius:6px; padding:8px; color:var(--green-800);">📧 Contact: admin@budgetbarber.in</div>
-      </div>`;
 }
+
+// ── PROFILE ───────────────────────────────────────────────────
+function renderProfile() {
+  if (!CR) return;
+  const isPrem  = CR.plan === 'premium';
+  const slCount = Object.values(RCA).filter(v => v === 'shortlisted').length;
+  const rjCount = Object.values(RCA).filter(v => v === 'rejected').length;
+
+  // Validity
+  let validHtml = '';
+  if (isPrem && CR.plan_expiry) {
+    const exp  = new Date(CR.plan_expiry);
+    const days = Math.ceil((exp - new Date()) / 86400000);
+    const cls  = days <= 7 ? 'expiring' : 'active-val';
+    validHtml = `
+      <div class="validity-row">
+        <div>
+          <div class="validity-lbl">Plan Valid Until</div>
+          <div class="validity-val ${cls}">${exp.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})} (${days} days left)</div>
+        </div>
+        <span class="badge ${days<=7?'badge-pending':'badge-verified'}">${days<=7?'⚠️ Expiring':'✓ Active'}</span>
+      </div>`;
+  }
+
+  document.getElementById('profile-wrap').innerHTML = `
+
+    <div class="card anim" style="margin-bottom:16px;">
+      <div class="card-header"><span style="font-size:1.3rem;">🏪</span><div><h2>Salon Profile</h2><span>सैलून प्रोफ़ाइल</span></div></div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-key">Salon Name</span><span class="info-val"><strong>${CR.salon_name}</strong></span></div>
+        <div class="info-row"><span class="info-key">Phone / फ़ोन</span><span class="info-val">${CR.phone}</span></div>
+        <div class="info-row"><span class="info-key">Location</span><span class="info-val">${CR.location||'—'}</span></div>
+        <div class="info-row"><span class="info-key">Franchise</span><span class="info-val">${CR.franchise==='yes'?'Yes / हाँ':'No / नहीं'}</span></div>
+        <div class="info-row"><span class="info-key">Address</span><span class="info-val">${CR.address||'—'}</span></div>
+        <div class="info-row"><span class="info-key">Member Since</span><span class="info-val">${CR.created_at?new Date(CR.created_at).toLocaleDateString('en-IN'):'—'}</span></div>
+        <div class="info-row"><span class="info-key">Shortlisted</span><span class="info-val" style="color:var(--success);font-weight:700;">★ ${slCount}</span></div>
+        <div class="info-row"><span class="info-key">Rejected</span><span class="info-val" style="color:var(--red);font-weight:700;">✗ ${rjCount}</span></div>
+      </div>
+    </div>
+
+    <div class="card anim anim-d1">
+      <div class="card-header"><span style="font-size:1.3rem;">⭐</span><div><h2>Current Plan</h2><span>वर्तमान प्लान</span></div></div>
+      <div class="card-body">
+        ${isPrem ? `
+          <div class="plan-box premium">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+              <span style="font-size:1.8rem;">⭐</span>
+              <div>
+                <div class="plan-title" style="color:#065F46;">Premium Active</div>
+                <div class="plan-price">₹1,000<span style="font-size:1rem;color:var(--text-light);font-weight:500;">/month</span></div>
+              </div>
+            </div>
+            <ul class="plan-features">
+              <li>✅ Full phone number access for all available staff</li>
+              <li>✅ Aadhaar card details visible</li>
+              <li>✅ Instagram profile links visible</li>
+              <li>✅ Shortlist &amp; manage candidates</li>
+              <li>✅ Direct call option on candidate cards</li>
+            </ul>
+            ${validHtml}
+            ${CR.plan_expiry && new Date(CR.plan_expiry) - new Date() < 15*86400000
+              ? `<button class="btn btn-primary btn-block" style="margin-top:12px;" onclick="openUpgrade()">🔄 Renew Plan</button>` : ''}
+          </div>` : `
+          <div class="plan-box basic">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+              <span style="font-size:1.8rem;">🔓</span>
+              <div>
+                <div class="plan-title" style="color:var(--green-800);">Basic Plan</div>
+                <div style="font-size:0.78rem;color:var(--text-light);margin-top:2px;">Limited — contact details hidden</div>
+              </div>
+            </div>
+            <ul class="plan-features">
+              <li>✅ Browse all registered hairstylists</li>
+              <li>✅ View photos, experience &amp; salary info</li>
+              <li>✅ Shortlist &amp; reject candidates</li>
+              <li>❌ Phone numbers hidden</li>
+              <li>❌ Aadhaar details hidden</li>
+              <li>❌ Instagram profiles hidden</li>
+            </ul>
+            ${CR.plan_requested ? `
+              <div style="background:#FEF3C7;border:1px solid #FBBF24;border-radius:var(--radius-sm);padding:10px;font-size:0.78rem;font-weight:700;color:#92400E;margin-top:10px;">
+                ⏳ Upgrade request submitted — Admin will activate within 24 hrs
+                <div style="font-family:var(--font-hindi);font-weight:400;color:#78350F;margin-top:3px;">अनुरोध जमा हो गया है — 24 घंटे में सक्रिय होगा</div>
+              </div>` : `
+              <button class="btn btn-yellow btn-block btn-lg" style="margin-top:14px;" onclick="openUpgrade()">
+                ⭐ Upgrade to Premium — ₹1,000/month
+              </button>
+              <div style="font-family:var(--font-hindi);font-size:0.7rem;color:var(--text-light);text-align:center;margin-top:6px;">प्रीमियम में अपग्रेड करें — सभी संपर्क विवरण देखें</div>`}
+          </div>`}
+      </div>
+    </div>`;
+}
+
+// ── PAYMENT ───────────────────────────────────────────────────
+function openUpgrade() {
+  selPay = null;
+  document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pay-info-area').style.display = 'none';
+  document.getElementById('pay-ref').value = '';
+  // Show/hide Razorpay & Cashfree based on admin config
+  const cfg = getPayCfg();
+  document.getElementById('pbtn-razorpay').style.display = cfg.razorpay_key  ? 'block' : 'none';
+  document.getElementById('pbtn-cashfree').style.display = cfg.cashfree_appid ? 'block' : 'none';
+  openModal('upgrade-modal');
+}
+
+function getPayCfg() {
+  try { return JSON.parse(localStorage.getItem('bb_payment_config') || '{}'); } catch { return {}; }
+}
+
+function selectPay(method) {
+  selPay = method;
+  document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pbtn-' + method)?.classList.add('active');
+  const cfg  = getPayCfg();
+  const area = document.getElementById('pay-info-area');
+  area.style.display = 'block';
+
+  if (method === 'razorpay') {
+    area.innerHTML = cfg.razorpay_key
+      ? `<div style="text-align:center;"><div style="font-weight:700;margin-bottom:10px;">💳 Pay via Razorpay</div><button class="btn btn-primary" onclick="launchRazorpay()">Pay ₹1,000 Now</button></div>`
+      : `<div style="color:var(--text-light);font-size:0.78rem;text-align:center;">Razorpay not yet configured by admin. Use UPI or QR Code.</div>`;
+  } else if (method === 'cashfree') {
+    area.innerHTML = cfg.cashfree_appid
+      ? `<div style="text-align:center;"><div style="font-weight:700;margin-bottom:10px;">🏦 Pay via Cashfree</div><button class="btn btn-primary" onclick="launchCashfree()">Pay ₹1,000 Now</button></div>`
+      : `<div style="color:var(--text-light);font-size:0.78rem;text-align:center;">Cashfree not yet configured by admin. Use UPI or QR Code.</div>`;
+  } else if (method === 'upi') {
+    const uid = cfg.upi_id || '';
+    area.innerHTML = uid
+      ? `<div style="text-align:center;">
+          <div style="font-weight:700;margin-bottom:6px;">📱 Pay via UPI</div>
+          <div class="upi-id-box">${uid}</div>
+          <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:8px;">Pay ₹1,000 using any UPI app (GPay, PhonePe, Paytm, etc.)</div>
+          <button class="btn btn-yellow btn-sm" onclick="navigator.clipboard.writeText('${uid}').then(()=>showToast('UPI ID copied! / कॉपी हो गया','success'))">📋 Copy UPI ID</button>
+        </div>`
+      : `<div style="color:var(--text-light);font-size:0.78rem;text-align:center;">UPI ID not configured by admin yet. Please use QR code or contact admin.</div>`;
+  } else if (method === 'qr') {
+    const qr = cfg.qr_image_url || '';
+    area.innerHTML = `<div class="qr-wrap">
+      <div style="font-weight:700;margin-bottom:10px;">🔲 Scan &amp; Pay ₹1,000</div>
+      ${qr
+        ? `<img src="${qr}" alt="Payment QR Code">`
+        : `<div class="qr-empty">📷 QR Code will be shown here once admin uploads it</div>`}
+      <div style="font-size:0.7rem;color:var(--text-light);margin-top:10px;font-family:var(--font-hindi);">QR कोड स्कैन करके ₹1,000 का भुगतान करें</div>
+    </div>`;
+  }
+}
+
+function launchRazorpay() {
+  const cfg = getPayCfg();
+  if (typeof Razorpay === 'undefined') {
+    const s = document.createElement('script');
+    s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    s.onload = () => _openRzp(cfg); document.head.appendChild(s);
+  } else { _openRzp(cfg); }
+}
+function _openRzp(cfg) {
+  const opts = {
+    key: cfg.razorpay_key,
+    amount: 100000, currency: 'INR',
+    name: 'Budget Barber', description: 'Premium Recruiter — 1 Month',
+    handler: r => { document.getElementById('pay-ref').value = r.razorpay_payment_id; submitUpgrade(); },
+    prefill: { contact: CR?.phone || '' },
+    theme: { color: '#0D3B2E' }
+  };
+  new Razorpay(opts).open();
+}
+
+function launchCashfree() {
+  showToast('Cashfree requires backend integration — contact admin', 'info');
+}
+
+function submitUpgrade() {
+  if (!CR) return;
+  const ref = document.getElementById('pay-ref')?.value.trim() || '';
+  const recs = getRecruiters();
+  const idx  = recs.findIndex(r => r.id === CR.id);
+  if (idx !== -1) {
+    recs[idx].plan_requested      = true;
+    recs[idx].plan_request_ref    = ref;
+    recs[idx].plan_request_method = selPay || 'manual';
+    recs[idx].plan_request_date   = new Date().toISOString();
+    saveRecruiters(recs);
+    CR = recs[idx]; setRecruiterSession(CR);
+  }
+  closeModal('upgrade-modal');
+  showToast('Upgrade request submitted! Admin will activate within 24 hrs 🎉', 'success');
+  renderProfile();
+}
+
 </script>
 </body>
 </html>

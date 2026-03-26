@@ -50,9 +50,10 @@ function _defaultStylests() {
   ];
 }
 function _defaultRecruiters() {
+  const thirtyDays = new Date(Date.now() + 30*86400000).toISOString();
   return [
-    { id:'REC-001', salon_name:'Style King Salon', email:'recruiter@demo.com', password:'demo123', location:'Hyderabad', franchise:'yes', address:'Banjara Hills, Hyderabad', plan:'premium', created_at:'2024-10-01T09:00:00Z' },
-    { id:'REC-002', salon_name:'Trim Masters', email:'trim@demo.com', password:'demo123', location:'Bangalore', franchise:'no', address:'Koramangala, Bangalore', plan:'basic', created_at:'2024-10-05T11:00:00Z' },
+    { id:'REC-001', salon_name:'Style King Salon', phone:'9876543000', pin:'123456', email:'recruiter@demo.com', location:'Hyderabad', franchise:'yes', address:'Banjara Hills, Hyderabad', plan:'premium', plan_expiry: thirtyDays, plan_requested:false, created_at:'2024-10-01T09:00:00Z' },
+    { id:'REC-002', salon_name:'Trim Masters', phone:'9876543001', pin:'123456', email:'trim@demo.com', location:'Bangalore', franchise:'no', address:'Koramangala, Bangalore', plan:'basic', plan_expiry:null, plan_requested:false, created_at:'2024-10-05T11:00:00Z' },
   ];
 }
 
