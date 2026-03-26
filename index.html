@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Budget Barber — Recruitment Platform</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ── HERO ─────────────────────────────────────────────── */
+body { overflow-x: hidden; }
+
+.hero {
+  min-height: 100vh;
+  background: var(--green-800);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Geometric background pattern */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(245,216,0,0.04) 0px,
+      rgba(245,216,0,0.04) 1px,
+      transparent 1px,
+      transparent 40px
+    );
+  pointer-events: none;
+}
+
+/* Big decorative circle */
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  border: 1px solid rgba(245,216,0,0.08);
+  top: -200px; right: -200px;
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative; z-index: 1;
+  text-align: center; max-width: 800px;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--yellow);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease 0.1s both;
+}
+
+.hero-logo-wrap {
+  display: flex; justify-content: center;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease 0.2s both;
+}
+
+.hero-tagline {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease 0.3s both;
+}
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease 0.4s both;
+}
+.hero-headline em {
+  color: var(--yellow);
+  font-style: normal;
+}
+
+.hero-sub {
+  font-family: var(--font-hindi);
+  font-size: 1rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 48px;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease 0.5s both;
+}
+
+/* ── PORTAL CARDS ─────────────────────────────────────── */
+.portals {
+  display: flex; gap: 20px; flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease 0.6s both;
+}
+
+.portal-card {
+  background: white;
+  border-radius: 20px;
+  width: 220px;
+  padding: 32px 24px 28px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  border: 3px solid transparent;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  text-decoration: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+.portal-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--yellow);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  transform-origin: left;
+}
+.portal-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--yellow);
+  box-shadow: 0 20px 48px rgba(0,0,0,0.35);
+}
+.portal-card:hover::before { transform: scaleX(1); }
+
+.portal-icon {
+  font-size: 3rem;
+  margin-bottom: 14px;
+  line-height: 1;
+  display: block;
+}
+
+.portal-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--green-800);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.portal-sub {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  font-family: var(--font-hindi);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.portal-pill {
+  display: inline-block;
+  background: var(--yellow);
+  color: var(--green-800);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* ── STATS STRIP ──────────────────────────────────────── */
+.stats-strip {
+  display: flex; gap: 0;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 56px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease 0.8s both;
+}
+.stat-item {
+  padding: 18px 32px;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  flex: 1;
+  min-width: 120px;
+}
+.stat-item:last-child { border-right: none; }
+.stat-n {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--yellow);
+  line-height: 1;
+}
+.stat-l {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+/* ── FOOTER ───────────────────────────────────────────── */
+.hero-footer {
+  margin-top: 40px;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 1px;
+  opacity: 0;
+  animation: fadeInUp 0.5s ease 1s both;
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-inner">
+
+    <div class="hero-eyebrow">✦ Digital Men's Salon Network ✦</div>
+
+    <div class="hero-logo-wrap">
+      <div class="bb-logo lg">
+        <span class="bb-logo-budget">BUDGET</span>
+        <span class="bb-logo-barber">BARBER</span>
+      </div>
+    </div>
+
+    <div class="hero-tagline">Recruitment Platform</div>
+
+    <h1 class="hero-headline">
+      Find the <em>Best</em><br>Hairstylists in India
+    </h1>
+    <p class="hero-sub">भारत के सर्वश्रेष्ठ हेयरस्टाइलिस्ट खोजें — Choose your portal below</p>
+
+    <div class="portals">
+
+      <a href="register.html" class="portal-card">
+        <span class="portal-icon">✂️</span>
+        <div class="portal-title">Hairstylist</div>
+        <div class="portal-sub">हेयरस्टाइलिस्ट<br>Register for Recruitment</div>
+        <span class="portal-pill">REGISTER / पंजीकरण</span>
+      </a>
+
+      <a href="recruiter.html" class="portal-card">
+        <span class="portal-icon">🏪</span>
+        <div class="portal-title">Recruiter</div>
+        <div class="portal-sub">भर्तीकर्ता<br>Hire Talented Staff</div>
+        <span class="portal-pill">HIRE / नियुक्ति</span>
+      </a>
+
+      <a href="admin.html" class="portal-card">
+        <span class="portal-icon">⚙️</span>
+        <div class="portal-title">Admin</div>
+        <div class="portal-sub">प्रशासन<br>Manage Everything</div>
+        <span class="portal-pill">ADMIN / व्यवस्थापक</span>
+      </a>
+
+    </div>
+
+    <div class="stats-strip" id="stats-strip">
+      <div class="stat-item"><div class="stat-n" id="s-total">0</div><div class="stat-l">Registered</div></div>
+      <div class="stat-item"><div class="stat-n" id="s-available">0</div><div class="stat-l">Available Now</div></div>
+      <div class="stat-item"><div class="stat-n" id="s-verified">0</div><div class="stat-l">Verified</div></div>
+      <div class="stat-item"><div class="stat-n" id="s-salons">0</div><div class="stat-l">Salons</div></div>
+    </div>
+
+    <div class="hero-footer">© Budget Barber Digital Men's Salon · All Rights Reserved</div>
+  </div>
+</section>
+
+<script src="shared.js"></script>
+<script>
+  // Populate live stats from shared store
+  const ss = getStylests();
+  const rr = getRecruiters();
+  document.getElementById('s-total').textContent     = ss.length;
+  document.getElementById('s-available').textContent = ss.filter(s => s.available).length;
+  document.getElementById('s-verified').textContent  = ss.filter(s => s.status === 'verified').length;
+  document.getElementById('s-salons').textContent    = rr.length;
+</script>
+</body>
+</html>
