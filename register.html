@@ -231,10 +231,30 @@
   <div class="container">
 
     <div class="card mt-20 anim">
-      <div class="card-header"><span style="font-size:1.5rem">🪪</span><div><h2>Aadhaar Card</h2><span>आधार कार्ड अपलोड करें</span></div></div>
+      <div class="card-header"><span style="font-size:1.5rem">🪪</span><div><h2>Aadhaar Card</h2><span>आधार कार्ड — Front &amp; Back दोनों अपलोड करें</span></div></div>
       <div class="card-body">
-        <div class="upload-zone"><input type="file" id="f_aadhaar" accept="image/*" onchange="handleUpload('aadhaar',this)"><div class="upload-icon">🪪</div><p><strong>Upload Aadhaar Card / आधार कार्ड अपलोड करें</strong></p><small>JPG, PNG — Max 5MB — Front side preferred</small></div>
-        <div class="upload-preview" id="prev-aadhaar"></div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Aadhaar Front Side <span class="hn">आधार का अगला भाग</span> <span class="req">*</span></label>
+            <div class="upload-zone" style="padding:18px 12px;">
+              <input type="file" id="f_aadhaar_front" accept="image/*" onchange="handleUpload('aadhaar_front',this)">
+              <div class="upload-icon">🪪</div>
+              <p style="font-size:0.8rem;"><strong>Front Side / अगला भाग</strong></p>
+              <small>Name &amp; photo side — JPG, PNG Max 5MB</small>
+            </div>
+            <div class="upload-preview" id="prev-aadhaar_front"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Aadhaar Back Side <span class="hn">आधार का पिछला भाग</span> <span class="req">*</span></label>
+            <div class="upload-zone" style="padding:18px 12px;">
+              <input type="file" id="f_aadhaar_back" accept="image/*" onchange="handleUpload('aadhaar_back',this)">
+              <div class="upload-icon">🔄</div>
+              <p style="font-size:0.8rem;"><strong>Back Side / पिछला भाग</strong></p>
+              <small>Address side — JPG, PNG Max 5MB</small>
+            </div>
+            <div class="upload-preview" id="prev-aadhaar_back"></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -247,9 +267,9 @@
     </div>
 
     <div class="card mt-16 anim anim-d2">
-      <div class="card-header"><span style="font-size:1.5rem">📷</span><div><h2>Full Photos</h2><span>पूर्ण फ़ोटो अपलोड करें</span></div></div>
+      <div class="card-header"><span style="font-size:1.5rem">📷</span><div><h2>Full Body Photos</h2><span>पूर्ण फ़ोटो अपलोड करें</span></div></div>
       <div class="card-body">
-        <div class="upload-zone"><input type="file" id="f_fullphotos" accept="image/*" multiple onchange="handleUpload('full_photos',this)"><div class="upload-icon">📷</div><p><strong>Upload Full Photos</strong></p><small>पूरे शरीर की फ़ोटो — Multiple files allowed</small></div>
+        <div class="upload-zone"><input type="file" id="f_fullphotos" accept="image/*" multiple onchange="handleUpload('full_photos',this)"><div class="upload-icon">📷</div><p><strong>Upload Full Body Photos</strong></p><small>पूरे शरीर की फ़ोटो — Multiple files allowed</small></div>
         <div class="upload-preview" id="prev-full_photos"></div>
       </div>
     </div>
@@ -337,13 +357,9 @@
               <input type="number" id="r_pinc" placeholder="% on billing" min="0" max="100">
             </div>
             <div class="form-group">
-              <label class="form-label">Food <span class="hn">खाना</span></label>
-              <select id="r_pfood">
-                <option value="">Select</option>
-                <option value="provided">Provided / दिया जाता था</option>
-                <option value="allowance">Cash Allowance / नकद भत्ता</option>
-                <option value="not_provided">Not Provided / नहीं था</option>
-              </select>
+              <label class="form-label">Food Allowance <span class="hn">खाना भत्ता राशि</span></label>
+              <input type="number" id="r_pfood" placeholder="₹ per month (0 if not given)" min="0">
+              <div class="form-hint">0 लिखें अगर खाना नहीं दिया जाता था — Enter 0 if not provided</div>
             </div>
             <div class="form-group">
               <label class="form-label">Room / Accommodation <span class="hn">कमरा</span></label>
@@ -373,12 +389,9 @@
               <input type="number" id="r_einc" placeholder="% expected" min="0" max="100">
             </div>
             <div class="form-group">
-              <label class="form-label">Food Required? <span class="hn">खाना चाहिए?</span></label>
-              <select id="r_efood">
-                <option value="">Select</option>
-                <option value="required">Required / चाहिए</option>
-                <option value="not_required">Not Required / नहीं चाहिए</option>
-              </select>
+              <label class="form-label">Food Allowance Expected <span class="hn">अपेक्षित खाना भत्ता</span></label>
+              <input type="number" id="r_efood" placeholder="₹ per month (0 if not needed)" min="0">
+              <div class="form-hint">0 लिखें अगर खाना भत्ता नहीं चाहिए — Enter 0 if not required</div>
             </div>
             <div class="form-group">
               <label class="form-label">Room Required? <span class="hn">कमरा चाहिए?</span></label>
