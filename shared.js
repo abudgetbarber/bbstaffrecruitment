@@ -36,7 +36,11 @@ if (localStorage.getItem('bb_data_ver') !== DATA_VERSION) {
 
 function getStylests() {
   try {
-    return JSON.parse(localStorage.getItem('bb_stylists') || 'null') || _defaultStylests();
+    const stored = localStorage.getItem('bb_stylists');
+    if (stored) return JSON.parse(stored);
+    const defaults = _defaultStylests();
+    localStorage.setItem('bb_stylists', JSON.stringify(defaults));
+    return defaults;
   } catch { return _defaultStylests(); }
 }
 function saveStylests(arr) {
@@ -44,7 +48,12 @@ function saveStylests(arr) {
 }
 function getRecruiters() {
   try {
-    return JSON.parse(localStorage.getItem('bb_recruiters') || 'null') || _defaultRecruiters();
+    const stored = localStorage.getItem('bb_recruiters');
+    if (stored) return JSON.parse(stored);
+    // First time: persist defaults so subsequent saves/reads work correctly
+    const defaults = _defaultRecruiters();
+    localStorage.setItem('bb_recruiters', JSON.stringify(defaults));
+    return defaults;
   } catch { return _defaultRecruiters(); }
 }
 function saveRecruiters(arr) {

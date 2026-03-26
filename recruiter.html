@@ -343,11 +343,9 @@
         <option value="">All Experience</option>
         <option value="less1">Less than 1 yr</option>
         <option value="1-2">1–2 years</option>
-        <option value="2-4">2–4 years</option>
-        <option value="4-6">4–6 years</option>
-        <option value="6-8">6–8 years</option>
-        <option value="8-10">8–10 years</option>
-        <option value="10+">10+ years</option>
+        <option value="2-3">2–3 years</option>
+        <option value="3-5">3–5 years</option>
+        <option value="5+">5+ years</option>
       </select>
       <select id="f_avail" onchange="renderAll()">
         <option value="">All Availability</option>
@@ -377,12 +375,11 @@
       <input class="filter-search" type="text" id="sl_search" placeholder="🔍 Search shortlisted…" oninput="renderShortlisted()">
       <select id="sl_exp" onchange="renderShortlisted()">
         <option value="">All Experience</option>
+        <option value="less1">Less than 1 yr</option>
         <option value="1-2">1–2 years</option>
-        <option value="2-4">2–4 years</option>
-        <option value="4-6">4–6 years</option>
-        <option value="6-8">6–8 years</option>
-        <option value="8-10">8–10 years</option>
-        <option value="10+">10+ years</option>
+        <option value="2-3">2–3 years</option>
+        <option value="3-5">3–5 years</option>
+        <option value="5+">5+ years</option>
       </select>
       <select id="sl_avail" onchange="renderShortlisted()">
         <option value="">All Availability</option>
@@ -406,12 +403,11 @@
       <input class="filter-search" type="text" id="rj_search" placeholder="🔍 Search rejected…" oninput="renderRejected()">
       <select id="rj_exp" onchange="renderRejected()">
         <option value="">All Experience</option>
+        <option value="less1">Less than 1 yr</option>
         <option value="1-2">1–2 years</option>
-        <option value="2-4">2–4 years</option>
-        <option value="4-6">4–6 years</option>
-        <option value="6-8">6–8 years</option>
-        <option value="8-10">8–10 years</option>
-        <option value="10+">10+ years</option>
+        <option value="2-3">2–3 years</option>
+        <option value="3-5">3–5 years</option>
+        <option value="5+">5+ years</option>
       </select>
       <select id="rj_avail" onchange="renderRejected()">
         <option value="">All Availability</option>
@@ -581,16 +577,12 @@ window.addEventListener('load', () => {
 
 // ── AUTH ─────────────────────────────────────────────────────
 
-// Ensure demo recruiters always have phone+pin (runs before every login attempt)
 function ensureDemoRecruiters() {
-  let recs = getRecruiters();
+  const recs = getRecruiters(); // getRecruiters now persists defaults automatically
   let changed = false;
   recs.forEach(r => {
-    if (!r.phone) {
-      r.phone = r.id === 'REC-001' ? '9876543000' : '9876543001';
-      changed = true;
-    }
-    if (!r.pin) { r.pin = '123456'; changed = true; }
+    if (!r.phone) { r.phone = r.id === 'REC-001' ? '9876543000' : '9876543001'; changed = true; }
+    if (!r.pin)   { r.pin   = '123456'; changed = true; }
     if (r.plan_requested === undefined) { r.plan_requested = false; changed = true; }
   });
   if (changed) saveRecruiters(recs);
@@ -601,21 +593,21 @@ function doLogin() {
   const phone = document.getElementById('l_phone').value.trim();
   const pin   = getPin('login-pins');
 
-  if (!phone || phone.length < 10) { showToast('Enter valid 10-digit phone / फ़ोन नंबर डालें', 'error'); return; }
-  if (pin.length !== 6) { showToast('Enter all 6 digits of PIN / 6 अंकों का PIN डालें', 'error'); return; }
+  if (phone.length < 10) { showToast('Enter valid 10-digit phone / फ़ोन नंबर डालें', 'error'); return; }
+  if (pin.length !== 6)  { showToast('Enter all 6 PIN digits / 6 अंक डालें', 'error'); return; }
 
-  // Always ensure demo data is seeded before searching
   const recs = ensureDemoRecruiters();
+  // Use String() comparison to avoid any type mismatch
+  const rec  = recs.find(r => String(r.phone) === String(phone) && String(r.pin) === String(pin));
 
-  console.log('Login attempt:', phone, pin);
-  console.log('Available recruiters:', recs.map(r => ({ id: r.id, phone: r.phone, pin: r.pin })));
-
-  const rec = recs.find(r => r.phone === phone && r.pin === pin);
   if (!rec) {
     showToast('Invalid phone or PIN / गलत फ़ोन या PIN', 'error');
     return;
   }
-  CR = rec; setRecruiterSession(rec); loadRCA(); showDash();
+  CR = rec;
+  setRecruiterSession(rec);
+  loadRCA();
+  showDash();
 }
 
 function doRegister() {
