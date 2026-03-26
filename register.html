@@ -565,7 +565,7 @@ function buildReview() {
     ['Join Timeline', v('r_join')],
     ['Reference', v('r_refname') || '—'],
     ['No Gutka/Weed/Alcohol', [c('c_gutka'),c('c_weed'),c('c_alcohol')].every(Boolean) ? '✅ Agreed' : '❌ Not all agreed'],
-    ['Company Rules', [c('c_uniform'),c('c_neat'),c('c_timing'),c('c_respect'),c('c_clean'),c('c_nuisance')].every(Boolean) ? '✅ All agreed' : '⚠️ Partial'],
+    ['Company Rules', [c('c_uniform'),c('c_neat'),c('c_timing'),c('c_respect'),c('c_clean'),c('c_nuisance'),c('c_other')].every(Boolean) ? '✅ All agreed' : '⚠️ Partial'],
     ['Performance Target ₹60k', c('c_target') ? '✅ Agreed' : '❌ Not agreed'],
   ];
   document.getElementById('review-body').innerHTML = `
