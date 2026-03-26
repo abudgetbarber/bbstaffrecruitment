@@ -343,11 +343,9 @@
         <option value="">All Experience</option>
         <option value="less1">Less than 1 yr</option>
         <option value="1-2">1–2 years</option>
-        <option value="2-4">2–4 years</option>
-        <option value="4-6">4–6 years</option>
-        <option value="6-8">6–8 years</option>
-        <option value="8-10">8–10 years</option>
-        <option value="10+">10+ years</option>
+        <option value="2-3">2–3 years</option>
+        <option value="3-5">3–5 years</option>
+        <option value="5+">5+ years</option>
       </select>
       <select id="f_avail" onchange="renderAll()">
         <option value="">All Availability</option>
@@ -365,7 +363,6 @@
         <option value="">Any Billing</option>
         <option value="30000">₹30k+</option>
         <option value="50000">₹50k+</option>
-        <option value="60000">₹60k+</option>
         <option value="70000">₹70k+</option>
       </select>
     </div>
@@ -380,11 +377,9 @@
         <option value="">All Experience</option>
         <option value="less1">Less than 1 yr</option>
         <option value="1-2">1–2 years</option>
-        <option value="2-4">2–4 years</option>
-        <option value="4-6">4–6 years</option>
-        <option value="6-8">6–8 years</option>
-        <option value="8-10">8–10 years</option>
-        <option value="10+">10+ years</option>
+        <option value="2-3">2–3 years</option>
+        <option value="3-5">3–5 years</option>
+        <option value="5+">5+ years</option>
       </select>
       <select id="sl_avail" onchange="renderShortlisted()">
         <option value="">All Availability</option>
@@ -410,11 +405,9 @@
         <option value="">All Experience</option>
         <option value="less1">Less than 1 yr</option>
         <option value="1-2">1–2 years</option>
-        <option value="2-4">2–4 years</option>
-        <option value="4-6">4–6 years</option>
-        <option value="6-8">6–8 years</option>
-        <option value="8-10">8–10 years</option>
-        <option value="10+">10+ years</option>
+        <option value="2-3">2–3 years</option>
+        <option value="3-5">3–5 years</option>
+        <option value="5+">5+ years</option>
       </select>
       <select id="rj_avail" onchange="renderRejected()">
         <option value="">All Availability</option>
@@ -570,19 +563,54 @@ function show(id) {
 
 // ── BOOT ─────────────────────────────────────────────────────
 window.addEventListener('load', () => {
+  ensureDemoRecruiters(); // always seed phone+pin on demo data
   const saved = getRecruiterSession();
-  if (saved) { CR = saved; loadRCA(); showDash(); }
-  else show('view-login');
+  if (saved) {
+    // Re-read from storage so we get latest plan/phone data
+    const latest = getRecruiters().find(r => r.id === saved.id);
+    CR = latest || saved;
+    loadRCA(); showDash();
+  } else {
+    show('view-login');
+  }
 });
 
 // ── AUTH ─────────────────────────────────────────────────────
+
+// Ensure demo recruiters always have phone+pin (runs before every login attempt)
+function ensureDemoRecruiters() {
+  let recs = getRecruiters();
+  let changed = false;
+  recs.forEach(r => {
+    if (!r.phone) {
+      r.phone = r.id === 'REC-001' ? '9876543000' : '9876543001';
+      changed = true;
+    }
+    if (!r.pin) { r.pin = '123456'; changed = true; }
+    if (r.plan_requested === undefined) { r.plan_requested = false; changed = true; }
+  });
+  if (changed) saveRecruiters(recs);
+  return recs;
+}
+
 function doLogin() {
   const phone = document.getElementById('l_phone').value.trim();
   const pin   = getPin('login-pins');
+
   if (!phone || phone.length < 10) { showToast('Enter valid 10-digit phone / फ़ोन नंबर डालें', 'error'); return; }
-  if (pin.length !== 6) { showToast('Enter 6-digit PIN / 6 अंकों का PIN डालें', 'error'); return; }
-  const rec = getRecruiters().find(r => r.phone === phone && r.pin === pin);
-  if (!rec) { showToast('Invalid phone or PIN / गलत फ़ोन या PIN', 'error'); return; }
+  if (pin.length !== 6) { showToast('Enter all 6 digits of PIN / 6 अंकों का PIN डालें', 'error'); return; }
+
+  // Always ensure demo data is seeded before searching
+  const recs = ensureDemoRecruiters();
+
+  console.log('Login attempt:', phone, pin);
+  console.log('Available recruiters:', recs.map(r => ({ id: r.id, phone: r.phone, pin: r.pin })));
+
+  const rec = recs.find(r => r.phone === phone && r.pin === pin);
+  if (!rec) {
+    showToast('Invalid phone or PIN / गलत फ़ोन या PIN', 'error');
+    return;
+  }
   CR = rec; setRecruiterSession(rec); loadRCA(); showDash();
 }
 

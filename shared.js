@@ -26,6 +26,8 @@ if (localStorage.getItem('bb_data_ver') !== DATA_VERSION) {
   localStorage.removeItem('bb_stylists');
   localStorage.removeItem('bb_recruiters');
   localStorage.setItem('bb_data_ver', DATA_VERSION);
+  // Also clear stale sessions so old logins don't persist
+  try { sessionStorage.removeItem('bb_recruiter'); sessionStorage.removeItem('bb_admin'); } catch(e) {}
 }
 
 // ── DEMO DATA STORE ───────────────────────────────────────────
