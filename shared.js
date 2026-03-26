@@ -19,6 +19,15 @@ function getSupabase() {
   return _sb;
 }
 
+// ── DATA VERSION / CACHE RESET ────────────────────────────────
+// Bump this number whenever default data changes significantly
+const DATA_VERSION = '3';
+if (localStorage.getItem('bb_data_ver') !== DATA_VERSION) {
+  localStorage.removeItem('bb_stylists');
+  localStorage.removeItem('bb_recruiters');
+  localStorage.setItem('bb_data_ver', DATA_VERSION);
+}
+
 // ── DEMO DATA STORE ───────────────────────────────────────────
 // In production this would be read from Supabase.
 // Using localStorage so data persists across the separate pages.
@@ -41,12 +50,89 @@ function saveRecruiters(arr) {
 }
 
 function _defaultStylests() {
+  // Using public picsum photos as realistic placeholders
+  // Each person gets a consistent seed so photos don't shuffle on reload
   return [
-    { id:'BB-2024-0001', name:'Rahul Sharma', phone:'9876543210', age:24, home_location:'Guntur, AP', address:'Flat 5, MG Road, Hyderabad', experience:'2-3 years', max_billing:55000, prev_fixed:15000, prev_incentive:10, prev_food:'provided', prev_room:'not_provided', exp_fixed:20000, exp_incentive:12, exp_food:'required', exp_room:'not_provided', prev_location:'Hyderabad', all_locations:'StyleX Hyderabad, TrimKing Guntur', instagram:'https://instagram.com/rahul.cuts', available:true, join_timeline:'immediate', ref_name:'Suresh Kumar', ref_phone:'9811223344', no_gutka:true, no_weed:true, no_alcohol:true, wear_uniform:true, stay_neat:true, follow_timing:true, respect_customers:true, keep_clean:true, no_nuisance:true, performance_target:true, follow_metrics:true, status:'verified', created_at:'2024-11-10T09:00:00Z' },
-    { id:'BB-2024-0002', name:'Aakash Reddy', phone:'9876543211', age:27, home_location:'Vijayawada, AP', address:'12 Main St, Vijayawada', experience:'3-5 years', max_billing:72000, prev_fixed:18000, prev_incentive:12, prev_food:'provided', prev_room:'provided', exp_fixed:25000, exp_incentive:15, exp_food:'required', exp_room:'required', prev_location:'Bangalore', all_locations:'Grand Salon Bangalore, Trim Masters Vijayawada', instagram:'https://instagram.com/aakash.styles', available:true, join_timeline:'1month', ref_name:'Ravi Teja', ref_phone:'9822334455', no_gutka:true, no_weed:true, no_alcohol:true, wear_uniform:true, stay_neat:true, follow_timing:true, respect_customers:true, keep_clean:true, no_nuisance:true, performance_target:true, follow_metrics:true, status:'verified', created_at:'2024-11-12T10:30:00Z' },
-    { id:'BB-2024-0003', name:'Pradeep Singh', phone:'9876543212', age:22, home_location:'Delhi', address:'Sector 15, Noida', experience:'1-2 years', max_billing:38000, prev_fixed:12000, prev_incentive:8, prev_food:'not_provided', prev_room:'not_provided', exp_fixed:16000, exp_incentive:10, exp_food:'required', exp_room:'required', prev_location:'Delhi', all_locations:'Quick Cuts Delhi', instagram:'', available:false, join_timeline:'2months', ref_name:'', ref_phone:'', no_gutka:true, no_weed:false, no_alcohol:true, wear_uniform:true, stay_neat:true, follow_timing:false, respect_customers:true, keep_clean:true, no_nuisance:true, performance_target:true, follow_metrics:true, status:'pending', created_at:'2024-11-15T11:00:00Z' },
-    { id:'BB-2024-0004', name:'Kiran Kumar', phone:'9876543213', age:30, home_location:'Mumbai', address:'Andheri West, Mumbai', experience:'5+ years', max_billing:95000, prev_fixed:25000, prev_incentive:15, prev_food:'provided', prev_room:'provided', exp_fixed:30000, exp_incentive:18, exp_food:'provided', exp_room:'required', prev_location:'Mumbai', all_locations:'Elite Salon Mumbai, StyleMax Pune, TopCuts Nashik', instagram:'https://instagram.com/kiran.mastercuts', available:true, join_timeline:'immediate', ref_name:'Master Ramesh', ref_phone:'9833445566', no_gutka:true, no_weed:true, no_alcohol:true, wear_uniform:true, stay_neat:true, follow_timing:true, respect_customers:true, keep_clean:true, no_nuisance:true, performance_target:true, follow_metrics:true, status:'verified', created_at:'2024-11-18T08:15:00Z' },
-    { id:'BB-2024-0005', name:'Venkat Rao', phone:'9876543214', age:26, home_location:'Chennai', address:'Anna Nagar, Chennai', experience:'2-3 years', max_billing:48000, prev_fixed:14000, prev_incentive:10, prev_food:'not_provided', prev_room:'not_provided', exp_fixed:18000, exp_incentive:12, exp_food:'required', exp_room:'not_required', prev_location:'Chennai', all_locations:'City Salon Chennai, Prestige Barbers', instagram:'', available:true, join_timeline:'1month', ref_name:'', ref_phone:'', no_gutka:true, no_weed:true, no_alcohol:false, wear_uniform:true, stay_neat:true, follow_timing:true, respect_customers:true, keep_clean:true, no_nuisance:true, performance_target:true, follow_metrics:true, status:'pending', created_at:'2024-11-20T14:00:00Z' },
+    {
+      id:'BB-2024-0001', name:'Rahul Sharma', phone:'9876543210', age:24,
+      home_location:'Guntur, AP', address:'Flat 5, MG Road, Hyderabad',
+      experience:'2-3 years', max_billing:55000, prev_fixed:15000,
+      prev_incentive:10, prev_food:500, prev_room:'not_provided',
+      exp_fixed:20000, exp_incentive:12, exp_food:800, exp_room:'not_provided',
+      prev_location:'Hyderabad', all_locations:'StyleX Hyderabad, TrimKing Guntur',
+      instagram:'https://instagram.com/rahul.cuts', available:true,
+      join_timeline:'immediate', ref_name:'Suresh Kumar', ref_phone:'9811223344',
+      selfie_url:'https://picsum.photos/seed/rahul1/200/200',
+      full_photo_urls:['https://picsum.photos/seed/rahul2/300/400','https://picsum.photos/seed/rahul3/300/400'],
+      work_photo_urls:['https://picsum.photos/seed/rahulw1/300/300','https://picsum.photos/seed/rahulw2/300/300','https://picsum.photos/seed/rahulw3/300/300','https://picsum.photos/seed/rahulw4/300/300'],
+      no_gutka:true, no_weed:true, no_alcohol:true, wear_uniform:true, stay_neat:true,
+      follow_timing:true, respect_customers:true, keep_clean:true, no_nuisance:true,
+      performance_target:true, follow_metrics:true, status:'verified', created_at:'2024-11-10T09:00:00Z'
+    },
+    {
+      id:'BB-2024-0002', name:'Aakash Reddy', phone:'9876543211', age:27,
+      home_location:'Vijayawada, AP', address:'12 Main St, Vijayawada',
+      experience:'3-5 years', max_billing:72000, prev_fixed:18000,
+      prev_incentive:12, prev_food:600, prev_room:'provided',
+      exp_fixed:25000, exp_incentive:15, exp_food:1000, exp_room:'required',
+      prev_location:'Bangalore', all_locations:'Grand Salon Bangalore, Trim Masters Vijayawada',
+      instagram:'https://instagram.com/aakash.styles', available:true,
+      join_timeline:'1month', ref_name:'Ravi Teja', ref_phone:'9822334455',
+      selfie_url:'https://picsum.photos/seed/aakash1/200/200',
+      full_photo_urls:['https://picsum.photos/seed/aakash2/300/400','https://picsum.photos/seed/aakash3/300/400'],
+      work_photo_urls:['https://picsum.photos/seed/aakashw1/300/300','https://picsum.photos/seed/aakashw2/300/300','https://picsum.photos/seed/aakashw3/300/300'],
+      no_gutka:true, no_weed:true, no_alcohol:true, wear_uniform:true, stay_neat:true,
+      follow_timing:true, respect_customers:true, keep_clean:true, no_nuisance:true,
+      performance_target:true, follow_metrics:true, status:'verified', created_at:'2024-11-12T10:30:00Z'
+    },
+    {
+      id:'BB-2024-0003', name:'Pradeep Singh', phone:'9876543212', age:22,
+      home_location:'Delhi', address:'Sector 15, Noida',
+      experience:'1-2 years', max_billing:38000, prev_fixed:12000,
+      prev_incentive:8, prev_food:0, prev_room:'not_provided',
+      exp_fixed:16000, exp_incentive:10, exp_food:500, exp_room:'required',
+      prev_location:'Delhi', all_locations:'Quick Cuts Delhi',
+      instagram:'', available:false, join_timeline:'2months',
+      ref_name:'', ref_phone:'',
+      selfie_url:'https://picsum.photos/seed/pradeep1/200/200',
+      full_photo_urls:['https://picsum.photos/seed/pradeep2/300/400'],
+      work_photo_urls:['https://picsum.photos/seed/pradeepw1/300/300','https://picsum.photos/seed/pradeepw2/300/300'],
+      no_gutka:true, no_weed:false, no_alcohol:true, wear_uniform:true, stay_neat:true,
+      follow_timing:false, respect_customers:true, keep_clean:true, no_nuisance:true,
+      performance_target:true, follow_metrics:true, status:'pending', created_at:'2024-11-15T11:00:00Z'
+    },
+    {
+      id:'BB-2024-0004', name:'Kiran Kumar', phone:'9876543213', age:30,
+      home_location:'Mumbai', address:'Andheri West, Mumbai',
+      experience:'5+ years', max_billing:95000, prev_fixed:25000,
+      prev_incentive:15, prev_food:1000, prev_room:'provided',
+      exp_fixed:30000, exp_incentive:18, exp_food:1200, exp_room:'required',
+      prev_location:'Mumbai', all_locations:'Elite Salon Mumbai, StyleMax Pune, TopCuts Nashik',
+      instagram:'https://instagram.com/kiran.mastercuts', available:true,
+      join_timeline:'immediate', ref_name:'Master Ramesh', ref_phone:'9833445566',
+      selfie_url:'https://picsum.photos/seed/kiran1/200/200',
+      full_photo_urls:['https://picsum.photos/seed/kiran2/300/400','https://picsum.photos/seed/kiran3/300/400'],
+      work_photo_urls:['https://picsum.photos/seed/kiranw1/300/300','https://picsum.photos/seed/kiranw2/300/300','https://picsum.photos/seed/kiranw3/300/300','https://picsum.photos/seed/kiranw4/300/300','https://picsum.photos/seed/kiranw5/300/300'],
+      no_gutka:true, no_weed:true, no_alcohol:true, wear_uniform:true, stay_neat:true,
+      follow_timing:true, respect_customers:true, keep_clean:true, no_nuisance:true,
+      performance_target:true, follow_metrics:true, status:'verified', created_at:'2024-11-18T08:15:00Z'
+    },
+    {
+      id:'BB-2024-0005', name:'Venkat Rao', phone:'9876543214', age:26,
+      home_location:'Chennai', address:'Anna Nagar, Chennai',
+      experience:'2-3 years', max_billing:48000, prev_fixed:14000,
+      prev_incentive:10, prev_food:0, prev_room:'not_provided',
+      exp_fixed:18000, exp_incentive:12, exp_food:600, exp_room:'not_required',
+      prev_location:'Chennai', all_locations:'City Salon Chennai, Prestige Barbers',
+      instagram:'', available:true, join_timeline:'1month',
+      ref_name:'', ref_phone:'',
+      selfie_url:'https://picsum.photos/seed/venkat1/200/200',
+      full_photo_urls:['https://picsum.photos/seed/venkat2/300/400'],
+      work_photo_urls:['https://picsum.photos/seed/venkatw1/300/300','https://picsum.photos/seed/venkatw2/300/300'],
+      no_gutka:true, no_weed:true, no_alcohol:false, wear_uniform:true, stay_neat:true,
+      follow_timing:true, respect_customers:true, keep_clean:true, no_nuisance:true,
+      performance_target:true, follow_metrics:true, status:'pending', created_at:'2024-11-20T14:00:00Z'
+    },
   ];
 }
 function _defaultRecruiters() {
