@@ -220,31 +220,22 @@
       <div class="form-group" style="margin-bottom:14px;">
         <label class="form-label">Phone Number <span class="hn">फ़ोन नंबर</span></label>
         <input type="tel" id="l_phone" placeholder="10-digit mobile number" maxlength="10"
-               oninput="this.value=this.value.replace(/\D/g,'')"
-               onkeydown="if(event.key==='Enter') document.getElementById('login-pins').querySelector('input').focus()">
+               style="font-size:1.1rem; letter-spacing:2px; font-weight:600;"
+               oninput="this.value=this.value.replace(/\D/g,'')">
       </div>
 
-      <div class="form-group" style="margin-bottom:22px;">
+      <div class="form-group" style="margin-bottom:24px;">
         <label class="form-label">6-Digit PIN <span class="hn">6 अंकों का PIN</span></label>
-        <div class="pin-inputs" id="login-pins">
-          <input type="password" maxlength="1" inputmode="numeric"
-                 oninput="pinMove(this,'login-pins')" onkeydown="pinBack(event,this,'login-pins')">
-          <input type="password" maxlength="1" inputmode="numeric"
-                 oninput="pinMove(this,'login-pins')" onkeydown="pinBack(event,this,'login-pins')">
-          <input type="password" maxlength="1" inputmode="numeric"
-                 oninput="pinMove(this,'login-pins')" onkeydown="pinBack(event,this,'login-pins')">
-          <input type="password" maxlength="1" inputmode="numeric"
-                 oninput="pinMove(this,'login-pins')" onkeydown="pinBack(event,this,'login-pins');if(event.key==='Enter') doLogin()">
-          <input type="password" maxlength="1" inputmode="numeric"
-                 oninput="pinMove(this,'login-pins')" onkeydown="pinBack(event,this,'login-pins');if(event.key==='Enter') doLogin()">
-          <input type="password" maxlength="1" inputmode="numeric"
-                 oninput="pinMove(this,'login-pins')" onkeydown="pinBack(event,this,'login-pins');if(event.key==='Enter') doLogin()">
-        </div>
+        <input type="password" id="l_pin" placeholder="Enter 6-digit PIN" maxlength="6"
+               inputmode="numeric" autocomplete="current-password"
+               style="font-size:1.3rem; letter-spacing:6px; font-weight:700; text-align:center;"
+               oninput="this.value=this.value.replace(/\D/g,'')"
+               onkeydown="if(event.key==='Enter') doLogin()">
       </div>
 
       <button class="btn btn-primary btn-block btn-lg" onclick="doLogin()">Login / लॉगिन करें</button>
 
-      <div style="text-align:center; margin:12px 0; color:var(--text-light); font-size:0.75rem;">— or —</div>
+      <div style="text-align:center; margin:14px 0; color:var(--text-light); font-size:0.75rem;">— or —</div>
       <div class="auth-switch">
         <button onclick="show('view-register')">
           New Recruiter? Register here<br>
@@ -252,8 +243,8 @@
         </button>
       </div>
       <div class="demo-hint">
-        Demo Basic: Phone <strong>9876543000</strong> · PIN <strong>123456</strong><br>
-        Demo Premium: Phone <strong>9876543001</strong> · PIN <strong>123456</strong>
+        Demo Basic &nbsp;→ Phone: <strong>9876543000</strong> &nbsp;PIN: <strong>123456</strong><br>
+        Demo Premium → Phone: <strong>9876543001</strong> &nbsp;PIN: <strong>123456</strong>
       </div>
     </div>
   </div>
@@ -293,21 +284,11 @@
         </div>
         <div class="form-group col-span-2" style="grid-column:1/-1;">
           <label class="form-label">Set 6-Digit PIN <span class="req">*</span> <span class="hn">6 अंकों का PIN सेट करें</span></label>
-          <div class="pin-inputs" id="reg-pins">
-            <input type="password" maxlength="1" inputmode="numeric"
-                   oninput="pinMove(this,'reg-pins')" onkeydown="pinBack(event,this,'reg-pins')">
-            <input type="password" maxlength="1" inputmode="numeric"
-                   oninput="pinMove(this,'reg-pins')" onkeydown="pinBack(event,this,'reg-pins')">
-            <input type="password" maxlength="1" inputmode="numeric"
-                   oninput="pinMove(this,'reg-pins')" onkeydown="pinBack(event,this,'reg-pins')">
-            <input type="password" maxlength="1" inputmode="numeric"
-                   oninput="pinMove(this,'reg-pins')" onkeydown="pinBack(event,this,'reg-pins')">
-            <input type="password" maxlength="1" inputmode="numeric"
-                   oninput="pinMove(this,'reg-pins')" onkeydown="pinBack(event,this,'reg-pins')">
-            <input type="password" maxlength="1" inputmode="numeric"
-                   oninput="pinMove(this,'reg-pins')" onkeydown="pinBack(event,this,'reg-pins')">
-          </div>
-          <div class="form-hint" style="margin-top:5px;">यह PIN आपका लॉगिन पासवर्ड होगा — This PIN logs you in</div>
+          <input type="password" id="reg_pin" placeholder="Choose a 6-digit PIN" maxlength="6"
+                 inputmode="numeric" autocomplete="new-password"
+                 style="font-size:1.3rem; letter-spacing:6px; font-weight:700; text-align:center;"
+                 oninput="this.value=this.value.replace(/\D/g,'')">
+          <div class="form-hint" style="margin-top:5px;">यह PIN आपका लॉगिन पासवर्ड होगा — This PIN will be used to login</div>
         </div>
       </div>
       <button class="btn btn-primary btn-block btn-lg" style="margin-top:18px;" onclick="doRegister()">
@@ -511,42 +492,10 @@
 <script>
 
 // ── GLOBALS ───────────────────────────────────────────────────
-let CR = null;         // current recruiter
-let RCA = {};          // recruiter candidate actions { id: 'shortlisted'|'rejected' }
+let CR = null;
+let RCA = {};
 let detailId = null;
 let selPay = null;
-
-// ── SEED DEMO DATA ────────────────────────────────────────────
-(function() {
-  const recs = getRecruiters();
-  let ch = false;
-  recs.forEach(r => {
-    if (!r.phone) { r.phone = r.id === 'REC-001' ? '9876543000' : '9876543001'; ch = true; }
-    if (!r.pin)   { r.pin = '123456'; ch = true; }
-    if (r.plan_requested === undefined) { r.plan_requested = false; ch = true; }
-  });
-  if (ch) saveRecruiters(recs);
-})();
-
-// ── PIN HELPERS ───────────────────────────────────────────────
-function pinMove(el, gid) {
-  el.value = el.value.replace(/\D/,'');
-  if (el.value.length === 1) {
-    const all = [...document.getElementById(gid).querySelectorAll('input')];
-    const i = all.indexOf(el);
-    if (i < all.length - 1) all[i+1].focus();
-  }
-}
-function pinBack(e, el, gid) {
-  if (e.key === 'Backspace' && !el.value) {
-    const all = [...document.getElementById(gid).querySelectorAll('input')];
-    const i = all.indexOf(el);
-    if (i > 0) all[i-1].focus();
-  }
-}
-function getPin(gid) {
-  return [...document.getElementById(gid).querySelectorAll('input')].map(i => i.value).join('');
-}
 
 // ── LIGHTBOX ──────────────────────────────────────────────────
 function openLB(src, cap) {
@@ -587,11 +536,11 @@ window.addEventListener('load', () => {
 // ── AUTH ─────────────────────────────────────────────────────
 
 function ensureDemoRecruiters() {
-  const recs = getRecruiters(); // getRecruiters now persists defaults automatically
+  const recs = getRecruiters();
   let changed = false;
   recs.forEach(r => {
     if (!r.phone) { r.phone = r.id === 'REC-001' ? '9876543000' : '9876543001'; changed = true; }
-    if (!r.pin)   { r.pin   = '123456'; changed = true; }
+    if (!r.pin)   { r.pin = '123456'; changed = true; }
     if (r.plan_requested === undefined) { r.plan_requested = false; changed = true; }
   });
   if (changed) saveRecruiters(recs);
@@ -599,18 +548,21 @@ function ensureDemoRecruiters() {
 }
 
 function doLogin() {
-  const phone = document.getElementById('l_phone').value.trim();
-  const pin   = getPin('login-pins');
+  const phone = (document.getElementById('l_phone').value || '').trim();
+  const pin   = (document.getElementById('l_pin').value   || '').trim();
 
-  if (phone.length < 10) { showToast('Enter valid 10-digit phone / फ़ोन नंबर डालें', 'error'); return; }
-  if (pin.length !== 6)  { showToast('Enter all 6 PIN digits / 6 अंक डालें', 'error'); return; }
+  if (phone.length < 10) {
+    showToast('Enter 10-digit phone number / फ़ोन नंबर डालें', 'error'); return;
+  }
+  if (pin.length < 4) {
+    showToast('Enter your PIN / PIN डालें', 'error'); return;
+  }
 
   const recs = ensureDemoRecruiters();
-  // Use String() comparison to avoid any type mismatch
-  const rec  = recs.find(r => String(r.phone) === String(phone) && String(r.pin) === String(pin));
+  const rec  = recs.find(r => String(r.phone).trim() === phone && String(r.pin).trim() === pin);
 
   if (!rec) {
-    showToast('Invalid phone or PIN / गलत फ़ोन या PIN', 'error');
+    showToast('Wrong phone or PIN. Demo: 9876543000 / 123456', 'error');
     return;
   }
   CR = rec;
@@ -620,18 +572,22 @@ function doLogin() {
 }
 
 function doRegister() {
-  const salon = document.getElementById('reg_salon').value.trim();
-  const phone = document.getElementById('reg_phone').value.trim();
-  const loc   = document.getElementById('reg_loc').value.trim();
-  const pin   = getPin('reg-pins');
-  if (!salon || !phone || !loc) { showToast('Fill all required fields', 'error'); return; }
-  if (phone.length < 10)        { showToast('Enter valid 10-digit phone', 'error'); return; }
-  if (pin.length !== 6)         { showToast('Set a 6-digit PIN', 'error'); return; }
-  const recs = getRecruiters();
-  if (recs.find(r => r.phone === phone)) { showToast('Phone already registered / पहले से पंजीकृत', 'error'); return; }
+  const salon = (document.getElementById('reg_salon').value || '').trim();
+  const phone = (document.getElementById('reg_phone').value || '').trim();
+  const loc   = (document.getElementById('reg_loc').value   || '').trim();
+  const pin   = (document.getElementById('reg_pin').value   || '').trim();
+
+  if (!salon)            { showToast('Enter salon name', 'error'); return; }
+  if (phone.length < 10) { showToast('Enter 10-digit phone number', 'error'); return; }
+  if (pin.length < 6)    { showToast('PIN must be 6 digits', 'error'); return; }
+
+  const recs = ensureDemoRecruiters();
+  if (recs.find(r => String(r.phone).trim() === phone)) {
+    showToast('Phone already registered / पहले से पंजीकृत है', 'error'); return;
+  }
   const nr = {
     id: 'REC-' + Date.now(), salon_name: salon, phone, pin,
-    location: loc, address: document.getElementById('reg_addr').value,
+    location: loc, address: (document.getElementById('reg_addr').value || '').trim(),
     franchise: document.getElementById('reg_franchise').value,
     plan: 'basic', plan_expiry: null, plan_requested: false,
     created_at: new Date().toISOString()
