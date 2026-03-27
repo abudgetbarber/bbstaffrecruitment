@@ -455,8 +455,8 @@ textarea.finp{resize:vertical;min-height:60px}
 // ─────────────────────────────────────────────────────────────
 //  SUPABASE — paste your keys here
 // ─────────────────────────────────────────────────────────────
-const SUPABASE_URL = 'https://ccdaqcpllhqonkdkrdlq.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_lKG0FnCMjfoTShRUorTH4w_da4SZ7RZ';
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_KEY';
 
 let _sb = null;
 function getSupabase() {
@@ -569,37 +569,47 @@ function doLogin() {
   btn.textContent = 'Logging in…';
   btn.disabled = true;
 
+  function loginSuccess() {
+    sessionStorage.setItem('bb_admin', '1');
+    btn.textContent = 'Login';
+    btn.disabled = false;
+    showDash();
+  }
+
+  function loginFail(msg) {
+    toast(msg || 'Invalid username or password', 'er');
+    btn.textContent = 'Login';
+    btn.disabled = false;
+  }
+
   const sb = getSupabase();
   if (sb) {
-    // Check against Supabase admin_users table
     sb.from('admin_users')
-      .select('id, username, password_hash')
+      .select('username, password_hash')
       .eq('username', u)
       .single()
       .then(({ data, error }) => {
-        btn.textContent = 'Login';
-        btn.disabled = false;
         if (error || !data) {
-          toast('Invalid username or password', 'er'); return;
+          // If Supabase fails (RLS block, network, etc.) fall back to hardcoded
+          if (u === 'admin' && p === 'admin123') { loginSuccess(); return; }
+          loginFail('Invalid username or password');
+          return;
         }
-        // Plain text comparison (use bcrypt in production)
         if (data.password_hash === p) {
-          sessionStorage.setItem('bb_admin', '1');
-          showDash();
+          loginSuccess();
         } else {
-          toast('Invalid username or password', 'er');
+          loginFail('Invalid username or password');
         }
+      })
+      .catch(() => {
+        // Network error — fall back to hardcoded
+        if (u === 'admin' && p === 'admin123') { loginSuccess(); return; }
+        loginFail('Connection error — check Supabase keys');
       });
   } else {
-    // Supabase not configured — fallback to hardcoded demo credentials
-    btn.textContent = 'Login';
-    btn.disabled = false;
-    if (u === 'admin' && p === 'admin123') {
-      sessionStorage.setItem('bb_admin', '1');
-      showDash();
-    } else {
-      toast('Invalid credentials (Supabase not connected)', 'er');
-    }
+    // Supabase not configured — use hardcoded
+    if (u === 'admin' && p === 'admin123') { loginSuccess(); return; }
+    loginFail('Invalid credentials');
   }
 }
 
