@@ -51,6 +51,14 @@ body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100
 .flbl{font-family:var(--fd);font-size:.7rem;font-weight:700;color:#3A5A40;text-transform:uppercase;letter-spacing:.8px}
 .finp{padding:11px 14px;border:1.5px solid var(--bd);border-radius:var(--r2);font-size:.9rem;font-family:var(--fb);color:var(--text);background:#fff;width:100%;outline:none;transition:border-color .15s}
 .finp:focus{border-color:var(--g7);box-shadow:0 0 0 3px rgba(46,125,90,.1)}
+select.finp{appearance:auto;-webkit-appearance:auto;cursor:pointer}
+
+/* FILTER BAR */
+.fbar{background:#fff;padding:12px 18px;border-bottom:1px solid var(--bd);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.fbar .finp{padding:7px 10px;font-size:.8rem;width:auto}
+.fbar select.finp{min-width:140px;appearance:auto;-webkit-appearance:auto}
+.fsearch{flex:1;min-width:160px}
+.floc{min-width:140px}
 .pin-inp{font-size:1.4rem;letter-spacing:8px;text-align:center;font-weight:700;padding:11px 14px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 22px;border-radius:30px;font-family:var(--fd);font-size:.9rem;font-weight:700;letter-spacing:.5px;border:none;cursor:pointer;transition:all .18s;text-decoration:none;white-space:nowrap;width:100%}
 .btn-g{background:var(--g8);color:#fff}
@@ -73,11 +81,6 @@ body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100
 .tcnt{background:var(--y);color:var(--g8);font-size:.6rem;padding:1px 6px;border-radius:10px;margin-left:4px;font-weight:900;vertical-align:middle}
 .tab-pane{display:none}
 .tab-pane.on{display:block}
-
-/* FILTER BAR */
-.fbar{background:#fff;padding:12px 18px;border-bottom:1px solid var(--bd);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.fbar .finp{padding:7px 10px;font-size:.8rem;width:auto}
-.fsearch{flex:1;min-width:180px}
 
 /* GRID */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;padding:18px 20px}
@@ -148,8 +151,8 @@ body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100
 .plan-features li{font-size:.8rem;padding:2px 0}
 
 /* MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
-.modal-bg.on{display:flex}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;pointer-events:none}
+.modal-bg.on{display:flex;pointer-events:all}
 .modal{background:#fff;border-radius:var(--r);max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .modal-hdr{padding:18px 20px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
 .modal-hdr h3{font-family:var(--fd);font-size:1.05rem;font-weight:800;color:var(--g8)}
@@ -305,10 +308,30 @@ body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100
   <!-- All Candidates -->
   <div class="tab-pane on" id="tp-all">
     <div class="fbar">
-      <input class="finp fsearch" type="text" id="fa_s" placeholder="🔍 Search name, location…" oninput="renderAll()">
-      <select class="finp" id="fa_e" onchange="renderAll()"><option value="">All Experience</option><option value="less1">Less than 1 yr</option><option value="1-2">1–2 years</option><option value="2-4">2–4 years</option><option value="4-6">4–6 years</option><option value="6-8">6–8 years</option><option value="8-10">8–10 years</option><option value="10+">10+ years</option></select>
-      <select class="finp" id="fa_a" onchange="renderAll()"><option value="">All Availability</option><option value="true">Available Now</option><option value="false">Not Available</option></select>
-      <select class="finp" id="fa_j" onchange="renderAll()"><option value="">Any Joining</option><option value="immediate">Immediate</option><option value="1month">1 Month</option><option value="2months">2 Months</option><option value="3months">3 Months</option></select>
+      <input class="finp fsearch" type="text" id="fa_s" placeholder="🔍 Search name…" oninput="renderAll()">
+      <input class="finp floc" type="text" id="fa_l" placeholder="📍 Home Location" oninput="renderAll()">
+      <select class="finp" id="fa_e" onchange="renderAll()">
+        <option value="">All Experience</option>
+        <option value="less1">Less than 1 yr</option>
+        <option value="1-2">1–2 years</option>
+        <option value="2-4">2–4 years</option>
+        <option value="4-6">4–6 years</option>
+        <option value="6-8">6–8 years</option>
+        <option value="8-10">8–10 years</option>
+        <option value="10+">10+ years</option>
+      </select>
+      <select class="finp" id="fa_a" onchange="renderAll()">
+        <option value="">All Availability</option>
+        <option value="true">Available Now</option>
+        <option value="false">Not Available</option>
+      </select>
+      <select class="finp" id="fa_j" onchange="renderAll()">
+        <option value="">Any Joining</option>
+        <option value="immediate">Immediate</option>
+        <option value="1month">1 Month</option>
+        <option value="2months">2 Months</option>
+        <option value="3months">3 Months</option>
+      </select>
     </div>
     <div class="grid" id="grid-all"></div>
   </div>
@@ -316,8 +339,13 @@ body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100
   <!-- Shortlisted -->
   <div class="tab-pane" id="tp-sl">
     <div class="fbar">
-      <input class="finp fsearch" type="text" id="fs_s" placeholder="🔍 Search shortlisted…" oninput="renderSL()">
-      <select class="finp" id="fs_a" onchange="renderSL()"><option value="">All Availability</option><option value="true">Available Now</option><option value="false">Not Available</option></select>
+      <input class="finp fsearch" type="text" id="fs_s" placeholder="🔍 Search name…" oninput="renderSL()">
+      <input class="finp floc" type="text" id="fs_l" placeholder="📍 Home Location" oninput="renderSL()">
+      <select class="finp" id="fs_a" onchange="renderSL()">
+        <option value="">All Availability</option>
+        <option value="true">Available Now</option>
+        <option value="false">Not Available</option>
+      </select>
     </div>
     <div class="grid" id="grid-sl"></div>
   </div>
@@ -325,7 +353,13 @@ body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100
   <!-- Rejected -->
   <div class="tab-pane" id="tp-rj">
     <div class="fbar">
-      <input class="finp fsearch" type="text" id="fr_s" placeholder="🔍 Search rejected…" oninput="renderRJ()">
+      <input class="finp fsearch" type="text" id="fr_s" placeholder="🔍 Search name…" oninput="renderRJ()">
+      <input class="finp floc" type="text" id="fr_l" placeholder="📍 Home Location" oninput="renderRJ()">
+      <select class="finp" id="fr_a" onchange="renderRJ()">
+        <option value="">All Availability</option>
+        <option value="true">Available Now</option>
+        <option value="false">Not Available</option>
+      </select>
     </div>
     <div class="grid" id="grid-rj"></div>
   </div>
@@ -399,7 +433,7 @@ body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100
 // ─────────────────────────────────────────────────────────────
 //  DATA LAYER  (localStorage — shared with admin.html)
 // ─────────────────────────────────────────────────────────────
-const DATA_VER = '4';
+const DATA_VER = '5';
 if (localStorage.getItem('bb_data_ver') !== DATA_VER) {
   ['bb_stylists','bb_recruiters'].forEach(k => localStorage.removeItem(k));
   try { sessionStorage.removeItem('bb_recruiter'); } catch(e){}
@@ -442,7 +476,7 @@ function defaultRecruiters() {
 function defaultStylests() {
   return [
     { id:'BB-2024-0001', name:'Rahul Sharma', phone:'9876543210', age:24,
-      home_location:'Guntur, AP', experience:'2-3 years', max_billing:55000,
+      home_location:'Guntur, AP', experience:'2-4 years', max_billing:55000,
       prev_fixed:15000, prev_incentive:10, exp_fixed:20000, exp_incentive:12, exp_food:800, exp_room:'not_provided',
       instagram:'https://instagram.com/rahul.cuts', available:true, join_timeline:'immediate',
       ref_name:'Suresh Kumar',
@@ -453,7 +487,7 @@ function defaultStylests() {
       follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'verified' },
     { id:'BB-2024-0002', name:'Aakash Reddy', phone:'9876543211', age:27,
-      home_location:'Vijayawada, AP', experience:'3-5 years', max_billing:72000,
+      home_location:'Vijayawada, AP', experience:'4-6 years', max_billing:72000,
       prev_fixed:18000, prev_incentive:12, exp_fixed:25000, exp_incentive:15, exp_food:1000, exp_room:'required',
       instagram:'https://instagram.com/aakash.styles', available:true, join_timeline:'1month',
       ref_name:'Ravi Teja',
@@ -473,7 +507,7 @@ function defaultStylests() {
       follow_timing:false,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'pending' },
     { id:'BB-2024-0004', name:'Kiran Kumar', phone:'9876543213', age:30,
-      home_location:'Mumbai', experience:'5+ years', max_billing:95000,
+      home_location:'Mumbai', experience:'8-10 years', max_billing:95000,
       prev_fixed:25000, prev_incentive:15, exp_fixed:30000, exp_incentive:18, exp_food:1200, exp_room:'required',
       instagram:'https://instagram.com/kiran.mastercuts', available:true, join_timeline:'immediate',
       ref_name:'Master Ramesh',
@@ -484,7 +518,7 @@ function defaultStylests() {
       follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'verified' },
     { id:'BB-2024-0005', name:'Venkat Rao', phone:'9876543214', age:26,
-      home_location:'Chennai', experience:'2-3 years', max_billing:48000,
+      home_location:'Chennai', experience:'2-4 years', max_billing:48000,
       prev_fixed:14000, prev_incentive:10, exp_fixed:18000, exp_incentive:12, exp_food:600, exp_room:'not_required',
       instagram:'', available:true, join_timeline:'1month', ref_name:'',
       selfie_url:'https://picsum.photos/seed/venkat1/200/200',
@@ -665,12 +699,14 @@ function setAction(sid, action) {
 // ─────────────────────────────────────────────────────────────
 //  RENDER GRIDS
 // ─────────────────────────────────────────────────────────────
-function filter(list, sid, aid, jid, eid) {
-  const s = (document.getElementById(sid)?.value || '').toLowerCase();
+function filter(list, sid, lid, aid, jid, eid) {
+  const s = (document.getElementById(sid)?.value || '').toLowerCase().trim();
+  const l = (document.getElementById(lid)?.value || '').toLowerCase().trim();
   const a = document.getElementById(aid)?.value || '';
   const j = jid ? (document.getElementById(jid)?.value || '') : '';
   const e = eid ? (document.getElementById(eid)?.value || '') : '';
-  if (s) list = list.filter(x => x.name.toLowerCase().includes(s) || (x.home_location||'').toLowerCase().includes(s));
+  if (s) list = list.filter(x => x.name.toLowerCase().includes(s));
+  if (l) list = list.filter(x => (x.home_location||'').toLowerCase().includes(l));
   if (a) list = list.filter(x => String(x.available) === a);
   if (j) list = list.filter(x => x.join_timeline === j);
   if (e) list = list.filter(x => x.experience === e);
@@ -679,17 +715,17 @@ function filter(list, sid, aid, jid, eid) {
 
 function renderAll() {
   let list = getStylests().filter(s => s.status !== 'rejected' && RCA[s.id] !== 'rejected');
-  list = filter(list, 'fa_s', 'fa_a', 'fa_j', 'fa_e');
+  list = filter(list, 'fa_s', 'fa_l', 'fa_a', 'fa_j', 'fa_e');
   renderGrid(list, 'grid-all', 'No candidates found', 'फ़िल्टर बदलें या बाद में देखें');
 }
 function renderSL() {
   let list = getStylests().filter(s => s.status !== 'rejected' && RCA[s.id] === 'shortlisted');
-  list = filter(list, 'fs_s', 'fs_a', null, null);
+  list = filter(list, 'fs_s', 'fs_l', 'fs_a', null, null);
   renderGrid(list, 'grid-sl', 'No shortlisted candidates', '★ बटन दबाकर शॉर्टलिस्ट करें');
 }
 function renderRJ() {
   let list = getStylests().filter(s => RCA[s.id] === 'rejected');
-  list = filter(list, 'fr_s', null, null, null);
+  list = filter(list, 'fr_s', 'fr_l', 'fr_a', null, null);
   renderGrid(list, 'grid-rj', 'No rejected candidates', 'कोई अस्वीकृत उम्मीदवार नहीं');
 }
 
@@ -920,7 +956,7 @@ function renderProfile() {
           </ul>
           ${validHtml}
           ${CR.plan_expiry && new Date(CR.plan_expiry) - new Date() < 15*86400000
-            ? `<button class="btn btn-g" style="margin-top:12px" onclick="openUpgrade()">🔄 Renew Plan</button>` : ''}
+            ? `<button class="btn btn-g" id="btn-renew-pro" style="margin-top:12px">🔄 Renew Plan</button>` : ''}
         </div>` : `
         <div class="plan-box basic">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
@@ -944,11 +980,17 @@ function renderProfile() {
               <div style="font-family:var(--fh);font-weight:400;color:#78350F;margin-top:3px">अनुरोध जमा हो गया है</div>
               ${CR.plan_request_ref ? `<div style="font-size:.7rem;margin-top:4px">Ref: ${CR.plan_request_ref}</div>` : ''}
             </div>` : `
-            <button class="btn btn-y" onclick="openUpgrade()">⭐ Upgrade to Premium — ₹1,000/month</button>
-            <div style="font-family:var(--fh);font-size:.7rem;color:var(--tl);text-align:center;margin-top:6px">प्रीमियम में अपग्रेड करें</div>`}
+            <button class="btn btn-y" id="btn-upgrade-pro">⭐ Upgrade to Premium — ₹1,000/month</button>
+            <div style="font-family:var(--fh);font-size:.7rem;color:var(--tl);text-align:center;margin-top:6px">प्रीमियम में अपग्रेड करें — सभी संपर्क विवरण देखें</div>`}
         </div>`}
       </div>
     </div>`;
+
+  // Bind buttons AFTER innerHTML is set — onclick in innerHTML strings can fail in sandboxed iframes
+  const btnUpg  = document.getElementById('btn-upgrade-pro');
+  const btnRenew = document.getElementById('btn-renew-pro');
+  if (btnUpg)   btnUpg.addEventListener('click', openUpgrade);
+  if (btnRenew) btnRenew.addEventListener('click', openUpgrade);
 }
 
 // ─────────────────────────────────────────────────────────────
