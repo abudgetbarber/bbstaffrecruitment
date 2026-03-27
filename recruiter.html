@@ -1039,7 +1039,7 @@ function viewCand(id) {
     ['Home Location', s.home_location||'—'],
     ['Aadhaar', aadharModalVal],
     ['Instagram', isPrem ? (s.instagram?`<a href="${s.instagram}" target="_blank" style="color:var(--g7)">View ↗</a>`:'—') : instaLocked],
-    ['Experience', s.experience||'—'],
+    ['Experience', s.experience && s.experience + ' years' || '—'],
     ['Max Billing', rupee(s.max_billing)+'/mo'],
     ['Expected Fixed', rupee(s.exp_fixed)+'/mo'],
     ['Expected Incentive', (s.exp_incentive||'—')+'%'],
