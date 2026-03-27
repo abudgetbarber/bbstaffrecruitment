@@ -4,130 +4,257 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel — Budget Barber</title>
-<link rel="stylesheet" href="shared.css">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* ── LOGIN ────────────────────────────────────────────── */
-.admin-login {
-  min-height: calc(100vh - 60px);
-  display: flex; align-items: center; justify-content: center;
-  padding: 32px;
-  background: linear-gradient(145deg, var(--green-900) 0%, var(--green-800) 100%);
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g9:#0A2E1E;--g8:#0D3B2E;--g7:#1A5C44;--g6:#2E7D5A;
+  --g1:#E8F5EE;--g0:#F0FAF4;
+  --y:#F5D800;--y0:#FFFDE7;
+  --bg:#F3F7F4;--bg2:#E6EFE9;
+  --white:#fff;--text:#152018;--tl:#6B8F71;
+  --bd:#C5DAC8;--red:#C0392B;--ok:#1E8449;--or:#E67E22;
+  --sh:0 2px 16px rgba(10,46,30,.08);
+  --shb:0 8px 40px rgba(10,46,30,.14);
+  --r:12px;--r2:8px;
+  --fd:'Barlow Condensed',sans-serif;
+  --fb:'Barlow',sans-serif;
+  --fh:'Noto Sans Devanagari',sans-serif;
 }
-.login-box {
-  background: white; border-radius: 20px;
-  padding: 40px 36px; max-width: 380px; width: 100%;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-.login-icon { font-size: 3rem; text-align: center; margin-bottom: 8px; }
-.login-title {
-  font-family: var(--font-display); font-size: 2rem;
-  font-weight: 900; color: var(--green-800); text-align: center;
-  margin-bottom: 4px;
-}
-.login-sub { text-align: center; color: var(--text-light); font-size: 0.78rem; margin-bottom: 28px; }
-.login-demo { background: var(--bg); border-radius: var(--radius-sm); padding: 10px; text-align: center; font-size: 0.72rem; color: var(--text-light); margin-top: 14px; }
+body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100vh}
 
-/* ── DASHBOARD ────────────────────────────────────────── */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 14px;
-  padding: 20px 24px;
-}
+/* HEADER */
+.hdr{background:var(--g8);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.hdr-logo{display:inline-flex;flex-direction:column;background:var(--y);border-radius:5px;overflow:hidden;line-height:1}
+.hdr-logo .b1{font-family:var(--fd);font-weight:900;font-size:.9rem;color:var(--g8);padding:3px 8px 1px;letter-spacing:1px}
+.hdr-logo .b2{background:var(--g8);font-family:var(--fd);font-weight:800;font-size:.55rem;color:var(--y);padding:2px 8px 3px;letter-spacing:3px;text-align:center}
+.hdr-mid h1{color:#fff;font-family:var(--fd);font-size:1rem;font-weight:700;line-height:1.1}
+.hdr-mid span{color:var(--y);font-size:.62rem;font-family:var(--fh)}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.btn-ghost{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;padding:5px 12px;border-radius:20px;cursor:pointer;font-size:.78rem;font-family:var(--fb)}
+.back-a{color:rgba(255,255,255,.7);font-size:.78rem;text-decoration:none}
+.back-a:hover{color:#fff}
 
-/* ── TABLE ACTIONS ────────────────────────────────────── */
-.tbl-actions { display: flex; gap: 4px; flex-wrap: wrap; }
-.tbl-actions button {
-  padding: 4px 10px; border: none; border-radius: 4px;
-  font-size: 0.68rem; font-weight: 700; cursor: pointer;
-  font-family: var(--font-display); letter-spacing: 0.3px;
-  transition: opacity 0.15s;
-}
-.tbl-actions button:hover { opacity: 0.85; }
-.act-view    { background: var(--green-800); color: white; }
-.act-verify  { background: var(--success); color: white; }
-.act-reject  { background: var(--orange); color: white; }
-.act-delete  { background: #888; color: white; }
-.act-premium { background: var(--yellow); color: var(--green-800); }
-.act-basic   { background: var(--bg2); color: var(--text-mid); }
+/* PAGES */
+.page{display:none;min-height:calc(100vh - 58px)}
+.page.active{display:block}
 
-/* ── ADMIN TABLE WRAPPER ──────────────────────────────── */
-.table-area { padding: 0 24px 32px; }
+/* AUTH */
+.auth-wrap{min-height:calc(100vh - 58px);display:flex;align-items:center;justify-content:center;padding:28px 16px;background:linear-gradient(145deg,var(--g9),var(--g8))}
+.auth-card{background:#fff;border-radius:18px;padding:36px 32px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.auth-icon{text-align:center;font-size:2.8rem;margin-bottom:8px}
+.auth-h{font-family:var(--fd);font-size:1.8rem;font-weight:900;color:var(--g8);text-align:center;margin-bottom:4px}
+.auth-sub{text-align:center;color:var(--tl);font-size:.78rem;margin-bottom:24px}
+.fgrp{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.flbl{font-family:var(--fd);font-size:.7rem;font-weight:700;color:#3A5A40;text-transform:uppercase;letter-spacing:.8px}
+.finp{padding:10px 14px;border:1.5px solid var(--bd);border-radius:var(--r2);font-size:.88rem;font-family:var(--fb);color:var(--text);background:#fff;width:100%;outline:none;transition:border-color .15s}
+.finp:focus{border-color:var(--g7);box-shadow:0 0 0 3px rgba(46,125,90,.1)}
+select.finp{appearance:auto;-webkit-appearance:auto;cursor:pointer}
+textarea.finp{resize:vertical;min-height:60px}
+.demo-hint{background:var(--bg);border-radius:var(--r2);padding:10px;text-align:center;font-size:.72rem;color:var(--tl);margin-top:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:30px;font-family:var(--fd);font-size:.88rem;font-weight:700;letter-spacing:.5px;border:none;cursor:pointer;transition:all .18s;white-space:nowrap}
+.btn-g{background:var(--g8);color:#fff}
+.btn-g:hover{background:var(--g7);transform:translateY(-1px)}
+.btn-y{background:var(--y);color:var(--g8)}
+.btn-y:hover{background:#E5C800}
+.btn-out{background:transparent;color:var(--g8);border:2px solid var(--g8)}
+.btn-out:hover{background:var(--g8);color:#fff}
+.btn-red{background:var(--red);color:#fff}
+.btn-sm{padding:5px 14px;font-size:.75rem}
+.btn-block{width:100%;justify-content:center}
 
-/* ── MODAL FORM ───────────────────────────────────────── */
-.mf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;padding:18px 20px}
+.stat-card{background:#fff;border-radius:var(--r);padding:16px 18px;border:1px solid var(--bd);box-shadow:var(--sh)}
+.stat-icon{font-size:1.5rem;margin-bottom:6px}
+.stat-num{font-family:var(--fd);font-size:2rem;font-weight:900;color:var(--g8);line-height:1}
+.stat-lbl{font-size:.68rem;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+
+/* TABS */
+.tab-bar{background:#fff;border-bottom:2px solid var(--bd);display:flex;padding:0 20px;overflow-x:auto}
+.tab-btn{padding:13px 18px;font-family:var(--fd);font-size:.82rem;font-weight:700;background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--tl);white-space:nowrap;transition:all .15s}
+.tab-btn:hover{color:var(--g8)}
+.tab-btn.on{color:var(--g8);border-bottom-color:var(--y)}
+.tab-pane{display:none}
+.tab-pane.on{display:block}
+.tbadge{background:var(--red);color:#fff;font-size:.6rem;padding:1px 6px;border-radius:10px;margin-left:4px;font-weight:900;vertical-align:middle}
+
+/* FILTER BAR */
+.fbar{background:#fff;padding:12px 18px;border-bottom:1px solid var(--bd);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.fbar .finp{padding:7px 10px;font-size:.8rem;width:auto}
+.fbar select.finp{min-width:140px}
+.fsearch{flex:1;min-width:180px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;padding:0 20px 28px}
+.dtbl{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.dtbl th{background:var(--g8);color:#fff;padding:11px 14px;font-family:var(--fd);font-size:.7rem;font-weight:700;letter-spacing:1px;text-align:left;white-space:nowrap}
+.dtbl td{padding:9px 14px;font-size:.78rem;border-bottom:1px solid var(--bg2);vertical-align:middle}
+.dtbl tr:last-child td{border-bottom:none}
+.dtbl tr:hover td{background:var(--g0)}
+.dtbl td code{font-size:.7rem;background:var(--bg);padding:2px 6px;border-radius:4px}
+.tbl-acts{display:flex;gap:4px;flex-wrap:wrap}
+.ta{padding:3px 9px;border:none;border-radius:4px;font-size:.67rem;font-weight:700;cursor:pointer;font-family:var(--fd);letter-spacing:.3px;transition:opacity .15s}
+.ta:hover{opacity:.85}
+.ta-view{background:var(--g8);color:#fff}
+.ta-ok{background:var(--ok);color:#fff}
+.ta-rj{background:var(--or);color:#fff}
+.ta-del{background:#888;color:#fff}
+.ta-prem{background:var(--y);color:var(--g8)}
+.ta-basic{background:var(--bg2);color:#3A5A40}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:700;font-family:var(--fd);letter-spacing:.3px}
+.badge-vf{background:#D1FAE5;color:#065F46}
+.badge-pd{background:#FEF3C7;color:#92400E}
+.badge-rj{background:#FEE2E2;color:#991B1B}
+.badge-pm{background:var(--y);color:var(--g8)}
+.badge-bs{background:var(--bg2);color:#3A5A40}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;pointer-events:none}
+.modal-bg.on{display:flex;pointer-events:all}
+.modal{background:#fff;border-radius:var(--r);max-width:600px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-hdr{padding:18px 20px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.modal-hdr h3{font-family:var(--fd);font-size:1.05rem;font-weight:800;color:var(--g8)}
+.modal-x{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--tl);line-height:1;padding:2px 6px}
+.modal-body{padding:18px 20px}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end}
+
+/* DETAIL GRID */
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
+.dc{background:var(--bg);padding:7px 9px;border-radius:6px;font-size:.77rem}
+.dk{font-size:.61rem;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:.4px}
+.dv{font-weight:600;margin-top:1px}
+
+/* FORM GRID */
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg2 .full{grid-column:1/-1}
+@media(max-width:480px){.fg2{grid-template-columns:1fr}.fg2 .full{grid-column:1}}
+
+/* LIGHTBOX */
+#lb{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:2000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px}
+#lb.on{display:flex}
+#lb img{max-width:88vw;max-height:78vh;border-radius:8px;object-fit:contain}
+#lb-cap{color:rgba(255,255,255,.6);font-size:.8rem}
+#lb-x{position:absolute;top:16px;right:20px;font-size:2rem;color:#fff;cursor:pointer;background:none;border:none;line-height:1}
+
+/* PHOTO STRIP in modal */
+.photo-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.pthumb{width:68px;height:68px;border-radius:8px;object-fit:cover;border:2px solid var(--bd);cursor:pointer;transition:transform .15s}
+.pthumb:hover{transform:scale(1.08)}
+.pthumb-lbl{font-size:.58rem;color:var(--tl);text-align:center;margin-top:2px}
+
+/* PAYMENT CONFIG */
+.pay-section{padding:20px;max-width:560px}
+.card{background:#fff;border-radius:var(--r);border:1px solid var(--bd);box-shadow:var(--sh);margin-bottom:16px}
+.card-hdr{background:linear-gradient(100deg,var(--g8),var(--g7));color:#fff;padding:13px 18px;border-radius:var(--r) var(--r) 0 0;display:flex;align-items:center;gap:10px}
+.card-hdr h2{font-family:var(--fd);font-size:.95rem;font-weight:700}
+.card-hdr span{font-size:.65rem;opacity:.75;font-family:var(--fh);display:block;margin-top:2px}
+.card-body{padding:18px}
+.sec-lbl{font-family:var(--fd);font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--tl);border-bottom:2px solid var(--y);padding-bottom:6px;margin:16px 0 12px}
+.qr-prev{text-align:center;margin-bottom:12px;display:none}
+.qr-prev img{max-width:160px;border-radius:8px;border:1px solid var(--bd)}
+
+/* TOAST */
+#toast{position:fixed;bottom:20px;right:20px;z-index:3000;padding:12px 18px;border-radius:var(--r);font-weight:600;font-size:.83rem;box-shadow:var(--shb);transform:translateY(80px);opacity:0;transition:all .3s;max-width:300px;pointer-events:none}
+#toast.on{transform:translateY(0);opacity:1}
+#toast.ok{background:var(--g8);color:#fff}
+#toast.er{background:var(--red);color:#fff}
+#toast.in{background:var(--g7);color:#fff}
+
+/* IROW */
+.irow{display:flex;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--bg2);font-size:.8rem}
+.irow:last-child{border-bottom:none}
+.ik{font-weight:700;color:var(--tl);min-width:130px;font-size:.73rem;flex-shrink:0}
+.iv{font-weight:500;color:var(--text)}
+
+/* COMMIT TAGS */
+.ctag{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:.68rem;font-weight:700;margin:2px}
+.ctag-ok{background:#D1FAE5;color:#065F46}
+.ctag-no{background:#FEE2E2;color:#991B1B}
 </style>
 </head>
 <body>
 
+<!-- LIGHTBOX -->
+<div id="lb">
+  <button id="lb-x" onclick="closeLB()">×</button>
+  <img id="lb-img" src="" alt="">
+  <div id="lb-cap"></div>
+</div>
+
 <!-- HEADER -->
-<header class="app-header">
-  <div class="header-left">
-    <div class="bb-logo sm"><span class="bb-logo-budget">BUDGET</span><span class="bb-logo-barber">BARBER</span></div>
-    <div class="header-title"><h1>Admin Panel</h1><span>प्रशासन पैनल</span></div>
+<header class="hdr">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="hdr-logo"><span class="b1">BUDGET</span><span class="b2">BARBER</span></div>
+    <div class="hdr-mid"><h1>Admin Panel</h1><span>प्रशासन पैनल</span></div>
   </div>
-  <div class="header-right">
-    <button class="btn btn-ghost btn-sm" id="btn-admin-logout" onclick="doLogout()" style="display:none;">Logout</button>
-    <a href="index.html" class="back-link">← Home</a>
+  <div class="hdr-right">
+    <button class="btn-ghost" id="btn-logout" style="display:none" onclick="doLogout()">Logout</button>
+    <a href="index.html" class="back-a">← Home</a>
   </div>
 </header>
 
-<!-- ══════════════════ LOGIN ══════════════════ -->
-<div id="view-login">
-  <div class="admin-login">
-    <div class="login-box anim">
-      <div class="login-icon">⚙️</div>
-      <div class="login-title">Admin Access</div>
-      <div class="login-sub">Authorized Personnel Only · केवल अधिकृत कर्मी</div>
-      <div class="form-group mb-16" style="margin-bottom:12px;">
-        <label class="form-label">Username</label>
-        <input type="text" id="a_user" placeholder="admin" onkeydown="if(event.key==='Enter') doLogin()">
+<!-- ══════ LOGIN ══════ -->
+<div class="page active" id="pg-login">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-icon">⚙️</div>
+      <div class="auth-h">Admin Access</div>
+      <div class="auth-sub">Authorized Personnel Only · केवल अधिकृत कर्मी</div>
+      <div class="fgrp">
+        <label class="flbl">Username</label>
+        <input class="finp" type="text" id="a_user" placeholder="admin" onkeydown="if(event.key==='Enter') doLogin()">
       </div>
-      <div class="form-group" style="margin-bottom:20px;">
-        <label class="form-label">Password</label>
-        <input type="password" id="a_pass" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()">
+      <div class="fgrp">
+        <label class="flbl">Password</label>
+        <input class="finp" type="password" id="a_pass" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()">
       </div>
-      <button class="btn btn-primary btn-block btn-lg" onclick="doLogin()">Login</button>
-      <div class="login-demo">Demo credentials: <strong>admin</strong> / <strong>admin123</strong></div>
+      <button class="btn btn-g btn-block" style="margin-top:4px" onclick="doLogin()">Login</button>
+      <div class="demo-hint">Demo: <strong>admin</strong> / <strong>admin123</strong></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════ DASHBOARD ══════════════════ -->
-<div id="view-dashboard" style="display:none;">
+<!-- ══════ DASHBOARD ══════ -->
+<div class="page" id="pg-dash">
 
   <!-- STATS -->
-  <div class="stats-row" id="stats-row">
-    <div class="stat-card anim"><div class="stat-icon">✂️</div><div class="stat-number" id="st-total">0</div><div class="stat-label">Total Stylists</div></div>
-    <div class="stat-card anim anim-d1"><div class="stat-icon">✅</div><div class="stat-number" id="st-verified">0</div><div class="stat-label">Verified</div></div>
-    <div class="stat-card anim anim-d2"><div class="stat-icon">⏳</div><div class="stat-number" id="st-pending">0</div><div class="stat-label">Pending Review</div></div>
-    <div class="stat-card anim anim-d3"><div class="stat-icon">🟢</div><div class="stat-number" id="st-available">0</div><div class="stat-label">Available Now</div></div>
-    <div class="stat-card anim anim-d4"><div class="stat-icon">🏪</div><div class="stat-number" id="st-recruiters">0</div><div class="stat-label">Recruiters</div></div>
-    <div class="stat-card anim anim-d4"><div class="stat-icon">⭐</div><div class="stat-number" id="st-premium">0</div><div class="stat-label">Premium Recs</div></div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-icon">✂️</div><div class="stat-num" id="st-total">0</div><div class="stat-lbl">Total Stylists</div></div>
+    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-num" id="st-verified">0</div><div class="stat-lbl">Verified</div></div>
+    <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-num" id="st-pending">0</div><div class="stat-lbl">Pending</div></div>
+    <div class="stat-card"><div class="stat-icon">🟢</div><div class="stat-num" id="st-avail">0</div><div class="stat-lbl">Available Now</div></div>
+    <div class="stat-card"><div class="stat-icon">🏪</div><div class="stat-num" id="st-recs">0</div><div class="stat-lbl">Recruiters</div></div>
+    <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-num" id="st-prem">0</div><div class="stat-lbl">Premium Recs</div></div>
+    <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-num" id="st-upgr">0</div><div class="stat-lbl">Upgrade Reqs</div></div>
   </div>
 
-  <!-- TABS -->
-  <div class="tab-bar" id="adm-tabs">
-    <button class="tab-btn active" data-tab="adm-stylists" onclick="switchTab('adm-tabs','adm-stylists')">✂️ Hairstylists</button>
-    <button class="tab-btn" data-tab="adm-recruiters" onclick="switchTab('adm-tabs','adm-recruiters')">🏪 Recruiters</button>
+  <!-- MAIN TABS -->
+  <div class="tab-bar">
+    <button class="tab-btn on" data-pane="tp-stylists" onclick="switchTab(this)">✂️ Hairstylists</button>
+    <button class="tab-btn" data-pane="tp-recruiters" onclick="switchTab(this)">🏪 Recruiters</button>
+    <button class="tab-btn" data-pane="tp-payments" onclick="switchTab(this);loadPayConfig()">💳 Payment Config</button>
   </div>
 
-  <!-- ── HAIRSTYLISTS TAB ── -->
-  <div class="tab-pane active" id="adm-stylists">
-    <div class="filter-bar">
-      <input type="text" class="filter-search" id="f_styl_search" placeholder="🔍 Search name, phone, location…" oninput="renderStylistTable()">
-      <select id="f_styl_status" onchange="renderStylistTable()">
+  <!-- ── HAIRSTYLISTS ── -->
+  <div class="tab-pane on" id="tp-stylists">
+    <div class="fbar">
+      <input class="finp fsearch" type="text" id="f_s_search" placeholder="🔍 Search name, phone, location…" oninput="renderStylists()">
+      <input class="finp" type="text" id="f_s_loc" placeholder="📍 Home Location" oninput="renderStylists()" style="min-width:140px;width:auto">
+      <select class="finp" id="f_s_status" onchange="renderStylists()">
         <option value="">All Status</option>
         <option value="pending">Pending</option>
         <option value="verified">Verified</option>
         <option value="rejected">Rejected</option>
       </select>
-      <select id="f_styl_avail" onchange="renderStylistTable()">
+      <select class="finp" id="f_s_avail" onchange="renderStylists()">
         <option value="">All Availability</option>
         <option value="true">Available</option>
         <option value="false">Not Available</option>
       </select>
-      <select id="f_styl_exp" onchange="renderStylistTable()">
+      <select class="finp" id="f_s_exp" onchange="renderStylists()">
         <option value="">All Experience</option>
         <option value="less1">Less than 1 yr</option>
         <option value="1-2">1–2 years</option>
@@ -137,455 +264,553 @@
         <option value="8-10">8–10 years</option>
         <option value="10+">10+ years</option>
       </select>
-      <button class="btn btn-yellow btn-sm" onclick="doExport()">📥 Export CSV</button>
+      <button class="btn btn-y btn-sm" onclick="exportCSV()">📥 CSV</button>
     </div>
-    <div class="table-area">
-      <div class="data-table-wrap">
-        <table class="data-table">
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead>
+          <tr>
+            <th>Reg ID</th><th>Name</th><th>Phone</th><th>Age</th><th>Home Location</th>
+            <th>Experience</th><th>Max Billing</th><th>Exp Salary</th>
+            <th>Avail</th><th>Commits</th><th>Status</th><th>Registered</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="styl-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── RECRUITERS ── -->
+  <div class="tab-pane" id="tp-recruiters">
+    <div class="tab-bar" style="border-bottom:1px solid var(--bd);padding:0 16px;margin-bottom:0">
+      <button class="tab-btn on" data-pane="tp-rec-all" onclick="switchTab(this)">All Recruiters</button>
+      <button class="tab-btn" data-pane="tp-rec-pending" onclick="switchTab(this)">
+        ⏳ Upgrade Requests <span class="tbadge" id="upg-badge"></span>
+      </button>
+    </div>
+
+    <!-- All Recruiters -->
+    <div class="tab-pane on" id="tp-rec-all">
+      <div class="fbar">
+        <input class="finp fsearch" type="text" id="f_r_search" placeholder="🔍 Search salon, phone, location…" oninput="renderRecruiters()">
+        <select class="finp" id="f_r_plan" onchange="renderRecruiters()">
+          <option value="">All Plans</option>
+          <option value="basic">Basic</option>
+          <option value="premium">Premium</option>
+        </select>
+        <button class="btn btn-g btn-sm" onclick="openMod('mod-create-rec')">+ Create Account</button>
+      </div>
+      <div class="tbl-wrap">
+        <table class="dtbl">
           <thead>
             <tr>
-              <th>Reg ID</th>
-              <th>Name / नाम</th>
-              <th>Phone</th>
-              <th>Age</th>
-              <th>Location</th>
-              <th>Experience</th>
-              <th>Max Billing</th>
-              <th>Exp Salary</th>
-              <th>Available</th>
-              <th>Commits</th>
-              <th>Status</th>
-              <th>Registered</th>
-              <th>Actions</th>
+              <th>ID</th><th>Salon Name</th><th>Phone</th><th>Location</th>
+              <th>Franchise</th><th>Plan</th><th>Expiry</th><th>Registered</th><th>Actions</th>
             </tr>
           </thead>
-          <tbody id="styl-tbody"></tbody>
+          <tbody id="rec-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Upgrade Requests -->
+    <div class="tab-pane" id="tp-rec-pending">
+      <div class="tbl-wrap" style="padding-top:16px">
+        <table class="dtbl">
+          <thead>
+            <tr>
+              <th>Salon Name</th><th>Phone</th><th>Location</th>
+              <th>Pay Method</th><th>UTR / Ref</th><th>Request Date</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="upg-tbody"></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- ── RECRUITERS TAB ── -->
-  <div class="tab-pane" id="adm-recruiters">
-    <div class="tab-bar" id="rec-subtabs" style="border-bottom:1px solid var(--border); padding:0 20px; margin-bottom:0;">
-      <button class="tab-btn active" data-tab="rst-all" onclick="switchTab('rec-subtabs','rst-all')">All Recruiters</button>
-      <button class="tab-btn" data-tab="rst-pending" onclick="switchTab('rec-subtabs','rst-pending')">
-        ⏳ Upgrade Requests <span id="pending-count" style="background:var(--red);color:white;font-size:0.6rem;padding:1px 6px;border-radius:10px;margin-left:4px;font-weight:800;"></span>
-      </button>
-      <button class="tab-btn" data-tab="rst-payments" onclick="switchTab('rec-subtabs','rst-payments')">💳 Payment Config</button>
-    </div>
+  <!-- ── PAYMENT CONFIG ── -->
+  <div class="tab-pane" id="tp-payments">
+    <div class="pay-section">
+      <div class="card">
+        <div class="card-hdr"><span style="font-size:1.2rem">💳</span><div><h2>Payment Configuration</h2><span>भुगतान सेटअप — Recruiter upgrade payments</span></div></div>
+        <div class="card-body">
 
-    <!-- All Recruiters subtab -->
-    <div class="tab-pane active" id="rst-all">
-      <div class="filter-bar">
-        <input type="text" class="filter-search" id="f_rec_search" placeholder="🔍 Search salon, phone, location…" oninput="renderRecruiterTable()">
-        <select id="f_rec_plan" onchange="renderRecruiterTable()">
-          <option value="">All Plans</option>
-          <option value="basic">Basic</option>
-          <option value="premium">Premium</option>
-        </select>
-        <button class="btn btn-primary btn-sm" onclick="openModal('create-rec-modal')">+ Create Account</button>
-      </div>
-      <div class="table-area">
-        <div class="data-table-wrap">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>ID</th><th>Salon Name</th><th>Phone</th><th>Location</th>
-                <th>Franchise</th><th>Plan</th><th>Expiry</th><th>Registered</th><th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="rec-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Pending Upgrade Requests -->
-    <div class="tab-pane" id="rst-pending">
-      <div class="table-area" style="padding-top:16px;">
-        <div class="data-table-wrap">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Salon Name</th><th>Phone</th><th>Location</th>
-                <th>Pay Method</th><th>UTR / Ref</th><th>Request Date</th><th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="pending-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Payment Config subtab -->
-    <div class="tab-pane" id="rst-payments">
-      <div style="padding:24px; max-width:560px;">
-        <div class="card">
-          <div class="card-header"><span style="font-size:1.3rem;">💳</span><div><h2>Payment Configuration</h2><span>भुगतान सेटअप — configure how recruiters pay</span></div></div>
-          <div class="card-body">
-            <div class="section-label">Razorpay / रेज़रपे</div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Razorpay API Key</label>
-              <input type="text" id="cfg_rzp_key" placeholder="rzp_live_XXXXXXXXXX">
-              <div class="form-hint">Leave blank to hide Razorpay option from recruiters</div>
-            </div>
-            <div class="section-label" style="margin-top:16px;">Cashfree / कैशफ्री</div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Cashfree App ID</label>
-              <input type="text" id="cfg_cf_appid" placeholder="Cashfree App ID">
-              <div class="form-hint">Leave blank to hide Cashfree option</div>
-            </div>
-            <div class="section-label" style="margin-top:16px;">UPI Direct / UPI ID</div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">UPI ID</label>
-              <input type="text" id="cfg_upi" placeholder="yourname@upi or 9876543210@paytm">
-              <div class="form-hint">Recruiters can copy &amp; pay directly to this UPI ID</div>
-            </div>
-            <div class="section-label" style="margin-top:16px;">QR Code / क्यूआर कोड</div>
-            <div class="form-group" style="margin-bottom:16px;">
-              <label class="form-label">QR Code Image URL</label>
-              <input type="url" id="cfg_qr_url" placeholder="https://your-qr-image-url.com/qr.png">
-              <div class="form-hint">Paste the URL of your payment QR code image. Recruiters will scan it.</div>
-            </div>
-            <div id="qr-preview" style="text-align:center; margin-bottom:14px; display:none;">
-              <img id="qr-preview-img" style="max-width:160px; border-radius:8px; border:1px solid var(--border);" alt="QR Preview">
-              <div style="font-size:0.7rem; color:var(--text-light); margin-top:4px;">QR Preview</div>
-            </div>
-            <button class="btn btn-primary btn-block" onclick="savePayConfig()">💾 Save Payment Config</button>
+          <div class="sec-lbl">Razorpay</div>
+          <div class="fgrp">
+            <label class="flbl">Razorpay API Key</label>
+            <input class="finp" type="text" id="cfg_rzp" placeholder="rzp_live_XXXXXXXXXX">
+            <span style="font-size:.68rem;color:var(--tl);margin-top:3px">Leave blank to hide Razorpay option from recruiters</span>
           </div>
+
+          <div class="sec-lbl">Cashfree</div>
+          <div class="fgrp">
+            <label class="flbl">Cashfree App ID</label>
+            <input class="finp" type="text" id="cfg_cf" placeholder="Cashfree App ID">
+          </div>
+
+          <div class="sec-lbl">UPI Direct</div>
+          <div class="fgrp">
+            <label class="flbl">UPI ID</label>
+            <input class="finp" type="text" id="cfg_upi" placeholder="yourname@upi or 9876543210@paytm">
+            <span style="font-size:.68rem;color:var(--tl);margin-top:3px">Recruiters can copy &amp; pay directly</span>
+          </div>
+
+          <div class="sec-lbl">QR Code</div>
+          <div class="fgrp">
+            <label class="flbl">QR Code Image URL</label>
+            <input class="finp" type="url" id="cfg_qr" placeholder="https://your-domain.com/qr.png" oninput="previewQR()">
+            <span style="font-size:.68rem;color:var(--tl);margin-top:3px">Paste URL of your payment QR code image</span>
+          </div>
+          <div class="qr-prev" id="qr-prev">
+            <img id="qr-prev-img" src="" alt="QR Preview">
+            <div style="font-size:.7rem;color:var(--tl);margin-top:4px">QR Preview</div>
+          </div>
+
+          <button class="btn btn-g" onclick="savePayConfig()" style="margin-top:8px">💾 Save Payment Config</button>
         </div>
       </div>
     </div>
   </div>
 
-<!-- ══════════════════ MODALS ══════════════════ -->
+</div>
 
-<!-- Hairstylist Detail -->
-<div class="modal-backdrop" id="styl-modal">
-  <div class="modal" style="max-width:620px;">
-    <div class="modal-header">
-      <h3 id="styl-modal-title">Hairstylist Profile</h3>
-      <button class="modal-close" onclick="closeModal('styl-modal')">×</button>
+<!-- ══════ MODAL: STYLIST DETAIL ══════ -->
+<div class="modal-bg" id="mod-stylist">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-hdr">
+      <h3 id="mod-s-title">Hairstylist Profile</h3>
+      <button class="modal-x" onclick="closeMod('mod-stylist')">×</button>
     </div>
-    <div class="modal-body" id="styl-modal-body"></div>
-    <div class="modal-footer">
-      <button class="btn btn-success btn-sm" id="btn-verify" onclick="changeStatus('verify')">✅ Verify</button>
-      <button class="btn btn-danger btn-sm" id="btn-reject" onclick="changeStatus('reject')">Reject</button>
-      <button class="btn btn-outline btn-sm" onclick="closeModal('styl-modal')">Close</button>
+    <div class="modal-body" id="mod-s-body"></div>
+    <div class="modal-foot">
+      <button class="btn btn-sm ta-ok" id="mod-btn-verify" onclick="quickStatus('verified')">✅ Verify</button>
+      <button class="btn btn-sm ta-rj" id="mod-btn-reject" onclick="quickStatus('rejected')">✗ Reject</button>
+      <button class="btn btn-sm ta-del" onclick="deleteStylest(curStylestId);closeMod('mod-stylist')">🗑 Delete</button>
+      <button class="btn btn-out btn-sm" onclick="closeMod('mod-stylist')" style="margin-left:auto">Close</button>
     </div>
   </div>
 </div>
 
-<!-- Create Recruiter -->
-<div class="modal-backdrop" id="create-rec-modal">
+<!-- ══════ MODAL: CREATE RECRUITER ══════ -->
+<div class="modal-bg" id="mod-create-rec">
   <div class="modal">
-    <div class="modal-header">
+    <div class="modal-hdr">
       <h3>Create Recruiter Account</h3>
-      <button class="modal-close" onclick="closeModal('create-rec-modal')">×</button>
+      <button class="modal-x" onclick="closeMod('mod-create-rec')">×</button>
     </div>
     <div class="modal-body">
-      <div class="mf-grid">
-        <div class="form-group col-span-2" style="grid-column:1/-1;">
-          <label class="form-label">Salon Name <span class="req">*</span></label>
-          <input type="text" id="nr_salon" placeholder="Salon Name">
+      <div class="fg2">
+        <div class="fgrp full">
+          <label class="flbl">Salon Name *</label>
+          <input class="finp" type="text" id="nr_salon" placeholder="Salon Name">
         </div>
-        <div class="form-group">
-          <label class="form-label">Phone Number <span class="req">*</span></label>
-          <input type="tel" id="nr_phone" placeholder="10-digit mobile" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'')">
+        <div class="fgrp">
+          <label class="flbl">Phone Number *</label>
+          <input class="finp" type="tel" id="nr_phone" placeholder="10-digit mobile" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'')">
         </div>
-        <div class="form-group">
-          <label class="form-label">6-Digit PIN <span class="req">*</span></label>
-          <input type="password" id="nr_pin" placeholder="Set 6-digit PIN" maxlength="6" inputmode="numeric">
+        <div class="fgrp">
+          <label class="flbl">6-Digit PIN *</label>
+          <input class="finp" type="password" id="nr_pin" placeholder="Set 6-digit PIN" maxlength="6" inputmode="numeric">
         </div>
-        <div class="form-group">
-          <label class="form-label">Location</label>
-          <input type="text" id="nr_loc" placeholder="City">
+        <div class="fgrp">
+          <label class="flbl">Location</label>
+          <input class="finp" type="text" id="nr_loc" placeholder="City, State">
         </div>
-        <div class="form-group">
-          <label class="form-label">Franchise?</label>
-          <select id="nr_franchise">
+        <div class="fgrp">
+          <label class="flbl">Franchise?</label>
+          <select class="finp" id="nr_fran">
             <option value="no">No</option>
             <option value="yes">Yes</option>
           </select>
         </div>
-        <div class="form-group">
-          <label class="form-label">Plan</label>
-          <select id="nr_plan" onchange="toggleExpiry()">
-            <option value="basic">Basic — Phone numbers hidden</option>
+        <div class="fgrp full">
+          <label class="flbl">Address</label>
+          <textarea class="finp" id="nr_addr" placeholder="Full salon address"></textarea>
+        </div>
+        <div class="fgrp">
+          <label class="flbl">Plan</label>
+          <select class="finp" id="nr_plan" onchange="toggleExpiry()">
+            <option value="basic">Basic — Contact details hidden</option>
             <option value="premium">Premium — Full access</option>
           </select>
         </div>
-        <div class="form-group" id="expiry-group" style="display:none;">
-          <label class="form-label">Premium Expiry Date</label>
-          <input type="date" id="nr_expiry">
+        <div class="fgrp" id="expiry-grp" style="display:none">
+          <label class="flbl">Premium Expiry Date</label>
+          <input class="finp" type="date" id="nr_expiry">
         </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline btn-sm" onclick="closeModal('create-rec-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="createRecruiter()">Create Account</button>
+    <div class="modal-foot">
+      <button class="btn btn-out btn-sm" onclick="closeMod('mod-create-rec')">Cancel</button>
+      <button class="btn btn-g" id="btn-create-rec">Create Account</button>
     </div>
   </div>
 </div>
 
-<script src="shared.js"></script>
+<!-- TOAST -->
+<div id="toast"></div>
+
 <script>
-let activeStylestId = null;
+// ─────────────────────────────────────────────────────────────
+//  DATA LAYER — same localStorage keys as recruiter.html
+// ─────────────────────────────────────────────────────────────
+function getStylests() {
+  try { return JSON.parse(localStorage.getItem('bb_stylists')) || []; } catch(e){ return []; }
+}
+function saveStylests(a) { localStorage.setItem('bb_stylists', JSON.stringify(a)); }
 
-// ── BOOT ─────────────────────────────────────────────────────
-window.addEventListener('load', () => {
-  if (isAdminLoggedIn()) showDashboard();
-  else show('view-login');
-});
+function getRecruiters() {
+  try {
+    const raw = localStorage.getItem('bb_recruiters');
+    if (raw) return JSON.parse(raw);
+    const def = defaultRecruiters();
+    localStorage.setItem('bb_recruiters', JSON.stringify(def));
+    return def;
+  } catch(e){ return []; }
+}
+function saveRecruiters(a) { localStorage.setItem('bb_recruiters', JSON.stringify(a)); }
 
-function show(id) {
-  ['view-login','view-dashboard'].forEach(v =>
-    document.getElementById(v).style.display = v === id ? 'block' : 'none'
-  );
+function getPayCfg() {
+  try { return JSON.parse(localStorage.getItem('bb_payment_config') || '{}'); } catch(e){ return {}; }
 }
 
-// ── AUTH ─────────────────────────────────────────────────────
+function defaultRecruiters() {
+  const exp30 = new Date(Date.now() + 30*86400000).toISOString();
+  return [
+    { id:'REC-001', salon_name:'Style King Salon', phone:'9876543000', pin:'123456',
+      location:'Hyderabad', franchise:'yes', address:'Banjara Hills, Hyderabad',
+      plan:'premium', plan_expiry:exp30, plan_requested:false, created_at:'2024-10-01T09:00:00Z' },
+    { id:'REC-002', salon_name:'Trim Masters', phone:'9876543001', pin:'123456',
+      location:'Bangalore', franchise:'no', address:'Koramangala, Bangalore',
+      plan:'basic', plan_expiry:null, plan_requested:false, created_at:'2024-10-05T11:00:00Z' },
+  ];
+}
+
+function rupee(v) { return v && !isNaN(v) ? '₹' + Number(v).toLocaleString('en-IN') : '—'; }
+function fmtDate(d) { return d ? new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) : '—'; }
+
+// ─────────────────────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────────────────────
+let curStylestId = null;
+
+// ─────────────────────────────────────────────────────────────
+//  UI HELPERS
+// ─────────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg, type='ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'on ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.className = '', 3500);
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function switchTab(btn) {
+  const bar  = btn.closest('.tab-bar');
+  const pane = btn.dataset.pane;
+  bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const parent = bar.parentElement;
+  parent.querySelectorAll(':scope > .tab-pane').forEach(p => p.classList.remove('on'));
+  document.getElementById(pane)?.classList.add('on');
+}
+
+function openMod(id)  { document.getElementById(id).classList.add('on'); }
+function closeMod(id) { document.getElementById(id).classList.remove('on'); }
+
+function openLB(src, cap) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-cap').textContent = cap || '';
+  document.getElementById('lb').classList.add('on');
+}
+function closeLB() { document.getElementById('lb').classList.remove('on'); }
+
+// ─────────────────────────────────────────────────────────────
+//  AUTH
+// ─────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('bb_admin') === '1') { showDash(); }
+  else showPage('pg-login');
+
+  // Bind create-rec button after DOM ready
+  document.getElementById('btn-create-rec').addEventListener('click', createRecruiter);
+});
+
 function doLogin() {
   const u = document.getElementById('a_user').value.trim();
   const p = document.getElementById('a_pass').value;
   if (u === 'admin' && p === 'admin123') {
-    setAdminSession();
-    showDashboard();
+    sessionStorage.setItem('bb_admin','1');
+    showDash();
   } else {
-    showToast('Invalid credentials', 'error');
+    toast('Invalid credentials', 'er');
   }
 }
+
 function doLogout() {
-  clearAdminSession();
-  show('view-login');
-  document.getElementById('btn-admin-logout').style.display = 'none';
+  sessionStorage.removeItem('bb_admin');
+  showPage('pg-login');
+  document.getElementById('btn-logout').style.display = 'none';
 }
 
-// ── DASHBOARD ────────────────────────────────────────────────
-function showDashboard() {
-  show('view-dashboard');
-  document.getElementById('btn-admin-logout').style.display = 'inline-flex';
-  loadPayConfig();
+// ─────────────────────────────────────────────────────────────
+//  DASHBOARD
+// ─────────────────────────────────────────────────────────────
+function showDash() {
+  document.getElementById('btn-logout').style.display = 'inline-block';
+  showPage('pg-dash');
   refreshAll();
 }
 
 function refreshAll() {
   updateStats();
-  renderStylistTable();
-  renderRecruiterTable();
+  renderStylists();
+  renderRecruiters();
+  renderUpgradeRequests();
 }
 
 function updateStats() {
   const ss = getStylests();
   const rr = getRecruiters();
-  document.getElementById('st-total').textContent     = ss.length;
-  document.getElementById('st-verified').textContent  = ss.filter(s => s.status === 'verified').length;
-  document.getElementById('st-pending').textContent   = ss.filter(s => s.status === 'pending').length;
-  document.getElementById('st-available').textContent = ss.filter(s => s.available).length;
-  document.getElementById('st-recruiters').textContent= rr.length;
-  document.getElementById('st-premium').textContent   = rr.filter(r => r.plan === 'premium').length;
+  const upgr = rr.filter(r => r.plan_requested && r.plan !== 'premium').length;
+  document.getElementById('st-total').textContent   = ss.length;
+  document.getElementById('st-verified').textContent= ss.filter(s=>s.status==='verified').length;
+  document.getElementById('st-pending').textContent = ss.filter(s=>s.status==='pending').length;
+  document.getElementById('st-avail').textContent   = ss.filter(s=>s.available).length;
+  document.getElementById('st-recs').textContent    = rr.length;
+  document.getElementById('st-prem').textContent    = rr.filter(r=>r.plan==='premium').length;
+  document.getElementById('st-upgr').textContent    = upgr;
+  const badge = document.getElementById('upg-badge');
+  if (badge) badge.textContent = upgr > 0 ? upgr : '';
 }
 
-// ── STYLIST TABLE ─────────────────────────────────────────────
-function renderStylistTable() {
-  const search = document.getElementById('f_styl_search')?.value.toLowerCase() || '';
-  const status = document.getElementById('f_styl_status')?.value || '';
-  const avail  = document.getElementById('f_styl_avail')?.value || '';
-  const exp    = document.getElementById('f_styl_exp')?.value || '';
+// ─────────────────────────────────────────────────────────────
+//  HAIRSTYLISTS TABLE
+// ─────────────────────────────────────────────────────────────
+function renderStylists() {
+  const search = (document.getElementById('f_s_search')?.value||'').toLowerCase();
+  const loc    = (document.getElementById('f_s_loc')?.value||'').toLowerCase();
+  const status = document.getElementById('f_s_status')?.value||'';
+  const avail  = document.getElementById('f_s_avail')?.value||'';
+  const exp    = document.getElementById('f_s_exp')?.value||'';
 
   let all = getStylests();
-  if (search) all = all.filter(s =>
-    s.name.toLowerCase().includes(search) ||
-    s.phone.includes(search) ||
-    (s.home_location||'').toLowerCase().includes(search)
-  );
+  if (search) all = all.filter(s => s.name.toLowerCase().includes(search) || (s.phone||'').includes(search));
+  if (loc)    all = all.filter(s => (s.home_location||'').toLowerCase().includes(loc));
   if (status) all = all.filter(s => s.status === status);
   if (avail)  all = all.filter(s => String(s.available) === avail);
   if (exp)    all = all.filter(s => s.experience === exp);
 
   const tbody = document.getElementById('styl-tbody');
-  tbody.innerHTML = all.length ? all.map(s => {
-    const commits = [s.no_gutka,s.no_weed,s.no_alcohol,s.wear_uniform,s.stay_neat,s.follow_timing,s.respect_customers,s.keep_clean,s.no_nuisance,s.performance_target,s.follow_metrics];
-    const commitScore = commits.filter(Boolean).length;
-    return `
-    <tr>
+
+  if (!all.length) {
+    tbody.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:28px;color:var(--tl)">No records found</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = all.map(s => {
+    const commits = [s.no_gutka,s.no_weed,s.no_alcohol,s.wear_uniform,s.stay_neat,
+                     s.follow_timing,s.respect_customers,s.keep_clean,s.no_nuisance,
+                     s.performance_target,s.follow_metrics];
+    const score = commits.filter(Boolean).length;
+    const scoreCol = score >= 9 ? 'color:var(--ok)' : score >= 6 ? 'color:var(--or)' : 'color:var(--red)';
+    return `<tr>
       <td><code>${s.id}</code></td>
       <td><strong>${s.name}</strong></td>
-      <td>${s.phone}</td>
+      <td>${s.phone||'—'}</td>
       <td>${s.age||'—'}</td>
       <td>${s.home_location||'—'}</td>
       <td>${s.experience||'—'}</td>
-      <td>${rupee(s.max_billing)}</td>
+      <td>${rupee(s.max_billing)}/mo</td>
       <td>${rupee(s.exp_fixed)}/mo</td>
-      <td>${s.available ? '<span style="color:var(--success); font-weight:700;">✅ Yes</span>' : '<span style="color:var(--text-light);">No</span>'}</td>
-      <td><span style="font-size:0.72rem; font-weight:700; color:${commitScore>=9?'var(--success)':'var(--orange)'};">${commitScore}/11</span></td>
+      <td>${s.available?'<span style="color:var(--ok);font-weight:700">✅ Yes</span>':'<span style="color:var(--tl)">No</span>'}</td>
+      <td style="font-size:.72rem;font-weight:700;${scoreCol}">${score}/11</td>
       <td><span class="badge badge-${s.status}">${s.status.toUpperCase()}</span></td>
-      <td style="font-size:0.72rem; color:var(--text-light);">${s.created_at ? new Date(s.created_at).toLocaleDateString('en-IN') : '—'}</td>
+      <td style="font-size:.7rem;color:var(--tl)">${fmtDate(s.created_at)}</td>
       <td>
-        <div class="tbl-actions">
-          <button class="act-view" onclick="viewStylest('${s.id}')">View</button>
-          <button class="act-verify" onclick="quickStatus('${s.id}','verified')">✅</button>
-          <button class="act-reject" onclick="quickStatus('${s.id}','rejected')">✗</button>
-          <button class="act-delete" onclick="deleteStylest('${s.id}')">🗑</button>
+        <div class="tbl-acts">
+          <button class="ta ta-view" onclick="viewStylest('${s.id}')">View</button>
+          <button class="ta ta-ok"   onclick="changeStatus('${s.id}','verified')">✅</button>
+          <button class="ta ta-rj"   onclick="changeStatus('${s.id}','rejected')">✗</button>
+          <button class="ta ta-del"  onclick="deleteStylest('${s.id}')">🗑</button>
         </div>
       </td>
     </tr>`;
-  }).join('') : `<tr><td colspan="13" style="text-align:center; padding:28px; color:var(--text-light);">No records found</td></tr>`;
+  }).join('');
 }
 
 function viewStylest(id) {
   const s = getStylests().find(h => h.id === id);
   if (!s) return;
-  activeStylestId = id;
-  document.getElementById('styl-modal-title').textContent = `${s.name} — ${s.id}`;
-  document.getElementById('styl-modal-body').innerHTML = `
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
+  curStylestId = id;
+  document.getElementById('mod-s-title').textContent = `${s.name} — ${s.id}`;
+
+  // Photos
+  const allPh = [
+    ...(s.selfie_url      ? [{u:s.selfie_url,        l:'Selfie'}]          : []),
+    ...(s.aadhaar_front_url ? [{u:s.aadhaar_front_url, l:'Aadhaar Front'}] : []),
+    ...(s.aadhaar_back_url  ? [{u:s.aadhaar_back_url,  l:'Aadhaar Back'}]  : []),
+    ...(s.full_photo_urls||[]).map((u,i)=>({u,l:`Full ${i+1}`})),
+    ...(s.work_photo_urls||[]).map((u,i)=>({u,l:`Work ${i+1}`})),
+  ];
+
+  const gallery = allPh.length ? `
+    <div class="photo-row">
+      ${allPh.map(p=>`<div style="text-align:center">
+        <img class="pthumb" src="${p.u}" onclick="openLB('${p.u}','${p.l} — ${s.name}')" title="${p.l}">
+        <div class="pthumb-lbl">${p.l}</div>
+      </div>`).join('')}
+    </div>` : '';
+
+  const commits = [
+    ['No Gutka',s.no_gutka],['No Weed',s.no_weed],['No Alcohol',s.no_alcohol],
+    ['Uniform',s.wear_uniform],['Neat & Tidy',s.stay_neat],['Timings',s.follow_timing],
+    ['Respect Cust.',s.respect_customers],['Clean Room',s.keep_clean],['No Nuisance',s.no_nuisance],
+    ['₹60k Target',s.performance_target],['Follow Metrics',s.follow_metrics],
+  ];
+
+  document.getElementById('mod-s-body').innerHTML = `
+    ${gallery}
+    <div class="dg">
       ${[
-        ['Name', s.name], ['Phone', s.phone],
-        ['Age', (s.age||'—')+' yrs'], ['Home Location', s.home_location||'—'],
-        ['Address', s.address||'—'], ['Experience', s.experience||'—'],
-        ['Max Billing', rupee(s.max_billing)+'/mo'], ['Exp Fixed', rupee(s.exp_fixed)+'/mo'],
-        ['Exp Incentive', (s.exp_incentive||'—')+'%'], ['Room Required', s.exp_room||'—'],
-        ['Food Required', s.exp_food||'—'], ['Prev Fixed', rupee(s.prev_fixed)+'/mo'],
-        ['Prev Incentive', (s.prev_incentive||'—')+'%'], ['Prev Location', s.prev_location||'—'],
-        ['All Prev Locations', s.all_locations||'—'], ['Available', s.available?'✅ Yes':'No'],
-        ['Join Timeline', s.join_timeline||'—'], ['Reference', s.ref_name||'—'],
-        ['Ref Phone', s.ref_phone||'—'], ['Instagram', s.instagram ? `<a href="${s.instagram}" target="_blank" style="color:var(--green-700);">View ↗</a>` : '—'],
-        ['Status', `<span class="badge badge-${s.status}">${s.status.toUpperCase()}</span>`],
-        ['Registered', s.created_at ? new Date(s.created_at).toLocaleString('en-IN') : '—'],
-      ].map(([k,v]) => `<div style="background:var(--bg); padding:8px 10px; border-radius:6px; font-size:0.78rem;"><div style="font-size:0.63rem; font-weight:700; color:var(--text-light); text-transform:uppercase; letter-spacing:0.5px;">${k}</div><div style="font-weight:600; margin-top:2px;">${v}</div></div>`).join('')}
+        ['Name',s.name],['Phone',s.phone||'—'],['Age',(s.age||'—')+' yrs'],
+        ['Home Location',s.home_location||'—'],['Address',s.address||'—'],
+        ['Experience',s.experience||'—'],['Max Billing',rupee(s.max_billing)+'/mo'],
+        ['Exp Fixed',rupee(s.exp_fixed)+'/mo'],['Exp Incentive',(s.exp_incentive||'—')+'%'],
+        ['Food Allowance Exp.',rupee(s.exp_food)],['Room',s.exp_room||'—'],
+        ['Prev Fixed',rupee(s.prev_fixed)+'/mo'],['Prev Incentive',(s.prev_incentive||'—')+'%'],
+        ['Prev Location',s.prev_location||'—'],['Available',s.available?'✅ Yes':'⏳ No'],
+        ['Join Timeline',s.join_timeline||'—'],['Reference',s.ref_name||'—'],
+        ['Ref Phone',s.ref_phone||'—'],['Instagram',s.instagram?`<a href="${s.instagram}" target="_blank" style="color:var(--g7)">View ↗</a>`:'—'],
+        ['Status',`<span class="badge badge-${s.status}">${s.status.toUpperCase()}</span>`],
+        ['Registered',fmtDate(s.created_at)],
+      ].map(([k,v])=>`<div class="dc"><div class="dk">${k}</div><div class="dv">${v}</div></div>`).join('')}
     </div>
-    <div style="background:var(--bg2); border-radius:var(--radius-sm); padding:12px; font-size:0.75px;">
-      <strong style="font-size:0.75rem;">Commitments / प्रतिबद्धताएं</strong>
-      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
-        ${[
-          ['No Gutka', s.no_gutka], ['No Weed', s.no_weed], ['No Alcohol', s.no_alcohol],
-          ['Uniform', s.wear_uniform], ['Neat & Tidy', s.stay_neat], ['Timings', s.follow_timing],
-          ['Respect Cust.', s.respect_customers], ['Clean Room', s.keep_clean], ['No Nuisance', s.no_nuisance],
-          ['₹60k Target', s.performance_target], ['Follow Metrics', s.follow_metrics],
-        ].map(([l,v]) => `<span style="background:${v?'#D1FAE5':'#FEE2E2'}; color:${v?'#065F46':'#991B1B'}; padding:3px 8px; border-radius:20px; font-size:0.68rem; font-weight:700;">${v?'✅':'❌'} ${l}</span>`).join('')}
+    <div style="margin-bottom:10px">
+      <div style="font-size:.68rem;font-weight:800;color:var(--tl);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Commitments / प्रतिबद्धताएं</div>
+      <div>
+        ${commits.map(([l,v])=>`<span class="ctag ${v?'ctag-ok':'ctag-no'}">${v?'✅':'❌'} ${l}</span>`).join('')}
       </div>
     </div>
+    ${s.all_locations?`<div style="font-size:.78rem"><strong>All Previous Locations:</strong> ${s.all_locations}</div>`:''}
   `;
-  openModal('styl-modal');
+
+  openMod('mod-stylist');
 }
 
-function changeStatus(action) {
-  if (!activeStylestId) return;
-  quickStatus(activeStylestId, action === 'verify' ? 'verified' : 'rejected');
-  closeModal('styl-modal');
-}
-
-function quickStatus(id, status) {
+function changeStatus(id, status) {
   const all = getStylests();
-  const s = all.find(h => h.id === id);
-  if (s) { s.status = status; saveStylests(all); refreshAll(); showToast(`Status → ${status}`, status === 'verified' ? 'success' : 'info'); }
+  const s   = all.find(h => h.id === id);
+  if (s) { s.status = status; saveStylests(all); refreshAll(); toast(`Status → ${status}`, 'ok'); }
+}
+
+function quickStatus(status) {
+  if (curStylestId) changeStatus(curStylestId, status);
 }
 
 function deleteStylest(id) {
-  if (!confirm('Delete this profile? This action cannot be undone.\nइस प्रोफ़ाइल को हटाएं? यह क्रिया वापस नहीं हो सकती।')) return;
+  if (!confirm('Delete this profile? / इस प्रोफ़ाइल को हटाएं?\nThis cannot be undone.')) return;
   saveStylests(getStylests().filter(h => h.id !== id));
   refreshAll();
-  showToast('Profile deleted / प्रोफ़ाइल हटाई गई', 'info');
+  toast('Profile deleted', 'in');
 }
 
-function doExport() {
-  exportCSV(getStylests());
+function exportCSV() {
+  const ss = getStylests();
+  const headers = ['ID','Name','Phone','Age','Home Location','Experience','Max Billing',
+    'Exp Fixed','Exp Incentive%','Food Allowance','Room','Available','Join Timeline',
+    'Status','Reference','Registered'];
+  const rows = ss.map(s => [
+    s.id,s.name,s.phone,s.age,s.home_location,s.experience,s.max_billing,
+    s.exp_fixed,s.exp_incentive,s.exp_food,s.exp_room,
+    s.available?'Yes':'No',s.join_timeline,s.status,s.ref_name,
+    s.created_at?new Date(s.created_at).toLocaleDateString('en-IN'):''
+  ]);
+  const csv = [headers,...rows].map(r => r.map(v=>`"${v||''}"`).join(',')).join('\n');
+  const a = Object.assign(document.createElement('a'),{
+    href: URL.createObjectURL(new Blob([csv],{type:'text/csv'})),
+    download: `bb-hairstylists-${new Date().toISOString().slice(0,10)}.csv`
+  });
+  a.click();
+  toast('CSV exported / CSV डाउनलोड हो गई', 'ok');
 }
 
-// ── RECRUITER TABLE ───────────────────────────────────────────
-function renderRecruiterTable() {
-  const search = document.getElementById('f_rec_search')?.value.toLowerCase() || '';
-  const plan   = document.getElementById('f_rec_plan')?.value || '';
+// ─────────────────────────────────────────────────────────────
+//  RECRUITERS TABLE
+// ─────────────────────────────────────────────────────────────
+function renderRecruiters() {
+  const search = (document.getElementById('f_r_search')?.value||'').toLowerCase();
+  const plan   = document.getElementById('f_r_plan')?.value||'';
   let all = getRecruiters();
   if (search) all = all.filter(r =>
-    r.salon_name.toLowerCase().includes(search) ||
-    (r.phone||'').includes(search) ||
+    r.salon_name.toLowerCase().includes(search)||
+    (r.phone||'').includes(search)||
     (r.location||'').toLowerCase().includes(search)
   );
   if (plan) all = all.filter(r => r.plan === plan);
 
   const tbody = document.getElementById('rec-tbody');
   tbody.innerHTML = all.length ? all.map(r => {
-    const exp = r.plan_expiry ? new Date(r.plan_expiry) : null;
+    const exp      = r.plan_expiry ? new Date(r.plan_expiry) : null;
     const daysLeft = exp ? Math.ceil((exp - new Date()) / 86400000) : null;
-    const expiryTxt = exp ? `${exp.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})} (${daysLeft}d)` : '—';
-    const expClass = daysLeft !== null && daysLeft <= 7 ? 'color:var(--red);font-weight:700;' : '';
-    return `
-    <tr>
+    const expTxt   = exp ? `${fmtDate(r.plan_expiry)} (${daysLeft}d)` : '—';
+    const expCol   = daysLeft !== null && daysLeft <= 7 ? 'color:var(--red);font-weight:700' : '';
+    return `<tr>
       <td><code>${r.id}</code></td>
       <td><strong>${r.salon_name}</strong></td>
       <td>${r.phone||'—'}</td>
       <td>${r.location||'—'}</td>
-      <td>${r.franchise === 'yes' ? 'Yes' : 'No'}</td>
-      <td><span class="badge ${r.plan === 'premium' ? 'badge-premium' : 'badge-basic'}">${r.plan.toUpperCase()}</span></td>
-      <td style="font-size:0.72rem;${expClass}">${expiryTxt}</td>
-      <td style="font-size:0.72rem; color:var(--text-light);">${r.created_at ? new Date(r.created_at).toLocaleDateString('en-IN') : '—'}</td>
+      <td>${r.franchise==='yes'?'Yes':'No'}</td>
+      <td><span class="badge badge-${r.plan==='premium'?'pm':'bs'}">${r.plan.toUpperCase()}</span></td>
+      <td style="font-size:.7rem;${expCol}">${expTxt}</td>
+      <td style="font-size:.7rem;color:var(--tl)">${fmtDate(r.created_at)}</td>
       <td>
-        <div class="tbl-actions">
-          <button class="${r.plan === 'premium' ? 'act-basic' : 'act-premium'}" onclick="togglePlan('${r.id}')">
-            ${r.plan === 'premium' ? 'Downgrade' : '⭐ Premium'}
+        <div class="tbl-acts">
+          <button class="ta ${r.plan==='premium'?'ta-basic':'ta-prem'}" onclick="togglePlan('${r.id}')">
+            ${r.plan==='premium'?'Downgrade':'⭐ Premium'}
           </button>
-          <button class="act-delete" onclick="deleteRecruiter('${r.id}')">🗑</button>
+          <button class="ta ta-del" onclick="deleteRecruiter('${r.id}')">🗑</button>
         </div>
       </td>
     </tr>`;
-  }).join('') : `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--text-light);">No recruiters found</td></tr>`;
+  }).join('') : `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--tl)">No recruiters found</td></tr>`;
 
-  // Also render pending
-  renderPendingRequests();
+  renderUpgradeRequests();
 }
 
-function renderPendingRequests() {
+function renderUpgradeRequests() {
   const pending = getRecruiters().filter(r => r.plan_requested && r.plan !== 'premium');
-  const badge = document.getElementById('pending-count');
+  const badge   = document.getElementById('upg-badge');
   if (badge) badge.textContent = pending.length > 0 ? pending.length : '';
-  const tbody = document.getElementById('pending-tbody');
+
+  const tbody = document.getElementById('upg-tbody');
   if (!tbody) return;
   tbody.innerHTML = pending.length ? pending.map(r => `
     <tr>
       <td><strong>${r.salon_name}</strong></td>
       <td>${r.phone||'—'}</td>
       <td>${r.location||'—'}</td>
-      <td><span class="badge badge-basic">${(r.plan_request_method||'manual').toUpperCase()}</span></td>
-      <td style="font-family:monospace; font-size:0.78rem;">${r.plan_request_ref||'—'}</td>
-      <td style="font-size:0.72rem;">${r.plan_request_date ? new Date(r.plan_request_date).toLocaleString('en-IN') : '—'}</td>
+      <td><span class="badge badge-bs">${(r.plan_request_method||'manual').toUpperCase()}</span></td>
+      <td style="font-family:monospace;font-size:.75rem">${r.plan_request_ref||'—'}</td>
+      <td style="font-size:.7rem">${r.plan_request_date?new Date(r.plan_request_date).toLocaleString('en-IN'):'—'}</td>
       <td>
-        <div class="tbl-actions">
-          <button class="act-premium" onclick="activatePremium('${r.id}')">⭐ Activate Premium</button>
-          <button class="act-delete" onclick="dismissRequest('${r.id}')">✗ Dismiss</button>
+        <div class="tbl-acts">
+          <button class="ta ta-prem" onclick="activatePremium('${r.id}')">⭐ Activate</button>
+          <button class="ta ta-del"  onclick="dismissRequest('${r.id}')">✗ Dismiss</button>
         </div>
       </td>
     </tr>
-  `).join('') : `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--text-light);">No pending upgrade requests</td></tr>`;
-}
+  `).join('') : `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--tl)">No pending upgrade requests</td></tr>`;
 
-function activatePremium(id) {
-  const all = getRecruiters();
-  const r   = all.find(rec => rec.id === id);
-  if (!r) return;
-  // Set expiry to 30 days from today
-  const expiry = new Date(Date.now() + 30*86400000).toISOString();
-  r.plan = 'premium'; r.plan_expiry = expiry; r.plan_requested = false;
-  saveRecruiters(all); refreshAll();
-  showToast(`Premium activated for ${r.salon_name} — valid 30 days`, 'success');
-}
-
-function dismissRequest(id) {
-  const all = getRecruiters();
-  const r   = all.find(rec => rec.id === id);
-  if (r) { r.plan_requested = false; saveRecruiters(all); refreshAll(); showToast('Request dismissed', 'info'); }
-}
-
-function toggleExpiry() {
-  const plan = document.getElementById('nr_plan')?.value;
-  document.getElementById('expiry-group').style.display = plan === 'premium' ? 'block' : 'none';
-  if (plan === 'premium' && !document.getElementById('nr_expiry').value) {
-    // Default 30 days
-    const d = new Date(Date.now() + 30*86400000);
-    document.getElementById('nr_expiry').value = d.toISOString().slice(0,10);
-  }
+  document.getElementById('st-upgr').textContent = pending.length;
 }
 
 function togglePlan(id) {
@@ -600,69 +825,105 @@ function togglePlan(id) {
     r.plan_requested = false;
   }
   saveRecruiters(all); refreshAll();
-  showToast(`Plan updated → ${r.plan.toUpperCase()} ${r.plan === 'premium' ? '(30 days)' : ''}`, 'success');
+  toast(`Plan → ${r.plan.toUpperCase()} ${r.plan==='premium'?'(30 days)':''}`, 'ok');
+}
+
+function activatePremium(id) {
+  const all = getRecruiters();
+  const r   = all.find(rec => rec.id === id);
+  if (!r) return;
+  r.plan = 'premium';
+  r.plan_expiry = new Date(Date.now() + 30*86400000).toISOString();
+  r.plan_requested = false;
+  saveRecruiters(all); refreshAll();
+  toast(`⭐ Premium activated for ${r.salon_name} — 30 days`, 'ok');
+}
+
+function dismissRequest(id) {
+  const all = getRecruiters();
+  const r   = all.find(rec => rec.id === id);
+  if (r) { r.plan_requested = false; saveRecruiters(all); refreshAll(); toast('Request dismissed', 'in'); }
 }
 
 function deleteRecruiter(id) {
   if (!confirm('Delete this recruiter account?')) return;
   saveRecruiters(getRecruiters().filter(r => r.id !== id));
-  refreshAll(); showToast('Recruiter deleted', 'info');
+  refreshAll(); toast('Recruiter deleted', 'in');
+}
+
+function toggleExpiry() {
+  const plan = document.getElementById('nr_plan')?.value;
+  const grp  = document.getElementById('expiry-grp');
+  if (!grp) return;
+  grp.style.display = plan === 'premium' ? 'flex' : 'none';
+  if (plan === 'premium' && !document.getElementById('nr_expiry').value) {
+    document.getElementById('nr_expiry').value = new Date(Date.now()+30*86400000).toISOString().slice(0,10);
+  }
 }
 
 function createRecruiter() {
   const salon = document.getElementById('nr_salon').value.trim();
   const phone = document.getElementById('nr_phone').value.trim();
   const pin   = document.getElementById('nr_pin').value.trim();
-  if (!salon || !phone) { showToast('Please fill required fields', 'error'); return; }
-  if (phone.length < 10) { showToast('Enter valid 10-digit phone', 'error'); return; }
-  if (!pin || pin.length !== 6) { showToast('Enter a 6-digit PIN', 'error'); return; }
+  if (!salon)            { toast('Enter salon name', 'er'); return; }
+  if (phone.length < 10) { toast('Enter valid 10-digit phone', 'er'); return; }
+  if (pin.length !== 6)  { toast('Enter 6-digit PIN', 'er'); return; }
+
   const all = getRecruiters();
-  if (all.find(r => r.phone === phone)) { showToast('Phone already registered', 'error'); return; }
+  if (all.find(r => r.phone === phone)) { toast('Phone already registered', 'er'); return; }
+
   const plan   = document.getElementById('nr_plan').value;
-  const expiry = plan === 'premium' ? (document.getElementById('nr_expiry').value ? new Date(document.getElementById('nr_expiry').value).toISOString() : new Date(Date.now()+30*86400000).toISOString()) : null;
+  const expVal = document.getElementById('nr_expiry')?.value;
+  const expiry = plan === 'premium'
+    ? (expVal ? new Date(expVal).toISOString() : new Date(Date.now()+30*86400000).toISOString())
+    : null;
+
   all.push({
     id: 'REC-' + Date.now(), salon_name: salon, phone, pin,
-    location: document.getElementById('nr_loc').value,
-    franchise: document.getElementById('nr_franchise').value,
+    location: document.getElementById('nr_loc').value.trim(),
+    address:  document.getElementById('nr_addr').value.trim(),
+    franchise: document.getElementById('nr_fran').value,
     plan, plan_expiry: expiry, plan_requested: false,
     created_at: new Date().toISOString()
   });
-  saveRecruiters(all); refreshAll(); closeModal('create-rec-modal');
-  showToast('Recruiter account created!', 'success');
-  ['nr_salon','nr_phone','nr_pin','nr_loc'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  saveRecruiters(all); refreshAll(); closeMod('mod-create-rec');
+  toast('Recruiter account created!', 'ok');
+  ['nr_salon','nr_phone','nr_pin','nr_loc','nr_addr'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value='';
+  });
 }
 
-// ── PAYMENT CONFIG ────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+//  PAYMENT CONFIG
+// ─────────────────────────────────────────────────────────────
 function loadPayConfig() {
-  try {
-    const cfg = JSON.parse(localStorage.getItem('bb_payment_config') || '{}');
-    document.getElementById('cfg_rzp_key').value  = cfg.razorpay_key   || '';
-    document.getElementById('cfg_cf_appid').value = cfg.cashfree_appid || '';
-    document.getElementById('cfg_upi').value       = cfg.upi_id         || '';
-    document.getElementById('cfg_qr_url').value    = cfg.qr_image_url   || '';
-    if (cfg.qr_image_url) showQRPreview(cfg.qr_image_url);
-    // Live preview on QR URL change
-    document.getElementById('cfg_qr_url').addEventListener('input', e => {
-      if (e.target.value) showQRPreview(e.target.value); else document.getElementById('qr-preview').style.display = 'none';
-    });
-  } catch(e) { console.warn(e); }
+  const cfg = getPayCfg();
+  const set = (id, val) => { const el=document.getElementById(id); if(el) el.value=val||''; };
+  set('cfg_rzp', cfg.razorpay_key);
+  set('cfg_cf',  cfg.cashfree_appid);
+  set('cfg_upi', cfg.upi_id);
+  set('cfg_qr',  cfg.qr_image_url);
+  if (cfg.qr_image_url) previewQR();
 }
 
-function showQRPreview(url) {
-  const pv = document.getElementById('qr-preview');
-  document.getElementById('qr-preview-img').src = url;
-  pv.style.display = 'block';
+function previewQR() {
+  const url = document.getElementById('cfg_qr')?.value.trim();
+  const pv  = document.getElementById('qr-prev');
+  const img = document.getElementById('qr-prev-img');
+  if (url && pv && img) { img.src = url; pv.style.display = 'block'; }
+  else if (pv) pv.style.display = 'none';
 }
 
 function savePayConfig() {
+  const g = id => document.getElementById(id)?.value.trim() || '';
   const cfg = {
-    razorpay_key:   document.getElementById('cfg_rzp_key').value.trim(),
-    cashfree_appid: document.getElementById('cfg_cf_appid').value.trim(),
-    upi_id:         document.getElementById('cfg_upi').value.trim(),
-    qr_image_url:   document.getElementById('cfg_qr_url').value.trim(),
+    razorpay_key:   g('cfg_rzp'),
+    cashfree_appid: g('cfg_cf'),
+    upi_id:         g('cfg_upi'),
+    qr_image_url:   g('cfg_qr'),
   };
   localStorage.setItem('bb_payment_config', JSON.stringify(cfg));
-  showToast('Payment config saved! / भुगतान सेटअप सहेजा गया', 'success');
+  toast('Payment config saved! / भुगतान सेटअप सहेजा गया ✅', 'ok');
 }
 </script>
 </body>
