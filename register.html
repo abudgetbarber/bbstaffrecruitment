@@ -267,9 +267,9 @@
     </div>
 
     <div class="card mt-16 anim anim-d2">
-      <div class="card-header"><span style="font-size:1.5rem">📷</span><div><h2>Full Photos</h2><span>पूर्ण फ़ोटो अपलोड करें</span></div></div>
+      <div class="card-header"><span style="font-size:1.5rem">📷</span><div><h2>Full Body Photos</h2><span>पूर्ण फ़ोटो अपलोड करें</span></div></div>
       <div class="card-body">
-        <div class="upload-zone"><input type="file" id="f_fullphotos" accept="image/*" multiple onchange="handleUpload('full_photos',this)"><div class="upload-icon">📷</div><p><strong>Upload Full Photos</strong></p><small>पूरे शरीर की फ़ोटो — Multiple files allowed</small></div>
+        <div class="upload-zone"><input type="file" id="f_fullphotos" accept="image/*" multiple onchange="handleUpload('full_photos',this)"><div class="upload-icon">📷</div><p><strong>Upload Full Body Photos</strong></p><small>पूरे शरीर की फ़ोटो — Multiple files allowed</small></div>
         <div class="upload-preview" id="prev-full_photos"></div>
       </div>
     </div>
@@ -305,11 +305,9 @@
               <option value="">Select / चुनें</option>
               <option value="less1">Less than 1 year / 1 साल से कम</option>
               <option value="1-2">1–2 years / 1–2 साल</option>
-              <option value="2-4">2–4 years / 2–4 साल</option>
-              <option value="4-6">4–6 years / 4–6 साल</option>
-              <option value="6-8">6–8 years / 6–8 साल</option>
-              <option value="8-10">8–10 years / 8–10 साल</option>
-              <option value="10+">10+ years / 10+ साल</option>
+              <option value="2-3">2–3 years / 2–3 साल</option>
+              <option value="3-5">3–5 years / 3–5 साल</option>
+              <option value="5+">5+ years / 5+ साल</option>
             </select>
           </div>
           <div class="form-group">
@@ -438,9 +436,9 @@
     <div class="card mt-20 anim">
       <div class="card-header"><span style="font-size:1.5rem">🚫</span><div><h2>Personal Conduct</h2><span>व्यक्तिगत आचरण — I confirm I will NOT:</span></div></div>
       <div class="card-body">
-        <div class="agree-item" onclick="toggleAgree(this)"><input type="checkbox" id="c_gutka"><label for="c_gutka"> Will Not Consume Gutka / गुटखा का सेवन नहीं करूंगा<small>मैं किसी भी रूप में गुटखा नहीं खाऊंगा/खाऊंगी</small></label></div>
-        <div class="agree-item" onclick="toggleAgree(this)"><input type="checkbox" id="c_weed"><label for="c_weed">Will not Use Weed / मारिजुआना का सेवन नहीं करूंगा<small>मैं किसी भी नशीली दवा का उपयोग नहीं करूंगा/करूंगी</small></label></div>
-        <div class="agree-item" onclick="toggleAgree(this)"><input type="checkbox" id="c_alcohol"><label for="c_alcohol"> Will not Drink Alcohol / शराब नहीं पीऊंगा<small>मैं शराब का सेवन नहीं करूंगा/करूंगी</small></label></div>
+        <div class="agree-item" onclick="toggleAgree(this)"><input type="checkbox" id="c_gutka"><label for="c_gutka">Consume Gutka / गुटखा का सेवन नहीं करूंगा<small>मैं किसी भी रूप में गुटखा नहीं खाऊंगा/खाऊंगी</small></label></div>
+        <div class="agree-item" onclick="toggleAgree(this)"><input type="checkbox" id="c_weed"><label for="c_weed">Use Weed / मारिजुआना का सेवन नहीं करूंगा<small>मैं किसी भी नशीली दवा का उपयोग नहीं करूंगा/करूंगी</small></label></div>
+        <div class="agree-item" onclick="toggleAgree(this)"><input type="checkbox" id="c_alcohol"><label for="c_alcohol">Drink Alcohol / शराब नहीं पीऊंगा<small>मैं शराब का सेवन नहीं करूंगा/करूंगी</small></label></div>
       </div>
     </div>
 
@@ -453,7 +451,6 @@
         <div class="agree-item" onclick="toggleAgree(this)"><input type="checkbox" id="c_respect"><label for="c_respect">Treat All Customers with Respect / ग्राहकों का सम्मान<small>मैं हर ग्राहक के साथ विनम्रता और सम्मान से पेश आऊंगा/आऊंगी</small></label></div>
         <div class="agree-item" onclick="toggleAgree(this)"><input type="checkbox" id="c_clean"><label for="c_clean">Keep Staff Room Clean / स्टाफ रूम साफ रखूंगा<small>मैं स्टाफ रूम को हमेशा साफ रखूंगा/रखूंगी</small></label></div>
         <div class="agree-item" onclick="toggleAgree(this)"><input type="checkbox" id="c_nuisance"><label for="c_nuisance">No Nuisance in Staff Room / कोई गड़बड़ी नहीं करूंगा<small>मैं स्टाफ रूम और सैलून में किसी प्रकार का हंगामा या परेशानी नहीं करूंगा/करूंगी</small></label></div>
-      <div class="agree-item" onclick="toggleAgree(this)"><input type="checkbox" id="c_nuisance"><label for="c_Other"> Will follow Any Other Rules set by company now and in future / कंपनी के नियमों का पालन करेंगे<small>कंपनी द्वारा वर्तमान और भविष्य में निर्धारित किए गए किसी भी अन्य नियम का पालन करेंगे।</small></label></div>
       </div>
     </div>
 
@@ -522,6 +519,7 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="shared.js"></script>
 <script>
 let curStep = 1;
@@ -566,7 +564,7 @@ function buildReview() {
     ['Join Timeline', v('r_join')],
     ['Reference', v('r_refname') || '—'],
     ['No Gutka/Weed/Alcohol', [c('c_gutka'),c('c_weed'),c('c_alcohol')].every(Boolean) ? '✅ Agreed' : '❌ Not all agreed'],
-    ['Company Rules', [c('c_uniform'),c('c_neat'),c('c_timing'),c('c_respect'),c('c_clean'),c('c_nuisance'),c('c_other')].every(Boolean) ? '✅ All agreed' : '⚠️ Partial'],
+    ['Company Rules', [c('c_uniform'),c('c_neat'),c('c_timing'),c('c_respect'),c('c_clean'),c('c_nuisance')].every(Boolean) ? '✅ All agreed' : '⚠️ Partial'],
     ['Performance Target ₹60k', c('c_target') ? '✅ Agreed' : '❌ Not agreed'],
   ];
   document.getElementById('review-body').innerHTML = `
@@ -580,8 +578,8 @@ async function submitForm() {
   if (!document.getElementById('c_decl')?.checked) {
     showToast('Please confirm the final declaration / कृपया घोषणा की पुष्टि करें', 'error'); return;
   }
-  const name  = document.getElementById('r_name')?.value;
-  const phone = document.getElementById('r_phone')?.value;
+  const name  = document.getElementById('r_name')?.value.trim();
+  const phone = document.getElementById('r_phone')?.value.trim();
   if (!name || !phone) {
     showToast('Please fill required fields (Step 1) / आवश्यक जानकारी भरें', 'error');
     goStep(1); return;
@@ -591,65 +589,80 @@ async function submitForm() {
   btn.textContent = 'Submitting… / जमा हो रहा है…';
   btn.disabled = true;
 
+  // Helper — return null instead of empty string for optional fields
+  const val  = id => { const v = document.getElementById(id)?.value?.trim(); return v || null; };
+  const num  = id => { const v = document.getElementById(id)?.value; return v ? Number(v) : null; };
+  const bool = id => document.getElementById(id)?.checked || false;
+
   const regId = genRegId();
   const entry = {
-    id: regId,
-    name, phone,
-    age: document.getElementById('r_age')?.value,
-    home_location: document.getElementById('r_home')?.value,
-    address: document.getElementById('r_address')?.value,
-    experience: document.getElementById('r_exp')?.value,
-    max_billing: document.getElementById('r_billing')?.value,
-    instagram: document.getElementById('r_insta')?.value || document.getElementById('r_insta2')?.value,
-    available: document.getElementById('r_available')?.checked,
-    join_timeline: document.getElementById('r_join')?.value,
-    prev_location: document.getElementById('r_prevloc')?.value,
-    all_locations: document.getElementById('r_alllocs')?.value,
-    prev_fixed: document.getElementById('r_pfixed')?.value,
-    prev_incentive: document.getElementById('r_pinc')?.value,
-    prev_food: document.getElementById('r_pfood')?.value,
-    prev_room: document.getElementById('r_proom')?.value,
-    exp_fixed: document.getElementById('r_efixed')?.value,
-    exp_incentive: document.getElementById('r_einc')?.value,
-    exp_food: document.getElementById('r_efood')?.value,
-    exp_room: document.getElementById('r_eroom')?.value,
-    ref_name: document.getElementById('r_refname')?.value,
-    ref_phone: document.getElementById('r_refphone')?.value,
-    no_gutka: document.getElementById('c_gutka')?.checked,
-    no_weed: document.getElementById('c_weed')?.checked,
-    no_alcohol: document.getElementById('c_alcohol')?.checked,
-    wear_uniform: document.getElementById('c_uniform')?.checked,
-    stay_neat: document.getElementById('c_neat')?.checked,
-    follow_timing: document.getElementById('c_timing')?.checked,
-    respect_customers: document.getElementById('c_respect')?.checked,
-    keep_clean: document.getElementById('c_clean')?.checked,
-    no_nuisance: document.getElementById('c_nuisance')?.checked,
-    performance_target: document.getElementById('c_target')?.checked,
-    follow_metrics: document.getElementById('c_metrics')?.checked,
-    status: 'pending',
-    created_at: new Date().toISOString()
+    id:                 regId,
+    name,
+    phone,
+    age:                num('r_age'),
+    home_location:      val('r_home'),
+    address:            val('r_address'),
+    instagram:          val('r_insta') || val('r_insta2'),
+    available:          bool('r_available'),
+    join_timeline:      val('r_join'),
+    prev_location:      val('r_prevloc'),
+    all_locations:      val('r_alllocs'),
+    experience:         val('r_exp'),
+    max_billing:        num('r_billing'),
+    prev_fixed:         num('r_pfixed'),
+    prev_incentive:     num('r_pinc'),
+    prev_food:          num('r_pfood') || 0,
+    prev_room:          val('r_proom'),
+    exp_fixed:          num('r_efixed'),
+    exp_incentive:      num('r_einc'),
+    exp_food:           num('r_efood') || 0,
+    exp_room:           val('r_eroom'),
+    ref_name:           val('r_refname'),
+    ref_phone:          val('r_refphone'),
+    no_gutka:           bool('c_gutka'),
+    no_weed:            bool('c_weed'),
+    no_alcohol:         bool('c_alcohol'),
+    wear_uniform:       bool('c_uniform'),
+    stay_neat:          bool('c_neat'),
+    follow_timing:      bool('c_timing'),
+    respect_customers:  bool('c_respect'),
+    keep_clean:         bool('c_clean'),
+    no_nuisance:        bool('c_nuisance'),
+    performance_target: bool('c_target'),
+    follow_metrics:     bool('c_metrics'),
+    status:             'pending',
+    created_at:         new Date().toISOString()
   };
 
-  // Save locally
+  // Save to localStorage
   const all = getStylests();
   all.push(entry);
   saveStylests(all);
 
-  // Supabase (if configured)
+  // Save to Supabase
   const sb = getSupabase();
-  if (sb && SUPABASE_URL !== 'https://YOUR_PROJECT.supabase.co') {
+  if (sb) {
     try {
-      await sb.from('hairstylists').insert(entry);
-      await uploadPhotos(regId);
-    } catch(e) { console.warn('Supabase save error:', e); }
+      const { error } = await sb.from('hairstylists').insert(entry);
+      if (error) {
+        console.error('Supabase insert error:', error.message, error.details);
+        showToast('Saved locally. Supabase error: ' + error.message, 'error');
+      } else {
+        // Upload photos if Supabase save succeeded
+        await uploadPhotos(regId);
+      }
+    } catch(e) {
+      console.warn('Supabase save error:', e);
+    }
   }
 
-  setTimeout(() => {
-    document.querySelectorAll('.form-wrap').forEach(w => w.classList.remove('active'));
-    document.getElementById('s-success').classList.add('active');
-    document.getElementById('reg-id-display').textContent = regId;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, 900);
+  // Show success screen
+  document.querySelectorAll('.form-wrap').forEach(w => w.classList.remove('active'));
+  document.getElementById('s-success').classList.add('active');
+  document.getElementById('reg-id-display').textContent = regId;
+  btn.textContent = '🚀 Submit Application / आवेदन जमा करें';
+  btn.disabled = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
 </body>

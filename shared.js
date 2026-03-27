@@ -4,18 +4,22 @@
 // ============================================================
 
 // ── SUPABASE ─────────────────────────────────────────────────
-// Replace these with your actual Supabase project credentials
-const SUPABASE_URL  = 'https://ccdaqcpllhqonkdkrdlq.supabase.co';
-const SUPABASE_KEY  = 'sb_publishable_lKG0FnCMjfoTShRUorTH4w_da4SZ7RZ';
+// ⚠️  PASTE YOUR KEYS HERE — get them from Supabase → Settings → API
+const SUPABASE_URL  = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY  = 'YOUR_ANON_KEY';
 
 let _sb = null;
 function getSupabase() {
   if (_sb) return _sb;
+  // Don't try to connect if keys are still placeholder
+  if (SUPABASE_URL.includes('YOUR_PROJECT') || SUPABASE_KEY.includes('YOUR_ANON')) {
+    return null;
+  }
   try {
     if (typeof supabase !== 'undefined') {
       _sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
-  } catch (e) { console.warn('Supabase not available — demo mode'); }
+  } catch (e) { console.warn('Supabase init failed:', e); }
   return _sb;
 }
 
