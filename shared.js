@@ -5,8 +5,8 @@
 
 // ── SUPABASE ─────────────────────────────────────────────────
 // ⚠️  PASTE YOUR KEYS HERE — get them from Supabase → Settings → API
-const SUPABASE_URL  = 'https://YOUR_PROJECT.supabase.co';
-const SUPABASE_KEY  = 'YOUR_ANON_KEY';
+const SUPABASE_URL  = 'https://ccdaqcpllhqonkdkrdlq.supabase.co';
+const SUPABASE_KEY  = 'sb_publishable_lKG0FnCMjfoTShRUorTH4w_da4SZ7RZ';
 
 let _sb = null;
 function getSupabase() {
