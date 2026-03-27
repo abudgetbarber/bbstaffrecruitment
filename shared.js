@@ -5,8 +5,8 @@
 
 // ── SUPABASE ─────────────────────────────────────────────────
 // ⚠️  PASTE YOUR KEYS HERE — get them from Supabase → Settings → API
-const SUPABASE_URL  = 'https://ccdaqcpllhqonkdkrdlq.supabase.co';
-const SUPABASE_KEY  = 'sb_publishable_lKG0FnCMjfoTShRUorTH4w_da4SZ7RZ';
+const SUPABASE_URL  = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY  = 'YOUR_ANON_KEY';
 
 let _sb = null;
 function getSupabase() {
@@ -247,17 +247,57 @@ function handleUpload(key, input) {
 }
 
 // ── SUPABASE UPLOAD ───────────────────────────────────────────
-async function uploadPhotos(regId) {
-  const sb = getSupabase();
-  if (!sb) return;
+// Upload photos to Supabase storage and return a map of DB column → URL/array
+async function uploadPhotosAndGetUrls(regId, sb) {
+  const result = {
+    selfie_url:        null,
+    aadhaar_front_url: null,
+    aadhaar_back_url:  null,
+    full_photo_urls:   [],
+    work_photo_urls:   [],
+  };
+
   for (const [key, files] of Object.entries(_uploads)) {
     for (const file of files) {
       try {
-        await sb.storage.from('hairstylist-photos')
-          .upload(`${regId}/${key}/${file.name}`, file, { upsert: true });
-      } catch (e) { console.warn('Upload failed:', e); }
+        const path = `${regId}/${key}/${file.name}`;
+        const { error } = await sb.storage
+          .from('hairstylist-photos')
+          .upload(path, file, { upsert: true });
+
+        if (error) {
+          console.warn('Upload failed for', key, ':', error.message);
+          continue;
+        }
+
+        // Get the public/signed URL
+        const { data: urlData } = sb.storage
+          .from('hairstylist-photos')
+          .getPublicUrl(path);
+        const url = urlData?.publicUrl || null;
+
+        // Map upload key → correct DB column
+        if (key === 'selfie')         result.selfie_url = url;
+        else if (key === 'aadhaar_front') result.aadhaar_front_url = url;
+        else if (key === 'aadhaar_back')  result.aadhaar_back_url  = url;
+        else if (key === 'full_photos')   result.full_photo_urls.push(url);
+        else if (key === 'work_photos')   result.work_photo_urls.push(url);
+
+      } catch (e) { console.warn('Upload error:', e); }
     }
   }
+
+  // Remove null fields so we don't overwrite with null
+  return Object.fromEntries(
+    Object.entries(result).filter(([, v]) => v !== null && !(Array.isArray(v) && v.length === 0))
+  );
+}
+
+// Keep old function as alias for backwards compatibility
+async function uploadPhotos(regId) {
+  const sb = getSupabase();
+  if (!sb) return;
+  await uploadPhotosAndGetUrls(regId, sb);
 }
 
 // ── CSV EXPORT ────────────────────────────────────────────────

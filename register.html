@@ -603,6 +603,8 @@ async function submitForm() {
   const bool = id => document.getElementById(id)?.checked || false;
 
   const regId = genRegId();
+
+  // Build the entry — all fields must match Supabase column names exactly
   const entry = {
     id:                 regId,
     name,
@@ -627,6 +629,13 @@ async function submitForm() {
     exp_room:           val('r_eroom'),
     ref_name:           val('r_refname'),
     ref_phone:          val('r_refphone'),
+    // Photo URLs — empty initially, updated after upload
+    selfie_url:         null,
+    aadhaar_front_url:  null,
+    aadhaar_back_url:   null,
+    full_photo_urls:    [],   // TEXT[] in DB — must be array not null
+    work_photo_urls:    [],   // TEXT[] in DB — must be array not null
+    // Commitments
     no_gutka:           bool('c_gutka'),
     no_weed:            bool('c_weed'),
     no_alcohol:         bool('c_alcohol'),
@@ -649,18 +658,39 @@ async function submitForm() {
 
   // Save to Supabase
   const sb = getSupabase();
-  if (sb) {
+  if (!sb) {
+    console.warn('⚠️ Supabase not connected. Paste your keys into shared.js lines 8-9.');
+    showToast('⚠️ Supabase not connected — check shared.js keys', 'error');
+  } else {
     try {
-      const { error } = await sb.from('hairstylists').insert(entry);
-      if (error) {
-        console.error('Supabase insert error:', error.message, error.details);
-        showToast('Saved locally. Supabase error: ' + error.message, 'error');
+      // Step 1: Insert the row first (without photo URLs)
+      const { error: insertError } = await sb.from('hairstylists').insert(entry);
+      if (insertError) {
+        console.error('Supabase insert error:', insertError.message, insertError.details, insertError.hint);
+        showToast('Supabase error: ' + insertError.message, 'error');
       } else {
-        // Upload photos if Supabase save succeeded
-        await uploadPhotos(regId);
+        console.log('✅ Row saved to Supabase. Now uploading photos...');
+
+        // Step 2: Upload photos to storage and get back the public URLs
+        const photoUrls = await uploadPhotosAndGetUrls(regId, sb);
+        console.log('Photo URLs:', photoUrls);
+
+        // Step 3: Update the row with the photo URLs
+        if (Object.keys(photoUrls).length > 0) {
+          const { error: updateError } = await sb
+            .from('hairstylists')
+            .update(photoUrls)
+            .eq('id', regId);
+          if (updateError) {
+            console.warn('Photo URL update error:', updateError.message);
+          } else {
+            console.log('✅ Photo URLs saved to Supabase');
+          }
+        }
       }
     } catch(e) {
       console.warn('Supabase save error:', e);
+      showToast('Network error saving to Supabase', 'error');
     }
   }
 
