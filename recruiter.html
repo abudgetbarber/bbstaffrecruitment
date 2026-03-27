@@ -421,8 +421,8 @@ select.finp{appearance:auto;-webkit-appearance:auto;cursor:pointer}
 // ─────────────────────────────────────────────────────────────
 //  SUPABASE — paste your keys here
 // ─────────────────────────────────────────────────────────────
-const SUPABASE_URL = 'https://ccdaqcpllhqonkdkrdlq.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_lKG0FnCMjfoTShRUorTH4w_da4SZ7RZ';
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_KEY';
 
 let _sb = null;
 function getSupabase() {
@@ -473,6 +473,32 @@ function saveRecruiters(a) { localStorage.setItem('bb_recruiters', JSON.stringif
 
 function getStylests() {
   try { return JSON.parse(localStorage.getItem('bb_stylists')) || defaultStylests(); } catch(e) { return defaultStylests(); }
+}
+
+// Fetch fresh hairstylist data from Supabase and update localStorage + UI
+async function syncStylestsFromSupabase() {
+  const sb = getSupabase();
+  if (!sb) return; // Not connected — use localStorage as-is
+
+  try {
+    const { data, error } = await sb
+      .from('hairstylists')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.warn('Supabase fetch error:', error.message);
+      return;
+    }
+
+    if (data && data.length > 0) {
+      // Save fresh Supabase data to localStorage so all functions work
+      localStorage.setItem('bb_stylists', JSON.stringify(data));
+      console.log(`✅ Loaded ${data.length} hairstylists from Supabase`);
+    }
+  } catch(e) {
+    console.warn('Supabase sync error:', e);
+  }
 }
 
 function getPayCfg() {
@@ -754,7 +780,7 @@ function doLogout() {
 //  DASHBOARD
 // ─────────────────────────────────────────────────────────────
 function showDash() {
-  // Always re-read CR from localStorage to get latest data (plan, etc.)
+  // Always re-read CR from localStorage to get latest plan data
   const allRecs = getRecruiters();
   const fresh = allRecs.find(r => r.id === CR.id) || allRecs.find(r => r.phone === CR.phone);
   if (fresh) {
@@ -762,7 +788,7 @@ function showDash() {
     sessionStorage.setItem('bb_recruiter', JSON.stringify(CR));
   }
 
-  // Update header with correct recruiter data
+  // Update header
   document.getElementById('hdr-salon').textContent = CR.salon_name;
   document.getElementById('hdr-salon').style.display = 'inline';
   document.getElementById('hdr-plan').innerHTML = CR.plan === 'premium'
@@ -772,7 +798,10 @@ function showDash() {
   document.getElementById('btn-logout').style.display = 'inline-block';
 
   showPage('pg-dash');
+
+  // First render with localStorage data (instant) then sync from Supabase and re-render
   renderAllGrids();
+  syncStylestsFromSupabase().then(() => renderAllGrids());
 }
 
 function renderAllGrids() { renderAll(); renderSL(); renderRJ(); updateCounts(); }

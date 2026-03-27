@@ -455,8 +455,8 @@ textarea.finp{resize:vertical;min-height:60px}
 // ─────────────────────────────────────────────────────────────
 //  SUPABASE — paste your keys here
 // ─────────────────────────────────────────────────────────────
-const SUPABASE_URL = 'https://ccdaqcpllhqonkdkrdlq.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_lKG0FnCMjfoTShRUorTH4w_da4SZ7RZ';
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_KEY';
 
 let _sb = null;
 function getSupabase() {
@@ -625,7 +625,37 @@ function doLogout() {
 function showDash() {
   document.getElementById('btn-logout').style.display = 'inline-block';
   showPage('pg-dash');
-  refreshAll();
+  refreshAll(); // Instant render from localStorage
+  syncFromSupabase().then(() => refreshAll()); // Then sync from DB and re-render
+}
+
+// Fetch fresh data from Supabase and update localStorage
+async function syncFromSupabase() {
+  const sb = getSupabase();
+  if (!sb) return;
+  try {
+    // Sync hairstylists
+    const { data: stylists, error: se } = await sb
+      .from('hairstylists')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (!se && stylists) {
+      localStorage.setItem('bb_stylists', JSON.stringify(stylists));
+      console.log(`✅ Admin: loaded ${stylists.length} hairstylists from Supabase`);
+    }
+
+    // Sync recruiters
+    const { data: recruiters, error: re } = await sb
+      .from('recruiters')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (!re && recruiters) {
+      localStorage.setItem('bb_recruiters', JSON.stringify(recruiters));
+      console.log(`✅ Admin: loaded ${recruiters.length} recruiters from Supabase`);
+    }
+  } catch(e) {
+    console.warn('Supabase sync error:', e);
+  }
 }
 
 function refreshAll() {
