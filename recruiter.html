@@ -118,6 +118,8 @@ select.finp{appearance:auto;-webkit-appearance:auto;cursor:pointer}
 .ck{font-weight:700;color:var(--tl);font-size:.7rem}
 .cv{font-weight:500;color:var(--text);text-align:right}
 .locked{filter:blur(4px);user-select:none;pointer-events:none}
+.lock-tap{cursor:pointer;display:inline-flex;align-items:center;gap:3px;border-radius:4px;padding:1px 4px;transition:background .15s}
+.lock-tap:hover{background:var(--y0)}
 .pcta{background:var(--y0);border-top:1.5px dashed #FBBF24;padding:8px 12px;font-size:.7rem;font-weight:700;color:var(--g8)}
 .pcta small{display:block;font-family:var(--fh);font-weight:400;font-size:.65rem;color:var(--tl)}
 
@@ -475,6 +477,8 @@ function defaultStylests() {
       selfie_url:'https://picsum.photos/seed/rahul1/200/200',
       full_photo_urls:['https://picsum.photos/seed/rahul2/300/400'],
       work_photo_urls:['https://picsum.photos/seed/rahulw1/300/300','https://picsum.photos/seed/rahulw2/300/300'],
+      aadhaar_front_url:'https://picsum.photos/seed/rahul_adf/340/200',
+      aadhaar_back_url:'https://picsum.photos/seed/rahul_adb/340/200',
       no_gutka:true,no_weed:true,no_alcohol:true,wear_uniform:true,stay_neat:true,
       follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'verified' },
@@ -486,6 +490,8 @@ function defaultStylests() {
       selfie_url:'https://picsum.photos/seed/aakash1/200/200',
       full_photo_urls:['https://picsum.photos/seed/aakash2/300/400'],
       work_photo_urls:['https://picsum.photos/seed/aakashw1/300/300','https://picsum.photos/seed/aakashw2/300/300','https://picsum.photos/seed/aakashw3/300/300'],
+      aadhaar_front_url:'https://picsum.photos/seed/aakash_adf/340/200',
+      aadhaar_back_url:'https://picsum.photos/seed/aakash_adb/340/200',
       no_gutka:true,no_weed:true,no_alcohol:true,wear_uniform:true,stay_neat:true,
       follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'verified' },
@@ -495,6 +501,8 @@ function defaultStylests() {
       instagram:'', available:false, join_timeline:'2months', ref_name:'',
       selfie_url:'https://picsum.photos/seed/pradeep1/200/200',
       full_photo_urls:[], work_photo_urls:['https://picsum.photos/seed/pradeepw1/300/300'],
+      aadhaar_front_url:'https://picsum.photos/seed/pradeep_adf/340/200',
+      aadhaar_back_url:'https://picsum.photos/seed/pradeep_adb/340/200',
       no_gutka:true,no_weed:false,no_alcohol:true,wear_uniform:true,stay_neat:true,
       follow_timing:false,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'pending' },
@@ -506,6 +514,8 @@ function defaultStylests() {
       selfie_url:'https://picsum.photos/seed/kiran1/200/200',
       full_photo_urls:['https://picsum.photos/seed/kiran2/300/400'],
       work_photo_urls:['https://picsum.photos/seed/kiranw1/300/300','https://picsum.photos/seed/kiranw2/300/300','https://picsum.photos/seed/kiranw3/300/300','https://picsum.photos/seed/kiranw4/300/300'],
+      aadhaar_front_url:'https://picsum.photos/seed/kiran_adf/340/200',
+      aadhaar_back_url:'https://picsum.photos/seed/kiran_adb/340/200',
       no_gutka:true,no_weed:true,no_alcohol:true,wear_uniform:true,stay_neat:true,
       follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'verified' },
@@ -515,6 +525,8 @@ function defaultStylests() {
       instagram:'', available:true, join_timeline:'1month', ref_name:'',
       selfie_url:'https://picsum.photos/seed/venkat1/200/200',
       full_photo_urls:[], work_photo_urls:['https://picsum.photos/seed/venkatw1/300/300'],
+      aadhaar_front_url:'https://picsum.photos/seed/venkat_adf/340/200',
+      aadhaar_back_url:'https://picsum.photos/seed/venkat_adb/340/200',
       no_gutka:true,no_weed:true,no_alcohol:false,wear_uniform:true,stay_neat:true,
       follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'pending' },
@@ -802,11 +814,28 @@ function buildCard(s, isPrem) {
 
   const phoneVal = isPrem
     ? `<a href="tel:${s.phone}" style="color:var(--g7);font-weight:700">${s.phone}</a>`
-    : `<span class="locked">98XXXXXXXX</span>`;
-  const aadharVal = isPrem ? `<span style="color:var(--ok);font-weight:700;font-size:.7rem">✅ On File</span>` : `<span class="locked">🔒 Hidden</span>`;
-  const instaVal  = isPrem && s.instagram
-    ? `<a href="${s.instagram}" target="_blank" style="color:var(--g7);font-weight:600">View ↗</a>`
-    : (isPrem ? '—' : `<span class="locked">🔒 Hidden</span>`);
+    : `<span class="lock-tap" onclick="goUpgrade()" title="Upgrade to see">🔒 <span style="filter:blur(4px);user-select:none">98XXXXXXXX</span></span>`;
+
+  // Aadhaar: premium shows actual images (clickable), basic shows locked tap-to-upgrade
+  let aadharVal;
+  if (isPrem) {
+    const af = s.aadhaar_front_url || '';
+    const ab = s.aadhaar_back_url  || '';
+    if (af || ab) {
+      aadharVal = `<span style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+        ${af ? `<img src="${af}" onclick="openLB('${af}','Aadhaar Front — ${s.name}')" style="height:32px;border-radius:4px;border:1px solid var(--bd);cursor:pointer" title="Aadhaar Front">` : ''}
+        ${ab ? `<img src="${ab}" onclick="openLB('${ab}','Aadhaar Back — ${s.name}')" style="height:32px;border-radius:4px;border:1px solid var(--bd);cursor:pointer" title="Aadhaar Back">` : ''}
+      </span>`;
+    } else {
+      aadharVal = `<span style="color:var(--tl);font-size:.7rem">Not uploaded</span>`;
+    }
+  } else {
+    aadharVal = `<span class="lock-tap" onclick="goUpgrade()" title="Upgrade to see">🔒 <span style="filter:blur(4px);user-select:none">XXXX XXXX XXXX</span></span>`;
+  }
+
+  const instaVal = isPrem
+    ? (s.instagram ? `<a href="${s.instagram}" target="_blank" style="color:var(--g7);font-weight:600">View ↗</a>` : '—')
+    : `<span class="lock-tap" onclick="goUpgrade()" title="Upgrade to see">🔒 <span style="filter:blur(4px);user-select:none">@username</span></span>`;
 
   const slStyle = sl ? 'background:#D1FAE5;color:#065F46;border-color:#6EE7B7' : 'background:var(--bg2);color:#3A5A40;border-color:var(--bd)';
   const rjStyle = rj ? 'background:#FEE2E2;color:#991B1B;border-color:#FCA5A5' : 'background:var(--bg2);color:#3A5A40;border-color:var(--bd)';
@@ -838,7 +867,10 @@ function buildCard(s, isPrem) {
       <div class="crow"><span class="ck">Aadhaar</span><span class="cv">${aadharVal}</span></div>
       ${s.instagram!==undefined?`<div class="crow"><span class="ck">Instagram</span><span class="cv">${instaVal}</span></div>`:''}
     </div>
-    ${!isPrem?`<div class="pcta">🔒 Phone, Aadhaar &amp; Instagram require Premium<small>प्रीमियम अकाउंट लें — ₹1,000/month</small></div>`:''}
+    ${!isPrem?`<div class="pcta" onclick="goUpgrade()" style="cursor:pointer" title="Click to upgrade">
+      🔒 Phone, Aadhaar &amp; Instagram — <strong>Tap to Upgrade</strong>
+      <small>प्रीमियम लें और सभी विवरण देखें — ₹1,000/month</small>
+    </div>`:''}
     <div class="cact">
       <button class="btn btn-g btn-sm" style="flex:1" onclick="viewCand('${s.id}')">Full Profile</button>
       <button class="act-btn" style="${slStyle}" onclick="setAction('${s.id}','shortlisted')">${sl?'★ SL':'☆ SL'}</button>
@@ -878,13 +910,33 @@ function viewCand(id) {
       </div>
     </div>` : '';
 
+  // Aadhaar display for modal
+  let aadharModalVal;
+  if (isPrem) {
+    const af = s.aadhaar_front_url || '';
+    const ab = s.aadhaar_back_url  || '';
+    if (af || ab) {
+      aadharModalVal = `<span style="display:flex;gap:6px;flex-wrap:wrap;margin-top:2px">
+        ${af?`<img src="${af}" onclick="openLB('${af}','Aadhaar Front — ${s.name}')" style="height:38px;border-radius:4px;border:1.5px solid var(--bd);cursor:pointer" title="Front">`:''}
+        ${ab?`<img src="${ab}" onclick="openLB('${ab}','Aadhaar Back — ${s.name}')" style="height:38px;border-radius:4px;border:1.5px solid var(--bd);cursor:pointer" title="Back">`:''}
+      </span>`;
+    } else {
+      aadharModalVal = `<span style="color:var(--tl);font-size:.75rem">Not uploaded yet</span>`;
+    }
+  } else {
+    aadharModalVal = `<span class="lock-tap" onclick="closeMod('mod-cand');goUpgrade()">🔒 <span style="filter:blur(4px);user-select:none">Upgrade to view</span></span>`;
+  }
+
+  const phoneLocked  = `<span class="lock-tap" onclick="closeMod('mod-cand');goUpgrade()">🔒 <span style="filter:blur(4px);user-select:none">98XXXXXXXX</span></span>`;
+  const instaLocked  = `<span class="lock-tap" onclick="closeMod('mod-cand');goUpgrade()">🔒 <span style="filter:blur(4px);user-select:none">@username</span></span>`;
+
   const rows = [
     ['Name', s.name],
-    ['Phone', isPrem ? `<a href="tel:${s.phone}" style="color:var(--g7);font-weight:700">${s.phone}</a>` : '🔒 Premium Only'],
+    ['Phone', isPrem ? `<a href="tel:${s.phone}" style="color:var(--g7);font-weight:700">${s.phone}</a>` : phoneLocked],
     ['Age', (s.age||'—') + ' yrs'],
     ['Home Location', s.home_location||'—'],
-    ['Aadhaar', isPrem ? '✅ Verified (on file)' : '🔒 Premium Only'],
-    ['Instagram', isPrem ? (s.instagram?`<a href="${s.instagram}" target="_blank" style="color:var(--g7)">View ↗</a>`:'—') : '🔒 Premium Only'],
+    ['Aadhaar', aadharModalVal],
+    ['Instagram', isPrem ? (s.instagram?`<a href="${s.instagram}" target="_blank" style="color:var(--g7)">View ↗</a>`:'—') : instaLocked],
     ['Experience', s.experience||'—'],
     ['Max Billing', rupee(s.max_billing)+'/mo'],
     ['Expected Fixed', rupee(s.exp_fixed)+'/mo'],
@@ -912,12 +964,18 @@ function viewCand(id) {
       ${s.performance_target?'✅ ₹60k Target':'❌ No Target'}
     </div>
     ${!isPrem?`<div style="background:var(--y0);border:1.5px dashed #FBBF24;border-radius:var(--r2);padding:11px;text-align:center;margin-top:10px">
-      <div style="font-weight:800;color:var(--g8)">🔒 Upgrade for full contact access</div>
-      <button class="btn btn-y" style="width:auto;margin-top:9px;padding:7px 18px;font-size:.8rem" onclick="closeMod('mod-cand');openUpgrade()">⭐ Upgrade — ₹1,000/month</button>
+      <div style="font-weight:800;color:var(--g8)">🔒 Upgrade for full contact &amp; Aadhaar access</div>
+      <div style="font-size:.72rem;color:var(--tl);margin:4px 0;font-family:var(--fh)">फ़ोन, आधार और इंस्टाग्राम देखने के लिए प्रीमियम लें</div>
+      <button id="modal-upg-btn" class="btn btn-y" style="width:auto;margin-top:8px;padding:7px 18px;font-size:.8rem">⭐ Upgrade — ₹1,000/month</button>
     </div>`:''}
   `;
 
   rebuildModalFoot(id);
+
+  // Bind upgrade button (injected via innerHTML — onclick won't work in sandboxed iframes)
+  const mub = document.getElementById('modal-upg-btn');
+  if (mub) mub.addEventListener('click', () => { closeMod('mod-cand'); goUpgrade(); });
+
   openMod('mod-cand');
 }
 
@@ -1047,6 +1105,29 @@ function renderProfile() {
 // ─────────────────────────────────────────────────────────────
 //  PAYMENT / UPGRADE
 // ─────────────────────────────────────────────────────────────
+
+// Navigate to My Profile tab and highlight the upgrade button
+function goUpgrade() {
+  const proBtn = document.querySelector('#pg-dash .tab-btn[data-pane="tp-pro"]');
+  if (proBtn) {
+    switchTab(proBtn);
+    renderProfile();
+    setTimeout(() => {
+      const btn = document.getElementById('btn-upgrade-pro');
+      if (btn) {
+        btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Flash highlight to draw attention
+        btn.style.outline = '3px solid var(--g8)';
+        btn.style.transform = 'scale(1.03)';
+        setTimeout(() => { btn.style.outline = ''; btn.style.transform = ''; }, 1500);
+      } else {
+        // Request already submitted or already premium — just open upgrade modal
+        openUpgrade();
+      }
+    }, 120);
+  }
+}
+
 function openUpgrade() {
   curPayMethod = null;
   document.querySelectorAll('.pay-opt').forEach(b => b.classList.remove('on'));
