@@ -433,28 +433,35 @@ select.finp{appearance:auto;-webkit-appearance:auto;cursor:pointer}
 // ─────────────────────────────────────────────────────────────
 //  DATA LAYER  (localStorage — shared with admin.html)
 // ─────────────────────────────────────────────────────────────
-const DATA_VER = '5';
-if (localStorage.getItem('bb_data_ver') !== DATA_VER) {
-  ['bb_stylists','bb_recruiters'].forEach(k => localStorage.removeItem(k));
-  try { sessionStorage.removeItem('bb_recruiter'); } catch(e){}
-  localStorage.setItem('bb_data_ver', DATA_VER);
-}
+// Seed defaults only if keys are missing — never wipe existing data
+// This preserves plan changes, shortlists, and upgrade requests across sessions
+(function seedIfEmpty() {
+  if (!localStorage.getItem('bb_recruiters')) {
+    localStorage.setItem('bb_recruiters', JSON.stringify(defaultRecruiters()));
+  } else {
+    // Ensure demo accounts always exist (merge in, don't overwrite existing)
+    const stored = JSON.parse(localStorage.getItem('bb_recruiters'));
+    const defs   = defaultRecruiters();
+    let changed  = false;
+    defs.forEach(def => {
+      if (!stored.find(r => r.phone === def.phone)) {
+        stored.push(def); changed = true;
+      }
+    });
+    if (changed) localStorage.setItem('bb_recruiters', JSON.stringify(stored));
+  }
+  if (!localStorage.getItem('bb_stylists')) {
+    localStorage.setItem('bb_stylists', JSON.stringify(defaultStylests()));
+  }
+})();
 
 function getRecruiters() {
-  const raw = localStorage.getItem('bb_recruiters');
-  if (raw) { try { return JSON.parse(raw); } catch(e){} }
-  const def = defaultRecruiters();
-  localStorage.setItem('bb_recruiters', JSON.stringify(def));
-  return def;
+  try { return JSON.parse(localStorage.getItem('bb_recruiters')) || defaultRecruiters(); } catch(e) { return defaultRecruiters(); }
 }
 function saveRecruiters(a) { localStorage.setItem('bb_recruiters', JSON.stringify(a)); }
 
 function getStylests() {
-  const raw = localStorage.getItem('bb_stylists');
-  if (raw) { try { return JSON.parse(raw); } catch(e){} }
-  const def = defaultStylests();
-  localStorage.setItem('bb_stylists', JSON.stringify(def));
-  return def;
+  try { return JSON.parse(localStorage.getItem('bb_stylists')) || defaultStylests(); } catch(e) { return defaultStylests(); }
 }
 
 function getPayCfg() {
@@ -587,16 +594,21 @@ function closeLB() { document.getElementById('lb').classList.remove('on'); }
 //  BOOT
 // ─────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
-  // Force-ensure recruiters are in localStorage right now
-  getRecruiters();
-
   const saved = sessionStorage.getItem('bb_recruiter');
   if (saved) {
     try {
-      const s = JSON.parse(saved);
-      const fresh = getRecruiters().find(r => r.id === s.id);
-      if (fresh) { CR = fresh; loadRCA(); showDash(); return; }
-    } catch(e){}
+      const s     = JSON.parse(saved);
+      const recs  = getRecruiters();
+      // Match by id first, then by phone as fallback
+      const fresh = recs.find(r => r.id === s.id) || recs.find(r => r.phone === s.phone);
+      if (fresh) {
+        CR = fresh;
+        sessionStorage.setItem('bb_recruiter', JSON.stringify(CR));
+        loadRCA();
+        showDash();
+        return;
+      }
+    } catch(e) {}
   }
   showPage('pg-login');
 });
@@ -669,7 +681,15 @@ function doLogout() {
 //  DASHBOARD
 // ─────────────────────────────────────────────────────────────
 function showDash() {
-  // Header
+  // Always re-read CR from localStorage to get latest data (plan, etc.)
+  const allRecs = getRecruiters();
+  const fresh = allRecs.find(r => r.id === CR.id) || allRecs.find(r => r.phone === CR.phone);
+  if (fresh) {
+    CR = fresh;
+    sessionStorage.setItem('bb_recruiter', JSON.stringify(CR));
+  }
+
+  // Update header with correct recruiter data
   document.getElementById('hdr-salon').textContent = CR.salon_name;
   document.getElementById('hdr-salon').style.display = 'inline';
   document.getElementById('hdr-plan').innerHTML = CR.plan === 'premium'
@@ -899,9 +919,21 @@ function rebuildModalFoot(id) {
 // ─────────────────────────────────────────────────────────────
 function renderProfile() {
   if (!CR) return;
-  // Always refresh from storage
-  const fresh = getRecruiters().find(r => r.id === CR.id);
-  if (fresh) { CR = fresh; sessionStorage.setItem('bb_recruiter', JSON.stringify(CR)); }
+
+  // Always re-read from localStorage — ensures plan changes by admin show immediately
+  const allRecs = getRecruiters();
+  const fresh = allRecs.find(r => r.id === CR.id) || allRecs.find(r => r.phone === CR.phone);
+  if (fresh) {
+    CR = fresh;
+    sessionStorage.setItem('bb_recruiter', JSON.stringify(CR));
+    // Update header plan badge to reflect latest
+    const hdrPlan = document.getElementById('hdr-plan');
+    if (hdrPlan) {
+      hdrPlan.innerHTML = CR.plan === 'premium'
+        ? '<span class="badge badge-pm">⭐ PREMIUM</span>'
+        : '<span class="badge badge-bs">BASIC</span>';
+    }
+  }
 
   const isPrem  = CR.plan === 'premium';
   const slCount = Object.values(RCA).filter(v => v === 'shortlisted').length;
