@@ -949,7 +949,7 @@ function buildCard(s, isPrem) {
       </div>
       <div style="flex:1;min-width:0">
         <div class="cname">${s.name}</div>
-        <div class="cmeta">📍 ${s.home_location||'—'} · ${s.experience||'—'}</div>
+        <div class="cmeta">📍 ${s.home_location||'—'} · ${s.experience ? `${s.experience} years` : '—'}</div>
         <div class="cbadges">
           <span class="badge ${s.available?'badge-av':'badge-na'}">${s.available?'✅ Available':'⏳ Not Available'}</span>
           <span class="badge ${s.status==='verified'?'badge-vf':'badge-pd'}">${s.status==='verified'?'✓ Verified':'Pending'}</span>
@@ -961,7 +961,7 @@ function buildCard(s, isPrem) {
     <div class="pstrip">${ps}</div>
     <div class="cbody">
       <div class="crow"><span class="ck">Age</span><span class="cv">${s.age||'—'} yrs</span></div>
-      <div class="crow"><span class="ck">Experience</span><span class="cv">${s.experience||'—'}</span></div>
+      <div class="crow"><span class="ck">Experience</span><span class="cv">${s.experience ? `${s.experience} years` : '—'}</span></div>
       <div class="crow"><span class="ck">Max Billing</span><span class="cv">${rupee(s.max_billing)}/mo</span></div>
       <div class="crow"><span class="ck">Expected Salary</span><span class="cv">${rupee(s.exp_fixed)}/mo + ${s.exp_incentive||'—'}%</span></div>
       <div class="crow"><span class="ck">Join In</span><span class="cv">${s.join_timeline||'—'}</span></div>
