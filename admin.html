@@ -450,7 +450,24 @@ textarea.finp{resize:vertical;min-height:60px}
 <!-- TOAST -->
 <div id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ─────────────────────────────────────────────────────────────
+//  SUPABASE — paste your keys here
+// ─────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_KEY';
+
+let _sb = null;
+function getSupabase() {
+  if (_sb) return _sb;
+  try {
+    if (SUPABASE_URL.includes('YOUR_PROJECT')) return null;
+    _sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  } catch(e) { console.warn('Supabase not available'); }
+  return _sb;
+}
+
 // ─────────────────────────────────────────────────────────────
 //  DATA LAYER — same localStorage keys as recruiter.html
 // ─────────────────────────────────────────────────────────────
@@ -545,12 +562,44 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function doLogin() {
   const u = document.getElementById('a_user').value.trim();
-  const p = document.getElementById('a_pass').value;
-  if (u === 'admin' && p === 'admin123') {
-    sessionStorage.setItem('bb_admin','1');
-    showDash();
+  const p = document.getElementById('a_pass').value.trim();
+  if (!u || !p) { toast('Enter username and password', 'er'); return; }
+
+  const btn = document.querySelector('#pg-login .btn-g');
+  btn.textContent = 'Logging in…';
+  btn.disabled = true;
+
+  const sb = getSupabase();
+  if (sb) {
+    // Check against Supabase admin_users table
+    sb.from('admin_users')
+      .select('id, username, password_hash')
+      .eq('username', u)
+      .single()
+      .then(({ data, error }) => {
+        btn.textContent = 'Login';
+        btn.disabled = false;
+        if (error || !data) {
+          toast('Invalid username or password', 'er'); return;
+        }
+        // Plain text comparison (use bcrypt in production)
+        if (data.password_hash === p) {
+          sessionStorage.setItem('bb_admin', '1');
+          showDash();
+        } else {
+          toast('Invalid username or password', 'er');
+        }
+      });
   } else {
-    toast('Invalid credentials', 'er');
+    // Supabase not configured — fallback to hardcoded demo credentials
+    btn.textContent = 'Login';
+    btn.disabled = false;
+    if (u === 'admin' && p === 'admin123') {
+      sessionStorage.setItem('bb_admin', '1');
+      showDash();
+    } else {
+      toast('Invalid credentials (Supabase not connected)', 'er');
+    }
   }
 }
 

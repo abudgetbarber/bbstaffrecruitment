@@ -416,7 +416,24 @@ select.finp{appearance:auto;-webkit-appearance:auto;cursor:pointer}
 <!-- TOAST -->
 <div id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ─────────────────────────────────────────────────────────────
+//  SUPABASE — paste your keys here
+// ─────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_KEY';
+
+let _sb = null;
+function getSupabase() {
+  if (_sb) return _sb;
+  try {
+    if (SUPABASE_URL.includes('YOUR_PROJECT')) return null;
+    _sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  } catch(e) { console.warn('Supabase not available'); }
+  return _sb;
+}
+
 // ─────────────────────────────────────────────────────────────
 //  DATA LAYER  (localStorage — shared with admin.html)
 // ─────────────────────────────────────────────────────────────
@@ -623,17 +640,45 @@ function doLogin() {
   if (phone.length < 10) { toast('Enter 10-digit phone number', 'er'); return; }
   if (pin.length < 4)    { toast('Enter your PIN', 'er'); return; }
 
-  const recs = getRecruiters();
-  const rec  = recs.find(r => String(r.phone) === phone && String(r.pin) === pin);
+  const btn = document.querySelector('#pg-login .btn-g');
+  btn.textContent = 'Logging in…';
+  btn.disabled = true;
 
-  if (!rec) {
-    toast('Wrong phone or PIN — Demo: 9876543000 / 123456', 'er');
-    return;
+  const sb = getSupabase();
+  if (sb) {
+    // Check Supabase recruiters table
+    sb.from('recruiters')
+      .select('*')
+      .eq('phone', phone)
+      .eq('pin', pin)
+      .single()
+      .then(({ data, error }) => {
+        btn.textContent = 'Login / लॉगिन करें';
+        btn.disabled = false;
+        if (error || !data) {
+          toast('Wrong phone or PIN / गलत फ़ोन या PIN', 'er');
+          return;
+        }
+        CR = data;
+        sessionStorage.setItem('bb_recruiter', JSON.stringify(data));
+        loadRCA();
+        showDash();
+      });
+  } else {
+    // Supabase not configured — fall back to localStorage
+    btn.textContent = 'Login / लॉगिन करें';
+    btn.disabled = false;
+    const recs = getRecruiters();
+    const rec  = recs.find(r => String(r.phone) === phone && String(r.pin) === pin);
+    if (!rec) {
+      toast('Wrong phone or PIN — Demo: 9876543000 / 123456', 'er');
+      return;
+    }
+    CR = rec;
+    sessionStorage.setItem('bb_recruiter', JSON.stringify(rec));
+    loadRCA();
+    showDash();
   }
-  CR = rec;
-  sessionStorage.setItem('bb_recruiter', JSON.stringify(rec));
-  loadRCA();
-  showDash();
 }
 
 function doRegister() {
@@ -647,9 +692,6 @@ function doRegister() {
   if (!loc)              { toast('Enter city / location', 'er'); return; }
   if (pin.length < 6)    { toast('PIN must be exactly 6 digits', 'er'); return; }
 
-  const recs = getRecruiters();
-  if (recs.find(r => String(r.phone) === phone)) { toast('Phone already registered', 'er'); return; }
-
   const nr = {
     id: 'REC-' + Date.now(), salon_name: salon, phone, pin,
     location: loc, address: document.getElementById('r_addr').value.trim(),
@@ -657,13 +699,37 @@ function doRegister() {
     plan: 'basic', plan_expiry: null, plan_requested: false,
     created_at: new Date().toISOString()
   };
-  recs.push(nr);
-  saveRecruiters(recs);
-  CR = nr;
-  sessionStorage.setItem('bb_recruiter', JSON.stringify(nr));
-  loadRCA();
-  toast('Account created! Welcome 🎉', 'ok');
-  showDash();
+
+  const btn = document.querySelector('#pg-register .btn-g');
+  if (btn) { btn.textContent = 'Creating…'; btn.disabled = true; }
+
+  const sb = getSupabase();
+  if (sb) {
+    sb.from('recruiters').insert(nr).then(({ error }) => {
+      if (btn) { btn.textContent = 'Create Account / खाता बनाएं'; btn.disabled = false; }
+      if (error) {
+        if (error.code === '23505') toast('Phone already registered / पहले से पंजीकृत है', 'er');
+        else toast('Error: ' + error.message, 'er');
+        return;
+      }
+      CR = nr;
+      sessionStorage.setItem('bb_recruiter', JSON.stringify(nr));
+      loadRCA();
+      toast('Account created! Welcome 🎉', 'ok');
+      showDash();
+    });
+  } else {
+    if (btn) { btn.textContent = 'Create Account / खाता बनाएं'; btn.disabled = false; }
+    const recs = getRecruiters();
+    if (recs.find(r => String(r.phone) === phone)) { toast('Phone already registered', 'er'); return; }
+    recs.push(nr);
+    saveRecruiters(recs);
+    CR = nr;
+    sessionStorage.setItem('bb_recruiter', JSON.stringify(nr));
+    loadRCA();
+    toast('Account created! Welcome 🎉', 'ok');
+    showDash();
+  }
 }
 
 function doLogout() {
