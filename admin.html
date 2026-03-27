@@ -304,7 +304,7 @@ textarea.finp{resize:vertical;min-height:60px}
         <table class="dtbl">
           <thead>
             <tr>
-              <th>ID</th><th>Salon Name</th><th>Phone</th><th>Location</th>
+              <th>ID</th><th>Salon Name</th><th>Phone</th><th>PIN</th><th>Location</th>
               <th>Franchise</th><th>Plan</th><th>Expiry</th><th>Registered</th><th>Actions</th>
             </tr>
           </thead>
@@ -455,8 +455,8 @@ textarea.finp{resize:vertical;min-height:60px}
 // ─────────────────────────────────────────────────────────────
 //  SUPABASE — paste your keys here
 // ─────────────────────────────────────────────────────────────
-const SUPABASE_URL = 'https://ccdaqcpllhqonkdkrdlq.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_lKG0FnCMjfoTShRUorTH4w_da4SZ7RZ';
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_KEY';
 
 let _sb = null;
 function getSupabase() {
@@ -768,7 +768,13 @@ function viewStylest(id) {
 function changeStatus(id, status) {
   const all = getStylests();
   const s   = all.find(h => h.id === id);
-  if (s) { s.status = status; saveStylests(all); refreshAll(); toast(`Status → ${status}`, 'ok'); }
+  if (!s) return;
+  s.status = status;
+  saveStylests(all);
+  const sb = getSupabase();
+  if (sb) sb.from('hairstylists').update({ status }).eq('id', id).then(() => {});
+  refreshAll();
+  toast(`Status → ${status}`, 'ok');
 }
 
 function quickStatus(status) {
@@ -778,6 +784,8 @@ function quickStatus(status) {
 function deleteStylest(id) {
   if (!confirm('Delete this profile? / इस प्रोफ़ाइल को हटाएं?\nThis cannot be undone.')) return;
   saveStylests(getStylests().filter(h => h.id !== id));
+  const sb = getSupabase();
+  if (sb) sb.from('hairstylists').delete().eq('id', id).then(() => {});
   refreshAll();
   toast('Profile deleted', 'in');
 }
@@ -826,6 +834,11 @@ function renderRecruiters() {
       <td><code>${r.id}</code></td>
       <td><strong>${r.salon_name}</strong></td>
       <td>${r.phone||'—'}</td>
+      <td>
+        <span id="pin-${r.id}" style="filter:blur(4px);cursor:pointer;font-family:monospace;font-weight:700;font-size:.85rem;user-select:none" title="Click to reveal" onclick="revealPin('${r.id}','${r.pin||'—'}')">
+          ●●●●●●
+        </span>
+      </td>
       <td>${r.location||'—'}</td>
       <td>${r.franchise==='yes'?'Yes':'No'}</td>
       <td><span class="badge badge-${r.plan==='premium'?'pm':'bs'}">${r.plan.toUpperCase()}</span></td>
@@ -840,9 +853,35 @@ function renderRecruiters() {
         </div>
       </td>
     </tr>`;
-  }).join('') : `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--tl)">No recruiters found</td></tr>`;
+  }).join('') : `<tr><td colspan="10" style="text-align:center;padding:28px;color:var(--tl)">No recruiters found</td></tr>`;
 
   renderUpgradeRequests();
+}
+
+// Click to reveal PIN — blurred by default, click shows it, click again hides
+function revealPin(id, pin) {
+  const el = document.getElementById('pin-' + id);
+  if (!el) return;
+  if (el.dataset.revealed === '1') {
+    el.textContent = '●●●●●●';
+    el.style.filter = 'blur(4px)';
+    el.title = 'Click to reveal';
+    el.dataset.revealed = '0';
+  } else {
+    el.textContent = pin;
+    el.style.filter = 'none';
+    el.title = 'Click to hide';
+    el.dataset.revealed = '1';
+    // Auto-hide after 10 seconds
+    setTimeout(() => {
+      if (el.dataset.revealed === '1') {
+        el.textContent = '●●●●●●';
+        el.style.filter = 'blur(4px)';
+        el.title = 'Click to reveal';
+        el.dataset.revealed = '0';
+      }
+    }, 10000);
+  }
 }
 
 function renderUpgradeRequests() {
@@ -883,7 +922,10 @@ function togglePlan(id) {
     r.plan_expiry = new Date(Date.now() + 30*86400000).toISOString();
     r.plan_requested = false;
   }
-  saveRecruiters(all); refreshAll();
+  saveRecruiters(all);
+  const sb = getSupabase();
+  if (sb) sb.from('recruiters').update({ plan: r.plan, plan_expiry: r.plan_expiry, plan_requested: r.plan_requested }).eq('id', id).then(() => {});
+  refreshAll();
   toast(`Plan → ${r.plan.toUpperCase()} ${r.plan==='premium'?'(30 days)':''}`, 'ok');
 }
 
@@ -894,20 +936,32 @@ function activatePremium(id) {
   r.plan = 'premium';
   r.plan_expiry = new Date(Date.now() + 30*86400000).toISOString();
   r.plan_requested = false;
-  saveRecruiters(all); refreshAll();
+  saveRecruiters(all);
+  const sb = getSupabase();
+  if (sb) sb.rpc('activate_premium', { p_recruiter_id: id, p_days: 30 }).then(() => {});
+  refreshAll();
   toast(`⭐ Premium activated for ${r.salon_name} — 30 days`, 'ok');
 }
 
 function dismissRequest(id) {
   const all = getRecruiters();
   const r   = all.find(rec => rec.id === id);
-  if (r) { r.plan_requested = false; saveRecruiters(all); refreshAll(); toast('Request dismissed', 'in'); }
+  if (!r) return;
+  r.plan_requested = false;
+  saveRecruiters(all);
+  const sb = getSupabase();
+  if (sb) sb.from('recruiters').update({ plan_requested: false }).eq('id', id).then(() => {});
+  refreshAll();
+  toast('Request dismissed', 'in');
 }
 
 function deleteRecruiter(id) {
   if (!confirm('Delete this recruiter account?')) return;
   saveRecruiters(getRecruiters().filter(r => r.id !== id));
-  refreshAll(); toast('Recruiter deleted', 'in');
+  const sb = getSupabase();
+  if (sb) sb.from('recruiters').delete().eq('id', id).then(() => {});
+  refreshAll();
+  toast('Recruiter deleted', 'in');
 }
 
 function toggleExpiry() {
@@ -928,28 +982,57 @@ function createRecruiter() {
   if (phone.length < 10) { toast('Enter valid 10-digit phone', 'er'); return; }
   if (pin.length !== 6)  { toast('Enter 6-digit PIN', 'er'); return; }
 
-  const all = getRecruiters();
-  if (all.find(r => r.phone === phone)) { toast('Phone already registered', 'er'); return; }
-
   const plan   = document.getElementById('nr_plan').value;
   const expVal = document.getElementById('nr_expiry')?.value;
   const expiry = plan === 'premium'
     ? (expVal ? new Date(expVal).toISOString() : new Date(Date.now()+30*86400000).toISOString())
     : null;
 
-  all.push({
+  const nr = {
     id: 'REC-' + Date.now(), salon_name: salon, phone, pin,
     location: document.getElementById('nr_loc').value.trim(),
     address:  document.getElementById('nr_addr').value.trim(),
     franchise: document.getElementById('nr_fran').value,
     plan, plan_expiry: expiry, plan_requested: false,
     created_at: new Date().toISOString()
-  });
-  saveRecruiters(all); refreshAll(); closeMod('mod-create-rec');
-  toast('Recruiter account created!', 'ok');
-  ['nr_salon','nr_phone','nr_pin','nr_loc','nr_addr'].forEach(id => {
-    const el = document.getElementById(id); if(el) el.value='';
-  });
+  };
+
+  const btn = document.getElementById('btn-create-rec');
+  btn.textContent = 'Creating…'; btn.disabled = true;
+
+  function onSuccess() {
+    btn.textContent = 'Create Account'; btn.disabled = false;
+    const all = getRecruiters();
+    // Only add if not already there (Supabase might have added it)
+    if (!all.find(r => r.phone === phone)) { all.push(nr); saveRecruiters(all); }
+    refreshAll(); closeMod('mod-create-rec');
+    toast('Recruiter account created! ✅', 'ok');
+    ['nr_salon','nr_phone','nr_pin','nr_loc','nr_addr'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.value='';
+    });
+  }
+
+  function onError(msg) {
+    btn.textContent = 'Create Account'; btn.disabled = false;
+    toast(msg, 'er');
+  }
+
+  const sb = getSupabase();
+  if (sb) {
+    sb.from('recruiters').insert(nr).then(({ error }) => {
+      if (error) {
+        if (error.code === '23505') onError('Phone already registered');
+        else onError('Error: ' + error.message);
+        return;
+      }
+      onSuccess();
+    });
+  } else {
+    // No Supabase — localStorage only
+    const all = getRecruiters();
+    if (all.find(r => r.phone === phone)) { onError('Phone already registered'); return; }
+    onSuccess();
+  }
 }
 
 // ─────────────────────────────────────────────────────────────
