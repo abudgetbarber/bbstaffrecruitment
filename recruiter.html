@@ -306,7 +306,14 @@ body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100
   <div class="tab-pane on" id="tp-all">
     <div class="fbar">
       <input class="finp fsearch" type="text" id="fa_s" placeholder="🔍 Search name, location…" oninput="renderAll()">
-      <select class="finp" id="fa_e" onchange="renderAll()"><option value="">All Experience</option><option value="less1">Less than 1yr</option><option value="1-2">1–2 years</option><option value="2-3">2–3 years</option><option value="3-5">3–5 years</option><option value="5+">5+ years</option></select>
+      <select class="finp" id="fa_e" onchange="renderAll()"><option value="">All Experience</option>
+       <option value="less1">Less than 1 yr</option>
+        <option value="1-2">1–2 years</option>
+        <option value="2-4">2–4 years</option>
+        <option value="4-6">4–6 years</option>
+        <option value="6-8">6–8 years</option>
+        <option value="8-10">8–10 years</option>
+        <option value="10+">10+ years</option>
       <select class="finp" id="fa_a" onchange="renderAll()"><option value="">All Availability</option><option value="true">Available Now</option><option value="false">Not Available</option></select>
       <select class="finp" id="fa_j" onchange="renderAll()"><option value="">Any Joining</option><option value="immediate">Immediate</option><option value="1month">1 Month</option><option value="2months">2 Months</option><option value="3months">3 Months</option></select>
     </div>
@@ -442,7 +449,7 @@ function defaultRecruiters() {
 function defaultStylests() {
   return [
     { id:'BB-2024-0001', name:'Rahul Sharma', phone:'9876543210', age:24,
-      home_location:'Guntur, AP', experience:'2-3 years', max_billing:55000,
+      home_location:'Guntur, AP', experience:'2-4 years', max_billing:55000,
       prev_fixed:15000, prev_incentive:10, exp_fixed:20000, exp_incentive:12, exp_food:800, exp_room:'not_provided',
       instagram:'https://instagram.com/rahul.cuts', available:true, join_timeline:'immediate',
       ref_name:'Suresh Kumar',
@@ -484,7 +491,7 @@ function defaultStylests() {
       follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'verified' },
     { id:'BB-2024-0005', name:'Venkat Rao', phone:'9876543214', age:26,
-      home_location:'Chennai', experience:'2-3 years', max_billing:48000,
+      home_location:'Chennai', experience:'2-4 years', max_billing:48000,
       prev_fixed:14000, prev_incentive:10, exp_fixed:18000, exp_incentive:12, exp_food:600, exp_room:'not_required',
       instagram:'', available:true, join_timeline:'1month', ref_name:'',
       selfie_url:'https://picsum.photos/seed/venkat1/200/200',
