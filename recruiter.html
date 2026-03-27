@@ -305,62 +305,47 @@ select.finp{appearance:auto;-webkit-appearance:auto;cursor:pointer}
     <button class="tab-btn" data-pane="tp-pro" onclick="switchTab(this);renderProfile()">🏪 My Profile</button>
   </div>
 
-  <!-- All Candidates -->
+  <!-- SHARED FILTER BAR — applies to whichever tab is active -->
+  <div class="fbar">
+    <input  class="finp fsearch" type="text"    id="f_s" placeholder="🔍 Search name…"       oninput="renderActive()">
+    <input  class="finp floc"    type="text"    id="f_l" placeholder="📍 Home Location"       oninput="renderActive()">
+    <select class="finp" id="f_e" onchange="renderActive()">
+      <option value="">All Experience</option>
+      <option value="less1">Less than 1 yr</option>
+      <option value="1-2">1–2 years</option>
+      <option value="2-4">2–4 years</option>
+      <option value="4-6">4–6 years</option>
+      <option value="6-8">6–8 years</option>
+      <option value="8-10">8–10 years</option>
+      <option value="10+">10+ years</option>
+    </select>
+    <select class="finp" id="f_a" onchange="renderActive()">
+      <option value="">All Availability</option>
+      <option value="true">Available Now</option>
+      <option value="false">Not Available</option>
+    </select>
+    <select class="finp" id="f_j" onchange="renderActive()">
+      <option value="">Any Joining</option>
+      <option value="immediate">Immediate / तुरंत</option>
+      <option value="1month">1 Month / 1 महीना</option>
+      <option value="2months">2 Months / 2 महीने</option>
+      <option value="3months">3 Months / 3 महीने</option>
+    </select>
+    <button class="btn btn-out btn-sm" onclick="clearFilters()" style="white-space:nowrap">✕ Clear</button>
+  </div>
+
+  <!-- All New Candidates -->
   <div class="tab-pane on" id="tp-all">
-    <div class="fbar">
-      <input class="finp fsearch" type="text" id="fa_s" placeholder="🔍 Search name…" oninput="renderAll()">
-      <input class="finp floc" type="text" id="fa_l" placeholder="📍 Home Location" oninput="renderAll()">
-      <select class="finp" id="fa_e" onchange="renderAll()">
-        <option value="">All Experience</option>
-        <option value="less1">Less than 1 yr</option>
-        <option value="1-2">1–2 years</option>
-        <option value="2-4">2–4 years</option>
-        <option value="4-6">4–6 years</option>
-        <option value="6-8">6–8 years</option>
-        <option value="8-10">8–10 years</option>
-        <option value="10+">10+ years</option>
-      </select>
-      <select class="finp" id="fa_a" onchange="renderAll()">
-        <option value="">All Availability</option>
-        <option value="true">Available Now</option>
-        <option value="false">Not Available</option>
-      </select>
-      <select class="finp" id="fa_j" onchange="renderAll()">
-        <option value="">Any Joining</option>
-        <option value="immediate">Immediate</option>
-        <option value="1month">1 Month</option>
-        <option value="2months">2 Months</option>
-        <option value="3months">3 Months</option>
-      </select>
-    </div>
     <div class="grid" id="grid-all"></div>
   </div>
 
   <!-- Shortlisted -->
   <div class="tab-pane" id="tp-sl">
-    <div class="fbar">
-      <input class="finp fsearch" type="text" id="fs_s" placeholder="🔍 Search name…" oninput="renderSL()">
-      <input class="finp floc" type="text" id="fs_l" placeholder="📍 Home Location" oninput="renderSL()">
-      <select class="finp" id="fs_a" onchange="renderSL()">
-        <option value="">All Availability</option>
-        <option value="true">Available Now</option>
-        <option value="false">Not Available</option>
-      </select>
-    </div>
     <div class="grid" id="grid-sl"></div>
   </div>
 
   <!-- Rejected -->
   <div class="tab-pane" id="tp-rj">
-    <div class="fbar">
-      <input class="finp fsearch" type="text" id="fr_s" placeholder="🔍 Search name…" oninput="renderRJ()">
-      <input class="finp floc" type="text" id="fr_l" placeholder="📍 Home Location" oninput="renderRJ()">
-      <select class="finp" id="fr_a" onchange="renderRJ()">
-        <option value="">All Availability</option>
-        <option value="true">Available Now</option>
-        <option value="false">Not Available</option>
-      </select>
-    </div>
     <div class="grid" id="grid-rj"></div>
   </div>
 
@@ -574,10 +559,13 @@ function switchTab(btn) {
   const pane = btn.dataset.pane;
   bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
   btn.classList.add('on');
-  // find sibling panes — all tab-panes inside same parent element
   const parent = bar.nextElementSibling?.parentElement || bar.parentElement;
   parent.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('on'));
   document.getElementById(pane)?.classList.add('on');
+  // Re-render the newly shown tab with current shared filter values
+  if (pane === 'tp-all') renderAll();
+  else if (pane === 'tp-sl') renderSL();
+  else if (pane === 'tp-rj') renderRJ();
 }
 
 function openMod(id)  { document.getElementById(id).classList.add('on'); }
@@ -699,53 +687,84 @@ function showDash() {
   document.getElementById('btn-logout').style.display = 'inline-block';
 
   showPage('pg-dash');
-  renderAll(); renderSL(); renderRJ(); updateCounts();
+  renderAllGrids();
 }
+
+function renderAllGrids() { renderAll(); renderSL(); renderRJ(); updateCounts(); }
 
 function updateCounts() {
   const all = getStylests().filter(s => s.status !== 'rejected');
-  document.getElementById('cnt-all').textContent = all.filter(s => RCA[s.id] !== 'rejected').length;
+  // "All" count = candidates with no action taken
+  document.getElementById('cnt-all').textContent = all.filter(s => !RCA[s.id]).length;
   document.getElementById('cnt-sl').textContent  = all.filter(s => RCA[s.id] === 'shortlisted').length;
   document.getElementById('cnt-rj').textContent  = all.filter(s => RCA[s.id] === 'rejected').length;
 }
 
 function setAction(sid, action) {
+  // Toggle: clicking same action again removes it (moves back to All)
   if (RCA[sid] === action) delete RCA[sid]; else RCA[sid] = action;
   saveRCA();
-  renderAll(); renderSL(); renderRJ(); updateCounts();
+  renderAllGrids();
   if (curDetailId === sid) rebuildModalFoot(sid);
 }
 
 // ─────────────────────────────────────────────────────────────
 //  RENDER GRIDS
 // ─────────────────────────────────────────────────────────────
-function filter(list, sid, lid, aid, jid, eid) {
-  const s = (document.getElementById(sid)?.value || '').toLowerCase().trim();
-  const l = (document.getElementById(lid)?.value || '').toLowerCase().trim();
-  const a = document.getElementById(aid)?.value || '';
-  const j = jid ? (document.getElementById(jid)?.value || '') : '';
-  const e = eid ? (document.getElementById(eid)?.value || '') : '';
-  if (s) list = list.filter(x => x.name.toLowerCase().includes(s));
-  if (l) list = list.filter(x => (x.home_location||'').toLowerCase().includes(l));
-  if (a) list = list.filter(x => String(x.available) === a);
-  if (j) list = list.filter(x => x.join_timeline === j);
-  if (e) list = list.filter(x => x.experience === e);
+
+// Get current filter values from the shared filter bar
+function getFilters() {
+  return {
+    s: (document.getElementById('f_s')?.value || '').toLowerCase().trim(),
+    l: (document.getElementById('f_l')?.value || '').toLowerCase().trim(),
+    e: document.getElementById('f_e')?.value || '',
+    a: document.getElementById('f_a')?.value || '',
+    j: document.getElementById('f_j')?.value || '',
+  };
+}
+
+function applyFilters(list) {
+  const f = getFilters();
+  if (f.s) list = list.filter(x => x.name.toLowerCase().includes(f.s));
+  if (f.l) list = list.filter(x => (x.home_location||'').toLowerCase().includes(f.l));
+  if (f.e) list = list.filter(x => x.experience === f.e);
+  if (f.a) list = list.filter(x => String(x.available) === f.a);
+  if (f.j) list = list.filter(x => x.join_timeline === f.j);
   return list;
 }
 
-function renderAll() {
-  let list = getStylests().filter(s => s.status !== 'rejected' && RCA[s.id] !== 'rejected');
-  list = filter(list, 'fa_s', 'fa_l', 'fa_a', 'fa_j', 'fa_e');
-  renderGrid(list, 'grid-all', 'No candidates found', 'फ़िल्टर बदलें या बाद में देखें');
+function clearFilters() {
+  ['f_s','f_l'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  ['f_e','f_a','f_j'].forEach(id => { const el = document.getElementById(id); if(el) el.selectedIndex = 0; });
+  renderAllGrids();
 }
+
+// Figure out which tab is active and re-render only that one (called by filter inputs)
+function renderActive() {
+  const active = document.querySelector('#pg-dash .tab-pane.on');
+  if (!active) { renderAllGrids(); return; }
+  const id = active.id;
+  if (id === 'tp-all') renderAll();
+  else if (id === 'tp-sl') renderSL();
+  else if (id === 'tp-rj') renderRJ();
+}
+
+function renderAll() {
+  // "All" tab = only candidates with NO action taken (not shortlisted, not rejected)
+  let list = getStylests().filter(s => s.status !== 'rejected' && !RCA[s.id]);
+  list = applyFilters(list);
+  renderGrid(list, 'grid-all', 'No new candidates', 'सभी उम्मीदवारों पर कार्रवाई हो चुकी है');
+}
+
 function renderSL() {
   let list = getStylests().filter(s => s.status !== 'rejected' && RCA[s.id] === 'shortlisted');
-  list = filter(list, 'fs_s', 'fs_l', 'fs_a', null, null);
-  renderGrid(list, 'grid-sl', 'No shortlisted candidates', '★ बटन दबाकर शॉर्टलिस्ट करें');
+  list = applyFilters(list);
+  renderGrid(list, 'grid-sl', 'No shortlisted candidates', '★ बटन दबाकर उम्मीदवार को शॉर्टलिस्ट करें');
 }
+
 function renderRJ() {
   let list = getStylests().filter(s => RCA[s.id] === 'rejected');
-  list = filter(list, 'fr_s', 'fr_l', 'fr_a', null, null);
+  list = applyFilters(list);
   renderGrid(list, 'grid-rj', 'No rejected candidates', 'कोई अस्वीकृत उम्मीदवार नहीं');
 }
 
