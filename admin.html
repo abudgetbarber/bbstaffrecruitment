@@ -153,8 +153,8 @@ textarea.finp{resize:vertical;min-height:60px}
 .card-hdr span{font-size:.65rem;opacity:.75;font-family:var(--fh);display:block;margin-top:2px}
 .card-body{padding:18px}
 .sec-lbl{font-family:var(--fd);font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--tl);border-bottom:2px solid var(--y);padding-bottom:6px;margin:16px 0 12px}
-.qr-prev{text-align:center;margin-bottom:12px;display:none}
 .qr-prev img{max-width:160px;border-radius:8px;border:1px solid var(--bd)}
+#qr-dropzone:hover{border-color:var(--g7);background:var(--g0)}
 
 /* TOAST */
 #toast{position:fixed;bottom:20px;right:20px;z-index:3000;padding:12px 18px;border-radius:var(--r);font-weight:600;font-size:.83rem;box-shadow:var(--shb);transform:translateY(80px);opacity:0;transition:all .3s;max-width:300px;pointer-events:none}
@@ -336,38 +336,36 @@ textarea.finp{resize:vertical;min-height:60px}
         <div class="card-hdr"><span style="font-size:1.2rem">💳</span><div><h2>Payment Configuration</h2><span>भुगतान सेटअप — Recruiter upgrade payments</span></div></div>
         <div class="card-body">
 
-          <div class="sec-lbl">Razorpay</div>
+          <div class="sec-lbl">📱 UPI ID</div>
           <div class="fgrp">
-            <label class="flbl">Razorpay API Key</label>
-            <input class="finp" type="text" id="cfg_rzp" placeholder="rzp_live_XXXXXXXXXX">
-            <span style="font-size:.68rem;color:var(--tl);margin-top:3px">Leave blank to hide Razorpay option from recruiters</span>
+            <label class="flbl">UPI ID / VPA</label>
+            <input class="finp" type="text" id="cfg_upi" placeholder="yourname@upi  or  9876543210@paytm">
+            <span style="font-size:.68rem;color:var(--tl);margin-top:3px">Recruiters will see this and can copy to pay via any UPI app (GPay, PhonePe, Paytm…)</span>
           </div>
 
-          <div class="sec-lbl">Cashfree</div>
+          <div class="sec-lbl" style="margin-top:20px">🔲 QR Code Image</div>
           <div class="fgrp">
-            <label class="flbl">Cashfree App ID</label>
-            <input class="finp" type="text" id="cfg_cf" placeholder="Cashfree App ID">
+            <label class="flbl">Upload QR Code Image</label>
+            <div style="border:2px dashed var(--bd);border-radius:var(--r2);padding:20px;text-align:center;background:var(--bg);position:relative;cursor:pointer;transition:border-color .2s" id="qr-dropzone">
+              <input type="file" id="cfg_qr_file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
+              <div style="font-size:1.8rem;margin-bottom:6px">🔲</div>
+              <div style="font-weight:700;font-size:.85rem;color:var(--g8)">Click to upload QR code image</div>
+              <div style="font-size:.7rem;color:var(--tl);margin-top:3px">JPG, PNG — Max 2MB · क्यूआर कोड इमेज अपलोड करें</div>
+            </div>
+            <span style="font-size:.68rem;color:var(--tl);margin-top:4px">Recruiters will scan this QR code to pay ₹1,000 for Premium upgrade</span>
           </div>
 
-          <div class="sec-lbl">UPI Direct</div>
-          <div class="fgrp">
-            <label class="flbl">UPI ID</label>
-            <input class="finp" type="text" id="cfg_upi" placeholder="yourname@upi or 9876543210@paytm">
-            <span style="font-size:.68rem;color:var(--tl);margin-top:3px">Recruiters can copy &amp; pay directly</span>
+          <!-- QR Preview -->
+          <div id="qr-prev" style="display:none;margin:12px 0;text-align:center">
+            <div style="font-size:.7rem;font-weight:800;color:var(--tl);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Current QR Code</div>
+            <img id="qr-prev-img" src="" alt="QR Preview" style="max-width:200px;border-radius:var(--r2);border:1.5px solid var(--bd);box-shadow:var(--sh)">
+            <div style="margin-top:8px">
+              <button class="btn btn-red btn-sm" id="btn-remove-qr">✕ Remove QR</button>
+            </div>
           </div>
 
-          <div class="sec-lbl">QR Code</div>
-          <div class="fgrp">
-            <label class="flbl">QR Code Image URL</label>
-            <input class="finp" type="url" id="cfg_qr" placeholder="https://your-domain.com/qr.png" oninput="previewQR()">
-            <span style="font-size:.68rem;color:var(--tl);margin-top:3px">Paste URL of your payment QR code image</span>
-          </div>
-          <div class="qr-prev" id="qr-prev">
-            <img id="qr-prev-img" src="" alt="QR Preview">
-            <div style="font-size:.7rem;color:var(--tl);margin-top:4px">QR Preview</div>
-          </div>
-
-          <button class="btn btn-g" onclick="savePayConfig()" style="margin-top:8px">💾 Save Payment Config</button>
+          <button class="btn btn-g" id="btn-save-pay" style="margin-top:12px">💾 Save Payment Config</button>
+          <div style="font-size:.72rem;color:var(--tl);margin-top:8px;font-family:var(--fh)">सेव करने के बाद भर्तीकर्ताओं को तुरंत दिखेगा</div>
         </div>
       </div>
     </div>
@@ -384,8 +382,9 @@ textarea.finp{resize:vertical;min-height:60px}
     </div>
     <div class="modal-body" id="mod-s-body"></div>
     <div class="modal-foot">
-      <button class="btn btn-sm ta-ok" id="mod-btn-verify" onclick="quickStatus('verified')">✅ Verify</button>
-      <button class="btn btn-sm ta-rj" id="mod-btn-reject" onclick="quickStatus('rejected')">✗ Reject</button>
+      <button class="btn btn-sm ta-ok"  id="mod-btn-verify"  onclick="quickStatus('verified')">✅ Verify</button>
+      <button class="btn btn-sm"        id="mod-btn-pending" onclick="quickStatus('pending')"  style="background:#FEF3C7;color:#92400E;border:none;cursor:pointer">⏳ Pending</button>
+      <button class="btn btn-sm ta-rj"  id="mod-btn-reject"  onclick="quickStatus('rejected')">✗ Reject</button>
       <button class="btn btn-sm ta-del" onclick="deleteStylest(curStylestId);closeMod('mod-stylist')">🗑 Delete</button>
       <button class="btn btn-out btn-sm" onclick="closeMod('mod-stylist')" style="margin-left:auto">Close</button>
     </div>
@@ -638,8 +637,9 @@ function renderStylists() {
       <td>
         <div class="tbl-acts">
           <button class="ta ta-view" onclick="viewStylest('${s.id}')">View</button>
-          <button class="ta ta-ok"   onclick="changeStatus('${s.id}','verified')">✅</button>
-          <button class="ta ta-rj"   onclick="changeStatus('${s.id}','rejected')">✗</button>
+          <button class="ta ta-ok"   onclick="changeStatus('${s.id}','verified')">✅ Verify</button>
+          <button class="ta"         onclick="changeStatus('${s.id}','pending')"  style="background:#FEF3C7;color:#92400E">⏳ Pending</button>
+          <button class="ta ta-rj"   onclick="changeStatus('${s.id}','rejected')">✗ Reject</button>
           <button class="ta ta-del"  onclick="deleteStylest('${s.id}')">🗑</button>
         </div>
       </td>
@@ -898,29 +898,69 @@ function createRecruiter() {
 // ─────────────────────────────────────────────────────────────
 function loadPayConfig() {
   const cfg = getPayCfg();
-  const set = (id, val) => { const el=document.getElementById(id); if(el) el.value=val||''; };
-  set('cfg_rzp', cfg.razorpay_key);
-  set('cfg_cf',  cfg.cashfree_appid);
-  set('cfg_upi', cfg.upi_id);
-  set('cfg_qr',  cfg.qr_image_url);
-  if (cfg.qr_image_url) previewQR();
+  const upiEl = document.getElementById('cfg_upi');
+  if (upiEl) upiEl.value = cfg.upi_id || '';
+
+  // Show existing QR if saved
+  if (cfg.qr_image_url) showQRPreview(cfg.qr_image_url);
+  else hideQRPreview();
+
+  // File input handler — convert to base64 and preview immediately
+  const fileInput = document.getElementById('cfg_qr_file');
+  const dropzone  = document.getElementById('qr-dropzone');
+  if (fileInput) {
+    fileInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) { toast('Image too large — max 2MB', 'er'); return; }
+      const reader = new FileReader();
+      reader.onload = e => {
+        showQRPreview(e.target.result);
+        dropzone.style.borderColor = 'var(--g7)';
+        dropzone.style.background  = 'var(--g0)';
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Remove QR button
+  const removeBtn = document.getElementById('btn-remove-qr');
+  if (removeBtn) {
+    removeBtn.addEventListener('click', () => {
+      hideQRPreview();
+      if (fileInput) fileInput.value = '';
+      if (dropzone) { dropzone.style.borderColor=''; dropzone.style.background=''; }
+    });
+  }
+
+  // Save button
+  const saveBtn = document.getElementById('btn-save-pay');
+  if (saveBtn) saveBtn.addEventListener('click', savePayConfig);
 }
 
-function previewQR() {
-  const url = document.getElementById('cfg_qr')?.value.trim();
+function showQRPreview(src) {
   const pv  = document.getElementById('qr-prev');
   const img = document.getElementById('qr-prev-img');
-  if (url && pv && img) { img.src = url; pv.style.display = 'block'; }
-  else if (pv) pv.style.display = 'none';
+  if (pv && img) { img.src = src; pv.style.display = 'block'; }
+}
+
+function hideQRPreview() {
+  const pv = document.getElementById('qr-prev');
+  if (pv) pv.style.display = 'none';
 }
 
 function savePayConfig() {
-  const g = id => document.getElementById(id)?.value.trim() || '';
+  const upi  = (document.getElementById('cfg_upi')?.value || '').trim();
+  const img  = document.getElementById('qr-prev-img');
+  // Use the previewed image src (base64 from upload, or existing URL)
+  const qrSrc = (img && img.src && img.src !== window.location.href) ? img.src : '';
+
   const cfg = {
-    razorpay_key:   g('cfg_rzp'),
-    cashfree_appid: g('cfg_cf'),
-    upi_id:         g('cfg_upi'),
-    qr_image_url:   g('cfg_qr'),
+    upi_id:        upi,
+    qr_image_url:  qrSrc,
+    // Keep any existing gateway keys intact (don't wipe them)
+    razorpay_key:   getPayCfg().razorpay_key   || '',
+    cashfree_appid: getPayCfg().cashfree_appid || '',
   };
   localStorage.setItem('bb_payment_config', JSON.stringify(cfg));
   toast('Payment config saved! / भुगतान सेटअप सहेजा गया ✅', 'ok');
