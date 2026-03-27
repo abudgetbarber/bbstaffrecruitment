@@ -663,34 +663,70 @@ async function submitForm() {
     showToast('⚠️ Supabase not connected — check shared.js keys', 'error');
   } else {
     try {
-      // Step 1: Insert the row first (without photo URLs)
+      // Step 1: Check if phone already registered
+      const { data: existing } = await sb
+        .from('hairstylists')
+        .select('id, phone')
+        .eq('phone', phone)
+        .maybeSingle();
+
+      if (existing) {
+        btn.textContent = '🚀 Submit Application / आवेदन जमा करें';
+        btn.disabled = false;
+        showToast('❌ This phone number is already registered! / यह फ़ोन नंबर पहले से पंजीकृत है', 'error');
+        goStep(1);
+        return;
+      }
+
+      // Step 2: Insert the row
       const { error: insertError } = await sb.from('hairstylists').insert(entry);
+
       if (insertError) {
-        console.error('Supabase insert error:', insertError.message, insertError.details, insertError.hint);
-        showToast('Supabase error: ' + insertError.message, 'error');
-      } else {
-        console.log('✅ Row saved to Supabase. Now uploading photos...');
+        btn.textContent = '🚀 Submit Application / आवेदन जमा करें';
+        btn.disabled = false;
 
-        // Step 2: Upload photos to storage and get back the public URLs
-        const photoUrls = await uploadPhotosAndGetUrls(regId, sb);
-        console.log('Photo URLs:', photoUrls);
-
-        // Step 3: Update the row with the photo URLs
-        if (Object.keys(photoUrls).length > 0) {
-          const { error: updateError } = await sb
-            .from('hairstylists')
-            .update(photoUrls)
-            .eq('id', regId);
-          if (updateError) {
-            console.warn('Photo URL update error:', updateError.message);
+        if (insertError.code === '23505') {
+          // Duplicate key — phone or ID already exists
+          if (insertError.message.includes('phone')) {
+            showToast('❌ Phone already registered / यह नंबर पहले से है', 'error');
+            goStep(1);
           } else {
-            console.log('✅ Photo URLs saved to Supabase');
+            showToast('❌ Duplicate ID — please try submitting again', 'error');
           }
+        } else if (insertError.code === '23514') {
+          // Check constraint violation — invalid dropdown value
+          showToast('❌ Invalid value: ' + insertError.message, 'error');
+        } else {
+          showToast('❌ Supabase error: ' + insertError.message, 'error');
+        }
+        console.error('Insert error:', insertError);
+        return;
+      }
+
+      console.log('✅ Row saved to Supabase. Uploading photos...');
+
+      // Step 3: Upload photos and get URLs
+      const photoUrls = await uploadPhotosAndGetUrls(regId, sb);
+
+      // Step 4: Update row with photo URLs if any were uploaded
+      if (Object.keys(photoUrls).length > 0) {
+        const { error: updateError } = await sb
+          .from('hairstylists')
+          .update(photoUrls)
+          .eq('id', regId);
+        if (updateError) {
+          console.warn('Photo URL update error:', updateError.message);
+        } else {
+          console.log('✅ Photo URLs saved');
         }
       }
+
     } catch(e) {
       console.warn('Supabase save error:', e);
-      showToast('Network error saving to Supabase', 'error');
+      showToast('Network error — please try again', 'error');
+      btn.textContent = '🚀 Submit Application / आवेदन जमा करें';
+      btn.disabled = false;
+      return;
     }
   }
 

@@ -5,8 +5,8 @@
 
 // ── SUPABASE ─────────────────────────────────────────────────
 // ⚠️  PASTE YOUR KEYS HERE — get them from Supabase → Settings → API
-const SUPABASE_URL  = 'https://ccdaqcpllhqonkdkrdlq.supabase.co';
-const SUPABASE_KEY  = 'sb_publishable_lKG0FnCMjfoTShRUorTH4w_da4SZ7RZ';
+const SUPABASE_URL  = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY  = 'YOUR_ANON_KEY';
 
 let _sb = null;
 function getSupabase() {
@@ -193,7 +193,8 @@ function closeModal(id) { const m = document.getElementById(id); if(m) m.classLi
 // ── GENERATE REG ID ───────────────────────────────────────────
 function genRegId() {
   const yr  = new Date().getFullYear();
-  const num = String(Math.floor(Math.random() * 9000) + 1000);
+  // Use last 6 digits of timestamp for uniqueness — no collisions possible
+  const num = String(Date.now()).slice(-6);
   return `BB-${yr}-${num}`;
 }
 
