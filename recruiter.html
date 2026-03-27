@@ -421,8 +421,8 @@ select.finp{appearance:auto;-webkit-appearance:auto;cursor:pointer}
 // ─────────────────────────────────────────────────────────────
 //  SUPABASE — paste your keys here
 // ─────────────────────────────────────────────────────────────
-const SUPABASE_URL = 'https://ccdaqcpllhqonkdkrdlq.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_lKG0FnCMjfoTShRUorTH4w_da4SZ7RZ';
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_KEY';
 
 let _sb = null;
 function getSupabase() {
@@ -453,6 +453,13 @@ function getSupabase() {
       }
     });
     if (changed) localStorage.setItem('bb_recruiters', JSON.stringify(stored));
+  }
+  // Always reset stylists to corrected dummy data (fixes experience values + exp_room)
+  // This only affects localStorage demo data — Supabase data is unaffected
+  const styVer = '2';
+  if (localStorage.getItem('bb_sty_ver') !== styVer) {
+    localStorage.removeItem('bb_stylists');
+    localStorage.setItem('bb_sty_ver', styVer);
   }
   if (!localStorage.getItem('bb_stylists')) {
     localStorage.setItem('bb_stylists', JSON.stringify(defaultStylests()));
@@ -487,8 +494,8 @@ function defaultRecruiters() {
 function defaultStylests() {
   return [
     { id:'BB-2024-0001', name:'Rahul Sharma', phone:'9876543210', age:24,
-      home_location:'Guntur, AP', experience:'2-4 years', max_billing:55000,
-      prev_fixed:15000, prev_incentive:10, exp_fixed:20000, exp_incentive:12, exp_food:800, exp_room:'not_provided',
+      home_location:'Guntur, AP', experience:'2-4', max_billing:55000,
+      prev_fixed:15000, prev_incentive:10, exp_fixed:20000, exp_incentive:12, exp_food:800, exp_room:'not_required',
       instagram:'https://instagram.com/rahul.cuts', available:true, join_timeline:'immediate',
       ref_name:'Suresh Kumar',
       selfie_url:'https://picsum.photos/seed/rahul1/200/200',
@@ -500,7 +507,7 @@ function defaultStylests() {
       follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'verified' },
     { id:'BB-2024-0002', name:'Aakash Reddy', phone:'9876543211', age:27,
-      home_location:'Vijayawada, AP', experience:'4-6 years', max_billing:72000,
+      home_location:'Vijayawada, AP', experience:'4-6', max_billing:72000,
       prev_fixed:18000, prev_incentive:12, exp_fixed:25000, exp_incentive:15, exp_food:1000, exp_room:'required',
       instagram:'https://instagram.com/aakash.styles', available:true, join_timeline:'1month',
       ref_name:'Ravi Teja',
@@ -513,7 +520,7 @@ function defaultStylests() {
       follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'verified' },
     { id:'BB-2024-0003', name:'Pradeep Singh', phone:'9876543212', age:22,
-      home_location:'Delhi', experience:'1-2 years', max_billing:38000,
+      home_location:'Delhi', experience:'1-2', max_billing:38000,
       prev_fixed:12000, prev_incentive:8, exp_fixed:16000, exp_incentive:10, exp_food:500, exp_room:'required',
       instagram:'', available:false, join_timeline:'2months', ref_name:'',
       selfie_url:'https://picsum.photos/seed/pradeep1/200/200',
@@ -524,7 +531,7 @@ function defaultStylests() {
       follow_timing:false,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'pending' },
     { id:'BB-2024-0004', name:'Kiran Kumar', phone:'9876543213', age:30,
-      home_location:'Mumbai', experience:'8-10 years', max_billing:95000,
+      home_location:'Mumbai', experience:'8-10', max_billing:95000,
       prev_fixed:25000, prev_incentive:15, exp_fixed:30000, exp_incentive:18, exp_food:1200, exp_room:'required',
       instagram:'https://instagram.com/kiran.mastercuts', available:true, join_timeline:'immediate',
       ref_name:'Master Ramesh',
@@ -537,7 +544,7 @@ function defaultStylests() {
       follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
       performance_target:true,follow_metrics:true,status:'verified' },
     { id:'BB-2024-0005', name:'Venkat Rao', phone:'9876543214', age:26,
-      home_location:'Chennai', experience:'2-4 years', max_billing:48000,
+      home_location:'Chennai', experience:'2-4', max_billing:48000,
       prev_fixed:14000, prev_incentive:10, exp_fixed:18000, exp_incentive:12, exp_food:600, exp_room:'not_required',
       instagram:'', available:true, join_timeline:'1month', ref_name:'',
       selfie_url:'https://picsum.photos/seed/venkat1/200/200',
