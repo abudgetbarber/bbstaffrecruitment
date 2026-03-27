@@ -4,245 +4,243 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recruiter Portal — Budget Barber</title>
-<link rel="stylesheet" href="shared.css">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
 <style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g9:#0A2E1E;--g8:#0D3B2E;--g7:#1A5C44;--g6:#2E7D5A;
+  --g1:#E8F5EE;--g0:#F0FAF4;
+  --y:#F5D800;--y0:#FFFDE7;
+  --bg:#F3F7F4;--bg2:#E6EFE9;
+  --white:#fff;--text:#152018;--tl:#6B8F71;
+  --bd:#C5DAC8;--red:#C0392B;--ok:#1E8449;
+  --sh:0 2px 16px rgba(10,46,30,.08);
+  --shb:0 8px 40px rgba(10,46,30,.14);
+  --r:12px;--r2:8px;
+  --fd:'Barlow Condensed',sans-serif;
+  --fb:'Barlow',sans-serif;
+  --fh:'Noto Sans Devanagari',sans-serif;
+}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100vh}
 
-/* ── AUTH ─────────────────────────────────────────────── */
-.auth-page {
-  min-height: calc(100vh - 60px);
-  display: flex; align-items: center; justify-content: center;
-  padding: 32px 24px;
-  background: linear-gradient(145deg, var(--green-50) 0%, var(--bg2) 100%);
-}
-.auth-box {
-  background: white; border-radius: 20px;
-  padding: 36px 32px; max-width: 420px; width: 100%;
-  box-shadow: var(--shadow-lg); border: 1px solid var(--border);
-}
-.auth-icon { font-size: 2.8rem; text-align: center; margin-bottom: 8px; }
-.auth-title {
-  font-family: var(--font-display); font-size: 1.8rem; font-weight: 900;
-  color: var(--green-800); text-align: center; margin-bottom: 4px;
-}
-.auth-sub { text-align: center; color: var(--text-light); font-family: var(--font-hindi); font-size: 0.82rem; margin-bottom: 24px; }
-.auth-switch { text-align: center; margin-top: 14px; }
-.auth-switch button {
-  background: none; border: none; color: var(--green-700);
-  font-size: 0.8rem; cursor: pointer; font-family: var(--font-body);
-  font-weight: 600; text-decoration: underline; line-height: 1.7;
-}
-.pin-inputs { display: flex; gap: 8px; justify-content: center; margin-top: 6px; }
-.pin-inputs input {
-  width: 44px; height: 48px; text-align: center; font-size: 1.3rem;
-  font-weight: 700; border-radius: var(--radius-sm);
-  border: 2px solid var(--border); font-family: var(--font-display); padding: 0;
-  transition: border-color 0.15s;
-}
-.pin-inputs input:focus { border-color: var(--green-700); box-shadow: 0 0 0 3px rgba(46,125,90,0.12); outline: none; }
-.demo-hint { background: var(--bg); border-radius: var(--radius-sm); padding: 10px; text-align: center; font-size: 0.72rem; color: var(--text-light); margin-top: 14px; line-height: 1.7; }
+/* HEADER */
+.hdr{background:var(--g8);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.hdr-logo{display:inline-flex;flex-direction:column;background:var(--y);border-radius:5px;overflow:hidden;line-height:1}
+.hdr-logo .b1{font-family:var(--fd);font-weight:900;font-size:.9rem;color:var(--g8);padding:3px 8px 1px;letter-spacing:1px}
+.hdr-logo .b2{background:var(--g8);font-family:var(--fd);font-weight:800;font-size:.55rem;color:var(--y);padding:2px 8px 3px;letter-spacing:3px;text-align:center}
+.hdr-mid{display:flex;flex-direction:column}
+.hdr-mid h1{color:#fff;font-family:var(--fd);font-size:1rem;font-weight:700;line-height:1.1}
+.hdr-mid span{color:var(--y);font-size:.62rem;font-family:var(--fh)}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.hdr-salon{color:var(--y);font-size:.78rem;font-weight:700}
+.btn-ghost{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;padding:5px 12px;border-radius:20px;cursor:pointer;font-size:.78rem;font-family:var(--fb)}
+.back-a{color:rgba(255,255,255,.7);font-size:.78rem;text-decoration:none}
+.back-a:hover{color:#fff}
 
-/* ── CANDIDATE GRID ───────────────────────────────────── */
-.candidates-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px; padding: 20px 24px;
-}
-.cand-card {
-  background: white; border-radius: 16px; overflow: hidden;
-  box-shadow: var(--shadow); border: 1px solid var(--border);
-  transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column;
-}
-.cand-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-.cand-top {
-  background: linear-gradient(130deg, var(--green-800), var(--green-600));
-  padding: 14px 16px; display: flex; align-items: center; gap: 12px;
-}
-.cand-avatar {
-  width: 56px; height: 56px; border-radius: 50%;
-  background: rgba(255,255,255,0.15); border: 3px solid var(--yellow);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-size: 1.5rem;
-  color: white; flex-shrink: 0; overflow: hidden; cursor: pointer;
-}
-.cand-avatar img { width:100%; height:100%; object-fit:cover; }
-.cand-name { color: white; font-family: var(--font-display); font-size: 1rem; font-weight: 800; }
-.cand-meta { color: rgba(255,255,255,0.65); font-size: 0.7rem; margin-top: 2px; }
-.cand-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+/* PAGES */
+.page{display:none;min-height:calc(100vh - 58px)}
+.page.active{display:block}
+
+/* AUTH */
+.auth-wrap{min-height:calc(100vh - 58px);display:flex;align-items:center;justify-content:center;padding:28px 16px;background:linear-gradient(145deg,var(--g0),var(--bg2))}
+.auth-card{background:#fff;border-radius:18px;padding:32px 28px;max-width:400px;width:100%;box-shadow:var(--shb);border:1px solid var(--bd)}
+.auth-icon{text-align:center;font-size:2.6rem;margin-bottom:8px}
+.auth-h{font-family:var(--fd);font-size:1.7rem;font-weight:900;color:var(--g8);text-align:center;margin-bottom:3px}
+.auth-sub{text-align:center;color:var(--tl);font-family:var(--fh);font-size:.8rem;margin-bottom:22px}
+.fgrp{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.flbl{font-family:var(--fd);font-size:.7rem;font-weight:700;color:#3A5A40;text-transform:uppercase;letter-spacing:.8px}
+.finp{padding:11px 14px;border:1.5px solid var(--bd);border-radius:var(--r2);font-size:.9rem;font-family:var(--fb);color:var(--text);background:#fff;width:100%;outline:none;transition:border-color .15s}
+.finp:focus{border-color:var(--g7);box-shadow:0 0 0 3px rgba(46,125,90,.1)}
+.pin-inp{font-size:1.4rem;letter-spacing:8px;text-align:center;font-weight:700;padding:11px 14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 22px;border-radius:30px;font-family:var(--fd);font-size:.9rem;font-weight:700;letter-spacing:.5px;border:none;cursor:pointer;transition:all .18s;text-decoration:none;white-space:nowrap;width:100%}
+.btn-g{background:var(--g8);color:#fff}
+.btn-g:hover{background:var(--g7);transform:translateY(-1px);box-shadow:0 4px 14px rgba(13,59,46,.3)}
+.btn-y{background:var(--y);color:var(--g8)}
+.btn-y:hover{background:#E5C800;transform:translateY(-1px)}
+.btn-out{background:transparent;color:var(--g8);border:2px solid var(--g8)}
+.btn-out:hover{background:var(--g8);color:#fff}
+.btn-sm{padding:5px 14px;font-size:.75rem;width:auto}
+.btn-red{background:var(--red);color:#fff}
+.auth-link{background:none;border:none;color:var(--g7);font-size:.8rem;cursor:pointer;font-family:var(--fb);font-weight:600;text-decoration:underline;display:block;text-align:center;margin-top:12px;width:100%;padding:4px}
+.demo-box{background:var(--bg);border-radius:var(--r2);padding:10px;text-align:center;font-size:.7rem;color:var(--tl);margin-top:12px;line-height:1.8}
+.divider{text-align:center;color:var(--tl);font-size:.72rem;margin:12px 0}
+
+/* TABS */
+.tab-bar{background:#fff;border-bottom:2px solid var(--bd);display:flex;padding:0 20px;overflow-x:auto}
+.tab-btn{padding:13px 18px;font-family:var(--fd);font-size:.82rem;font-weight:700;background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--tl);white-space:nowrap;transition:all .15s}
+.tab-btn:hover{color:var(--g8)}
+.tab-btn.on{color:var(--g8);border-bottom-color:var(--y)}
+.tcnt{background:var(--y);color:var(--g8);font-size:.6rem;padding:1px 6px;border-radius:10px;margin-left:4px;font-weight:900;vertical-align:middle}
+.tab-pane{display:none}
+.tab-pane.on{display:block}
+
+/* FILTER BAR */
+.fbar{background:#fff;padding:12px 18px;border-bottom:1px solid var(--bd);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.fbar .finp{padding:7px 10px;font-size:.8rem;width:auto}
+.fsearch{flex:1;min-width:180px}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;padding:18px 20px}
+
+/* CANDIDATE CARD */
+.ccard{background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--sh);border:1px solid var(--bd);display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.ccard:hover{transform:translateY(-3px);box-shadow:var(--shb)}
+.ctop{background:linear-gradient(130deg,var(--g8),var(--g6));padding:14px;display:flex;align-items:center;gap:12px}
+.cav{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.15);border:3px solid var(--y);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:1.4rem;color:#fff;flex-shrink:0;overflow:hidden;cursor:pointer}
+.cav img{width:100%;height:100%;object-fit:cover}
+.cname{color:#fff;font-family:var(--fd);font-size:1rem;font-weight:800}
+.cmeta{color:rgba(255,255,255,.65);font-size:.7rem;margin-top:2px}
+.cbadges{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:700;font-family:var(--fd);letter-spacing:.3px}
+.badge-av{background:var(--y);color:var(--g8)}
+.badge-na{background:rgba(255,255,255,.15);color:#fff}
+.badge-vf{background:#D1FAE5;color:#065F46}
+.badge-pd{background:#FEF3C7;color:#92400E}
+.badge-sl{background:#D1FAE5;color:#065F46}
+.badge-rj{background:#FEE2E2;color:#991B1B}
+.badge-pm{background:var(--y);color:var(--g8)}
+.badge-bs{background:var(--bg2);color:#3A5A40}
 
 /* Photos strip */
-.photos-strip {
-  display: flex; gap: 6px; padding: 10px 14px;
-  background: var(--bg); border-bottom: 1px solid var(--border);
-  overflow-x: auto; align-items: center;
-}
-.photo-thumb {
-  width: 56px; height: 56px; flex-shrink: 0; border-radius: 6px;
-  object-fit: cover; border: 1.5px solid var(--border); cursor: pointer;
-  transition: transform 0.15s;
-}
-.photo-thumb:hover { transform: scale(1.08); }
-.photo-placeholder {
-  width: 56px; height: 56px; flex-shrink: 0; border-radius: 6px;
-  border: 1.5px dashed var(--border); background: var(--bg2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.2rem;
-}
-.photos-label { font-size: 0.6rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; writing-mode: vertical-rl; transform: rotate(180deg); padding: 2px 0; }
+.pstrip{display:flex;gap:6px;padding:10px 12px;background:var(--bg);border-bottom:1px solid var(--bd);overflow-x:auto;align-items:center}
+.ptlbl{font-size:.58rem;font-weight:800;color:var(--tl);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;margin-right:2px}
+.pthumb{width:52px;height:52px;flex-shrink:0;border-radius:6px;object-fit:cover;border:1.5px solid var(--bd);cursor:pointer;transition:transform .15s}
+.pthumb:hover{transform:scale(1.08)}
+.pph{width:52px;height:52px;flex-shrink:0;border-radius:6px;border:1.5px dashed var(--bd);background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
 
 /* Card body */
-.cand-body { padding: 12px 16px; flex: 1; }
-.cand-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 4px 0; border-bottom: 1px solid var(--bg2); font-size: 0.78rem;
-}
-.cand-row:last-child { border-bottom: none; }
-.cand-key { font-weight: 700; color: var(--text-light); font-size: 0.72rem; }
-.cand-val { font-weight: 500; color: var(--text); text-align: right; }
+.cbody{padding:12px 14px;flex:1}
+.crow{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bg2);font-size:.77rem}
+.crow:last-child{border-bottom:none}
+.ck{font-weight:700;color:var(--tl);font-size:.7rem}
+.cv{font-weight:500;color:var(--text);text-align:right}
+.locked{filter:blur(4px);user-select:none;pointer-events:none}
+.pcta{background:var(--y0);border-top:1.5px dashed #FBBF24;padding:8px 12px;font-size:.7rem;font-weight:700;color:var(--g8)}
+.pcta small{display:block;font-family:var(--fh);font-weight:400;font-size:.65rem;color:var(--tl)}
 
-/* Locked */
-.locked { filter: blur(4px); user-select: none; pointer-events: none; font-size: 0.78rem; font-weight: 600; }
-.premium-cta-strip {
-  background: var(--yellow-50); border-top: 1.5px dashed #FBBF24;
-  padding: 8px 14px; font-size: 0.72rem; font-weight: 700; color: var(--green-800);
-}
-.premium-cta-strip small { display: block; font-family: var(--font-hindi); font-weight: 400; font-size: 0.68rem; color: var(--text-light); }
+/* Card actions */
+.cact{display:flex;gap:6px;padding:10px 12px;border-top:1px solid var(--bd)}
+.act-btn{padding:5px 12px;border-radius:20px;font-family:var(--fd);font-size:.72rem;font-weight:800;border:1.5px solid;cursor:pointer;transition:all .15s;white-space:nowrap}
 
-/* Actions */
-.cand-actions { display: flex; gap: 6px; padding: 10px 14px; border-top: 1px solid var(--border); }
+/* EMPTY */
+.empty{text-align:center;padding:56px 20px;grid-column:1/-1}
+.empty-ic{font-size:3rem;margin-bottom:12px}
+.empty h3{font-family:var(--fd);font-size:1.1rem;color:#3A5A40}
+.empty p{color:var(--tl);font-size:.8rem;margin-top:5px;font-family:var(--fh)}
 
-/* SL/REJ badges */
-.badge-sl  { background: #D1FAE5; color: #065F46; }
-.badge-rej { background: #FEE2E2; color: #991B1B; }
+/* PROFILE */
+.pro-wrap{padding:20px;max-width:620px}
+.card{background:#fff;border-radius:var(--r);border:1px solid var(--bd);box-shadow:var(--sh);margin-bottom:16px}
+.card-hdr{background:linear-gradient(100deg,var(--g8),var(--g7));color:#fff;padding:13px 18px;border-radius:var(--r) var(--r) 0 0;display:flex;align-items:center;gap:10px}
+.card-hdr h2{font-family:var(--fd);font-size:.95rem;font-weight:700;line-height:1.2}
+.card-hdr span{font-size:.65rem;opacity:.75;font-family:var(--fh);display:block;margin-top:2px}
+.card-body{padding:18px}
+.irow{display:flex;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--bg2);font-size:.8rem}
+.irow:last-child{border-bottom:none}
+.ik{font-weight:700;color:var(--tl);min-width:130px;font-size:.73rem;flex-shrink:0}
+.iv{font-weight:500;color:var(--text)}
+.plan-box{border-radius:var(--r);padding:18px;border:2px solid}
+.plan-box.prem{background:#ECFDF5;border-color:#6EE7B7}
+.plan-box.basic{background:var(--y0);border-color:var(--y)}
+.plan-title{font-family:var(--fd);font-size:1.1rem;font-weight:900}
+.plan-price{font-family:var(--fd);font-size:1.8rem;font-weight:900;color:var(--g8);margin:4px 0}
+.plan-features{list-style:none;margin:10px 0 12px}
+.plan-features li{font-size:.8rem;padding:2px 0}
 
-/* ── FILTER BAR ───────────────────────────────────────── */
-.filter-bar { background: white; padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.filter-bar input, .filter-bar select { padding: 7px 10px; font-size: 0.8rem; }
-.filter-search { flex: 1; min-width: 180px; }
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-bg.on{display:flex}
+.modal{background:#fff;border-radius:var(--r);max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-hdr{padding:18px 20px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.modal-hdr h3{font-family:var(--fd);font-size:1.05rem;font-weight:800;color:var(--g8)}
+.modal-x{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--tl);line-height:1;padding:2px 6px}
+.modal-body{padding:18px 20px}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end}
 
-/* ── PHOTO LIGHTBOX ───────────────────────────────────── */
-.lightbox {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000;
-  display: none; pointer-events: none;
-  align-items: center; justify-content: center; padding: 20px; flex-direction: column; gap: 12px;
-}
-.lightbox.open { display: flex; pointer-events: all; }
-.lightbox img { max-width: 90vw; max-height: 80vh; border-radius: 10px; object-fit: contain; }
-.lightbox-close { position: absolute; top: 20px; right: 24px; font-size: 2rem; color: white; cursor: pointer; background: none; border: none; }
-.lightbox-caption { color: rgba(255,255,255,0.6); font-size: 0.82rem; }
+/* UPGRADE */
+.upg-hero{background:linear-gradient(135deg,var(--g8),var(--g7));border-radius:var(--r);padding:18px;color:#fff;margin-bottom:14px}
+.upg-hero h3{font-family:var(--fd);font-size:1.05rem;font-weight:900;margin-bottom:4px}
+.upg-price{font-family:var(--fd);font-size:2rem;font-weight:900;color:var(--y);line-height:1}
+.upg-hero ul{list-style:none;margin:10px 0 0}
+.upg-hero ul li{font-size:.78rem;padding:2px 0;opacity:.9}
+.upg-hero ul li::before{content:"✓ ";color:var(--y);font-weight:700}
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.pay-opt{border:2px solid var(--bd);border-radius:var(--r);padding:12px 10px;text-align:center;cursor:pointer;transition:all .15s;background:#fff}
+.pay-opt:hover,.pay-opt.on{border-color:var(--g7);background:var(--g0)}
+.pay-opt .pic{font-size:1.5rem;margin-bottom:4px}
+.pay-opt .pname{font-family:var(--fd);font-weight:800;font-size:.82rem;color:var(--g8)}
+.pay-opt .psub{font-size:.62rem;color:var(--tl);margin-top:1px}
+.pay-info{background:var(--bg);border-radius:var(--r2);padding:12px;margin-bottom:12px}
+.upi-box{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r2);padding:9px 12px;font-family:monospace;font-size:.95rem;font-weight:700;text-align:center;margin:7px 0;letter-spacing:1px}
+.qr-wrap{text-align:center}
+.qr-wrap img{max-width:170px;border-radius:8px;border:1px solid var(--bd)}
+.qr-empty{width:170px;height:170px;border:2px dashed var(--bd);border-radius:var(--r);display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:.73rem;color:var(--tl);text-align:center;padding:14px}
+.warn-box{background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:var(--r2);padding:10px 12px;font-size:.74rem;margin-bottom:10px}
 
-/* ── PROFILE ──────────────────────────────────────────── */
-.profile-wrap { padding: 24px; max-width: 660px; }
-.plan-box { border-radius: var(--radius); padding: 20px; border: 2px solid; margin-bottom: 0; }
-.plan-box.basic   { background: var(--yellow-50); border-color: var(--yellow); }
-.plan-box.premium { background: #ECFDF5; border-color: #6EE7B7; }
-.plan-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 900; }
-.plan-price { font-family: var(--font-display); font-size: 2rem; font-weight: 900; color: var(--green-800); }
-.plan-features { list-style: none; margin: 10px 0 14px; }
-.plan-features li { font-size: 0.82rem; padding: 3px 0; }
-.validity-row {
-  background: white; border-radius: var(--radius-sm); padding: 10px 14px;
-  display: flex; align-items: center; justify-content: space-between; margin-top: 12px;
-  border: 1px solid var(--border);
-}
-.validity-lbl { font-size: 0.68rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
-.validity-val { font-weight: 700; font-size: 0.85rem; }
-.expiring { color: var(--red); }
-.active-val { color: var(--success); }
+/* LIGHTBOX — completely off-screen when hidden, no overlap */
+#lb{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:2000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px}
+#lb.on{display:flex}
+#lb img{max-width:88vw;max-height:78vh;border-radius:8px;object-fit:contain}
+#lb-cap{color:rgba(255,255,255,.6);font-size:.8rem}
+#lb-x{position:absolute;top:16px;right:20px;font-size:2rem;color:#fff;cursor:pointer;background:none;border:none;line-height:1}
 
-/* ── UPGRADE MODAL ────────────────────────────────────── */
-.upgrade-hero {
-  background: linear-gradient(135deg, var(--green-800), var(--green-700));
-  border-radius: var(--radius); padding: 20px; color: white; margin-bottom: 16px;
-}
-.upgrade-hero h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 900; margin-bottom: 4px; }
-.upgrade-price { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; color: var(--yellow); line-height: 1; }
-.upgrade-hero ul { list-style: none; margin: 10px 0 0; }
-.upgrade-hero ul li { font-size: 0.8rem; padding: 2px 0; opacity: 0.9; }
-.upgrade-hero ul li::before { content: "✓ "; color: var(--yellow); font-weight: 700; }
-.pay-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-.pay-btn {
-  border: 2px solid var(--border); border-radius: var(--radius); padding: 14px 10px;
-  text-align: center; cursor: pointer; transition: all 0.18s; background: white;
-}
-.pay-btn:hover { border-color: var(--green-700); background: var(--green-50); }
-.pay-btn.active { border-color: var(--green-700); background: var(--green-50); }
-.pay-btn .p-icon { font-size: 1.6rem; margin-bottom: 5px; }
-.pay-btn .p-name { font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; color: var(--green-800); }
-.pay-btn .p-sub  { font-size: 0.65rem; color: var(--text-light); margin-top: 1px; }
-.pay-info { background: var(--bg); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; }
-.upi-id-box { background: white; border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; font-family: monospace; font-size: 1rem; font-weight: 700; text-align: center; margin: 8px 0; letter-spacing: 1px; }
-.qr-wrap { text-align: center; }
-.qr-wrap img { max-width: 180px; border-radius: 8px; border: 1px solid var(--border); }
-.qr-empty { width: 180px; height: 180px; border: 2px dashed var(--border); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 0.75rem; color: var(--text-light); text-align: center; padding: 16px; }
+/* TOAST */
+#toast{position:fixed;bottom:20px;right:20px;z-index:3000;padding:12px 18px;border-radius:var(--r);font-weight:600;font-size:.83rem;box-shadow:var(--shb);transform:translateY(80px);opacity:0;transition:all .3s;max-width:300px;pointer-events:none}
+#toast.on{transform:translateY(0);opacity:1}
+#toast.ok{background:var(--g8);color:#fff}
+#toast.er{background:var(--red);color:#fff}
+#toast.in{background:var(--g7);color:#fff}
 
-/* ── TAB COUNTS ───────────────────────────────────────── */
-.tcnt { background: var(--yellow); color: var(--green-800); font-size: 0.6rem; padding: 1px 6px; border-radius: 10px; margin-left: 4px; font-weight: 900; vertical-align: middle; }
-
-/* ── EMPTY STATE ──────────────────────────────────────── */
-.empty-state { text-align: center; padding: 60px 24px; grid-column: 1/-1; }
-.empty-icon  { font-size: 3.5rem; margin-bottom: 14px; }
-.empty-state h3 { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-mid); }
-.empty-state p  { color: var(--text-light); font-size: 0.82rem; margin-top: 6px; font-family: var(--font-hindi); }
-
+/* GRID-2 */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g2 .full{grid-column:1/-1}
+@media(max-width:480px){.g2{grid-template-columns:1fr}.g2 .full{grid-column:1}}
 </style>
 </head>
 <body>
 
 <!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()" style="display:none; pointer-events:none;">
-  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+<div id="lb">
+  <button id="lb-x" onclick="closeLB()">×</button>
   <img id="lb-img" src="" alt="">
-  <div class="lightbox-caption" id="lb-cap"></div>
+  <div id="lb-cap"></div>
 </div>
 
 <!-- HEADER -->
-<header class="app-header">
-  <div class="header-left">
-    <div class="bb-logo sm"><span class="bb-logo-budget">BUDGET</span><span class="bb-logo-barber">BARBER</span></div>
-    <div class="header-title"><h1>Recruiter Portal</h1><span>भर्तीकर्ता पोर्टल</span></div>
+<header class="hdr">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="hdr-logo"><span class="b1">BUDGET</span><span class="b2">BARBER</span></div>
+    <div class="hdr-mid"><h1>Recruiter Portal</h1><span>भर्तीकर्ता पोर्टल</span></div>
   </div>
-  <div class="header-right">
-    <span id="hdr-name" style="color:var(--yellow); font-size:0.78rem; font-weight:700; display:none;"></span>
-    <span id="hdr-plan" style="display:none; margin-left:6px;"></span>
-    <button class="btn btn-ghost btn-sm" id="btn-logout" onclick="doLogout()" style="display:none;">Logout</button>
-    <a href="index.html" class="back-link">← Home</a>
+  <div class="hdr-right">
+    <span class="hdr-salon" id="hdr-salon" style="display:none"></span>
+    <span id="hdr-plan" style="display:none;margin-left:4px"></span>
+    <button class="btn-ghost" id="btn-logout" style="display:none" onclick="doLogout()">Logout</button>
+    <a href="index.html" class="back-a">← Home</a>
   </div>
 </header>
 
-<!-- ══════════════════ LOGIN ══════════════════ -->
-<div id="view-login">
-  <div class="auth-page">
-    <div class="auth-box anim">
+<!-- PAGE: LOGIN -->
+<div class="page active" id="pg-login">
+  <div class="auth-wrap">
+    <div class="auth-card">
       <div class="auth-icon">🏪</div>
-      <div class="auth-title">Sign In</div>
-      <div class="auth-sub">फ़ोन नंबर और 6 अंकों का PIN डालें</div>
+      <div class="auth-h">Sign In</div>
+      <div class="auth-sub">फ़ोन नंबर और PIN से लॉगिन करें</div>
 
-      <div class="form-group" style="margin-bottom:14px;">
-        <label class="form-label">Phone Number <span class="hn">फ़ोन नंबर</span></label>
-        <input type="tel" id="l_phone" placeholder="10-digit mobile number" maxlength="10"
-               style="font-size:1.1rem; letter-spacing:2px; font-weight:600;"
-               oninput="this.value=this.value.replace(/\D/g,'')">
+      <div class="fgrp">
+        <label class="flbl">Phone Number / फ़ोन नंबर</label>
+        <input class="finp" type="tel" id="l_phone" placeholder="10-digit mobile number" maxlength="10">
+      </div>
+      <div class="fgrp">
+        <label class="flbl">6-Digit PIN</label>
+        <input class="finp pin-inp" type="password" id="l_pin" placeholder="••••••" maxlength="6" inputmode="numeric">
       </div>
 
-      <div class="form-group" style="margin-bottom:24px;">
-        <label class="form-label">6-Digit PIN <span class="hn">6 अंकों का PIN</span></label>
-        <input type="password" id="l_pin" placeholder="Enter 6-digit PIN" maxlength="6"
-               inputmode="numeric" autocomplete="current-password"
-               style="font-size:1.3rem; letter-spacing:6px; font-weight:700; text-align:center;"
-               oninput="this.value=this.value.replace(/\D/g,'')"
-               onkeydown="if(event.key==='Enter') doLogin()">
-      </div>
-
-      <button class="btn btn-primary btn-block btn-lg" onclick="doLogin()">Login / लॉगिन करें</button>
-
-      <div style="text-align:center; margin:14px 0; color:var(--text-light); font-size:0.75rem;">— or —</div>
-      <div class="auth-switch">
-        <button onclick="show('view-register')">
-          New Recruiter? Register here<br>
-          <span style="font-family:var(--font-hindi); font-weight:400;">नए भर्तीकर्ता? यहाँ पंजीकरण करें</span>
-        </button>
-      </div>
-      <div class="demo-hint">
+      <button class="btn btn-g" onclick="doLogin()">Login / लॉगिन करें</button>
+      <div class="divider">— or —</div>
+      <button class="auth-link" onclick="showPage('pg-register')">New Recruiter? Register here / नया खाता बनाएं</button>
+      <div class="demo-box">
         Demo Basic &nbsp;→ Phone: <strong>9876543000</strong> &nbsp;PIN: <strong>123456</strong><br>
         Demo Premium → Phone: <strong>9876543001</strong> &nbsp;PIN: <strong>123456</strong>
       </div>
@@ -250,386 +248,405 @@
   </div>
 </div>
 
-<!-- ══════════════════ REGISTER ══════════════════ -->
-<div id="view-register" style="display:none;">
-  <div class="auth-page">
-    <div class="auth-box anim" style="max-width:500px;">
+<!-- PAGE: REGISTER -->
+<div class="page" id="pg-register">
+  <div class="auth-wrap">
+    <div class="auth-card" style="max-width:460px">
       <div class="auth-icon">🏪</div>
-      <div class="auth-title">Register</div>
+      <div class="auth-h">Register</div>
       <div class="auth-sub">नया भर्तीकर्ता खाता बनाएं</div>
-      <div class="grid-2">
-        <div class="form-group col-span-2" style="grid-column:1/-1;">
-          <label class="form-label">Salon Name <span class="req">*</span></label>
-          <input type="text" id="reg_salon" placeholder="Your Salon Name">
+
+      <div class="g2">
+        <div class="fgrp full">
+          <label class="flbl">Salon Name *</label>
+          <input class="finp" type="text" id="r_salon" placeholder="Your Salon Name">
         </div>
-        <div class="form-group">
-          <label class="form-label">Phone Number <span class="req">*</span></label>
-          <input type="tel" id="reg_phone" placeholder="10-digit mobile" maxlength="10"
-                 oninput="this.value=this.value.replace(/\D/g,'')">
+        <div class="fgrp">
+          <label class="flbl">Phone Number *</label>
+          <input class="finp" type="tel" id="r_phone" placeholder="10-digit mobile" maxlength="10">
         </div>
-        <div class="form-group">
-          <label class="form-label">Franchise? <span class="hn">फ्रैंचाइज़ी?</span></label>
-          <select id="reg_franchise">
+        <div class="fgrp">
+          <label class="flbl">Franchise?</label>
+          <select class="finp" id="r_fran">
             <option value="no">No / नहीं</option>
             <option value="yes">Yes / हाँ</option>
           </select>
         </div>
-        <div class="form-group">
-          <label class="form-label">City / Location <span class="req">*</span></label>
-          <input type="text" id="reg_loc" placeholder="City, State">
+        <div class="fgrp">
+          <label class="flbl">City / Location *</label>
+          <input class="finp" type="text" id="r_loc" placeholder="City, State">
         </div>
-        <div class="form-group col-span-2" style="grid-column:1/-1;">
-          <label class="form-label">Full Salon Address</label>
-          <textarea id="reg_addr" placeholder="Complete salon address" style="min-height:56px;"></textarea>
+        <div class="fgrp full">
+          <label class="flbl">Full Salon Address</label>
+          <textarea class="finp" id="r_addr" placeholder="Complete salon address" style="min-height:56px;resize:vertical"></textarea>
         </div>
-        <div class="form-group col-span-2" style="grid-column:1/-1;">
-          <label class="form-label">Set 6-Digit PIN <span class="req">*</span> <span class="hn">6 अंकों का PIN सेट करें</span></label>
-          <input type="password" id="reg_pin" placeholder="Choose a 6-digit PIN" maxlength="6"
-                 inputmode="numeric" autocomplete="new-password"
-                 style="font-size:1.3rem; letter-spacing:6px; font-weight:700; text-align:center;"
-                 oninput="this.value=this.value.replace(/\D/g,'')">
-          <div class="form-hint" style="margin-top:5px;">यह PIN आपका लॉगिन पासवर्ड होगा — This PIN will be used to login</div>
+        <div class="fgrp full">
+          <label class="flbl">Set 6-Digit PIN *</label>
+          <input class="finp pin-inp" type="password" id="r_pin" placeholder="••••••" maxlength="6" inputmode="numeric">
+          <span style="font-size:.68rem;color:var(--tl);font-family:var(--fh)">यह PIN आपका लॉगिन पासवर्ड होगा</span>
         </div>
       </div>
-      <button class="btn btn-primary btn-block btn-lg" style="margin-top:18px;" onclick="doRegister()">
-        Create Account / खाता बनाएं
-      </button>
-      <div class="auth-switch"><button onclick="show('view-login')">Already have an account? Sign in</button></div>
+
+      <button class="btn btn-g" style="margin-top:14px" onclick="doRegister()">Create Account / खाता बनाएं</button>
+      <button class="auth-link" onclick="showPage('pg-login')">Already have account? Sign in</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════ DASHBOARD ══════════════════ -->
-<div id="view-dashboard" style="display:none;">
-
-  <div class="tab-bar" id="rec-tabs">
-    <button class="tab-btn active" data-tab="tab-all" onclick="switchTab('rec-tabs','tab-all')">
-      ✂️ All Candidates <span class="tcnt" id="cnt-all">0</span>
-    </button>
-    <button class="tab-btn" data-tab="tab-shortlisted" onclick="switchTab('rec-tabs','tab-shortlisted')">
-      ★ Shortlisted <span class="tcnt" id="cnt-sl">0</span>
-    </button>
-    <button class="tab-btn" data-tab="tab-rejected" onclick="switchTab('rec-tabs','tab-rejected')">
-      ✗ Rejected <span class="tcnt" id="cnt-rj">0</span>
-    </button>
-    <button class="tab-btn" data-tab="tab-profile" onclick="switchTab('rec-tabs','tab-profile'); refreshCRAndProfile()">
-      🏪 My Profile
-    </button>
+<!-- PAGE: DASHBOARD -->
+<div class="page" id="pg-dash">
+  <div class="tab-bar" id="main-tabs">
+    <button class="tab-btn on" data-pane="tp-all" onclick="switchTab(this)">✂️ All Candidates <span class="tcnt" id="cnt-all">0</span></button>
+    <button class="tab-btn" data-pane="tp-sl" onclick="switchTab(this)">★ Shortlisted <span class="tcnt" id="cnt-sl">0</span></button>
+    <button class="tab-btn" data-pane="tp-rj" onclick="switchTab(this)">✗ Rejected <span class="tcnt" id="cnt-rj">0</span></button>
+    <button class="tab-btn" data-pane="tp-pro" onclick="switchTab(this);renderProfile()">🏪 My Profile</button>
   </div>
 
-  <!-- ALL CANDIDATES -->
-  <div class="tab-pane active" id="tab-all">
-    <div class="filter-bar">
-      <input class="filter-search" type="text" id="f_search" placeholder="🔍 Search name, location…" oninput="renderAll()">
-      <select id="f_exp" onchange="renderAll()">
-        <option value="">All Experience</option>
-        <option value="less1">Less than 1 yr</option>
-        <option value="1-2">1–2 years</option>
-        <option value="2-3">2–3 years</option>
-        <option value="3-5">3–5 years</option>
-        <option value="5+">5+ years</option>
-      </select>
-      <select id="f_avail" onchange="renderAll()">
-        <option value="">All Availability</option>
-        <option value="true">Available Now</option>
-        <option value="false">Not Available</option>
-      </select>
-      <select id="f_join" onchange="renderAll()">
-        <option value="">Any Joining</option>
-        <option value="immediate">Immediate</option>
-        <option value="1month">1 Month</option>
-        <option value="2months">2 Months</option>
-        <option value="3months">3 Months</option>
-      </select>
-      <select id="f_billing" onchange="renderAll()">
-        <option value="">Any Billing</option>
-        <option value="30000">₹30k+</option>
-        <option value="50000">₹50k+</option>
-        <option value="70000">₹70k+</option>
-      </select>
+  <!-- All Candidates -->
+  <div class="tab-pane on" id="tp-all">
+    <div class="fbar">
+      <input class="finp fsearch" type="text" id="fa_s" placeholder="🔍 Search name, location…" oninput="renderAll()">
+      <select class="finp" id="fa_e" onchange="renderAll()"><option value="">All Experience</option><option value="less1">Less than 1yr</option><option value="1-2">1–2 years</option><option value="2-3">2–3 years</option><option value="3-5">3–5 years</option><option value="5+">5+ years</option></select>
+      <select class="finp" id="fa_a" onchange="renderAll()"><option value="">All Availability</option><option value="true">Available Now</option><option value="false">Not Available</option></select>
+      <select class="finp" id="fa_j" onchange="renderAll()"><option value="">Any Joining</option><option value="immediate">Immediate</option><option value="1month">1 Month</option><option value="2months">2 Months</option><option value="3months">3 Months</option></select>
     </div>
-    <div class="candidates-grid" id="grid-all"></div>
+    <div class="grid" id="grid-all"></div>
   </div>
 
-  <!-- SHORTLISTED -->
-  <div class="tab-pane" id="tab-shortlisted">
-    <div class="filter-bar">
-      <input class="filter-search" type="text" id="sl_search" placeholder="🔍 Search shortlisted…" oninput="renderShortlisted()">
-      <select id="sl_exp" onchange="renderShortlisted()">
-        <option value="">All Experience</option>
-        <option value="less1">Less than 1 yr</option>
-        <option value="1-2">1–2 years</option>
-        <option value="2-3">2–3 years</option>
-        <option value="3-5">3–5 years</option>
-        <option value="5+">5+ years</option>
-      </select>
-      <select id="sl_avail" onchange="renderShortlisted()">
-        <option value="">All Availability</option>
-        <option value="true">Available Now</option>
-        <option value="false">Not Available</option>
-      </select>
-      <select id="sl_join" onchange="renderShortlisted()">
-        <option value="">Any Joining</option>
-        <option value="immediate">Immediate</option>
-        <option value="1month">1 Month</option>
-        <option value="2months">2 Months</option>
-        <option value="3months">3 Months</option>
-      </select>
+  <!-- Shortlisted -->
+  <div class="tab-pane" id="tp-sl">
+    <div class="fbar">
+      <input class="finp fsearch" type="text" id="fs_s" placeholder="🔍 Search shortlisted…" oninput="renderSL()">
+      <select class="finp" id="fs_a" onchange="renderSL()"><option value="">All Availability</option><option value="true">Available Now</option><option value="false">Not Available</option></select>
     </div>
-    <div class="candidates-grid" id="grid-sl"></div>
+    <div class="grid" id="grid-sl"></div>
   </div>
 
-  <!-- REJECTED -->
-  <div class="tab-pane" id="tab-rejected">
-    <div class="filter-bar">
-      <input class="filter-search" type="text" id="rj_search" placeholder="🔍 Search rejected…" oninput="renderRejected()">
-      <select id="rj_exp" onchange="renderRejected()">
-        <option value="">All Experience</option>
-        <option value="less1">Less than 1 yr</option>
-        <option value="1-2">1–2 years</option>
-        <option value="2-3">2–3 years</option>
-        <option value="3-5">3–5 years</option>
-        <option value="5+">5+ years</option>
-      </select>
-      <select id="rj_avail" onchange="renderRejected()">
-        <option value="">All Availability</option>
-        <option value="true">Available Now</option>
-        <option value="false">Not Available</option>
-      </select>
+  <!-- Rejected -->
+  <div class="tab-pane" id="tp-rj">
+    <div class="fbar">
+      <input class="finp fsearch" type="text" id="fr_s" placeholder="🔍 Search rejected…" oninput="renderRJ()">
     </div>
-    <div class="candidates-grid" id="grid-rj"></div>
+    <div class="grid" id="grid-rj"></div>
   </div>
 
-  <!-- PROFILE -->
-  <div class="tab-pane" id="tab-profile">
-    <div class="profile-wrap" id="profile-wrap"></div>
-  </div>
-
-</div>
-
-<!-- ══════ CANDIDATE DETAIL MODAL ══════ -->
-<div class="modal-backdrop" id="cand-modal">
-  <div class="modal" style="max-width:600px;">
-    <div class="modal-header">
-      <h3 id="cm-title">Profile</h3>
-      <button class="modal-close" onclick="closeModal('cand-modal')">×</button>
-    </div>
-    <div class="modal-body" id="cm-body"></div>
-    <div class="modal-footer" id="cm-footer"></div>
+  <!-- Profile -->
+  <div class="tab-pane" id="tp-pro">
+    <div class="pro-wrap" id="pro-wrap"></div>
   </div>
 </div>
 
-<!-- ══════ UPGRADE MODAL ══════ -->
-<div class="modal-backdrop" id="upgrade-modal">
-  <div class="modal" style="max-width:480px;">
-    <div class="modal-header">
+<!-- MODAL: Candidate Detail -->
+<div class="modal-bg" id="mod-cand">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="mod-cand-title">Candidate Profile</h3>
+      <button class="modal-x" onclick="closeMod('mod-cand')">×</button>
+    </div>
+    <div class="modal-body" id="mod-cand-body"></div>
+    <div class="modal-foot" id="mod-cand-foot"></div>
+  </div>
+</div>
+
+<!-- MODAL: Upgrade -->
+<div class="modal-bg" id="mod-upg">
+  <div class="modal">
+    <div class="modal-hdr">
       <h3>⭐ Upgrade to Premium</h3>
-      <button class="modal-close" onclick="closeModal('upgrade-modal')">×</button>
+      <button class="modal-x" onclick="closeMod('mod-upg')">×</button>
     </div>
     <div class="modal-body">
-
-      <div class="upgrade-hero">
+      <div class="upg-hero">
         <h3>Premium Recruiter Plan</h3>
-        <div class="upgrade-price">₹1,000 <span style="font-size:1rem; font-weight:500; color:rgba(255,255,255,0.7);">/ month</span></div>
+        <div class="upg-price">₹1,000 <span style="font-size:.9rem;font-weight:500;color:rgba(255,255,255,.7)">/month</span></div>
         <ul>
           <li>Access to verified phone numbers of all available staff</li>
           <li>View Aadhaar card details of hairstylists</li>
           <li>View Instagram profiles of all candidates</li>
           <li>Shortlist &amp; manage candidates with full info</li>
-          <li>Priority recruiter status &amp; direct call option</li>
         </ul>
-        <div style="font-family:var(--font-hindi); font-size:0.75rem; opacity:0.75;">₹1,000/माह में सभी फ़ोन नंबर, आधार और इंस्टाग्राम देखें</div>
+        <div style="font-family:var(--fh);font-size:.72rem;opacity:.75;margin-top:6px">₹1,000/माह में सभी फ़ोन नंबर, आधार और इंस्टाग्राम देखें</div>
       </div>
 
-      <div style="font-family:var(--font-display); font-size:0.75rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-light); margin-bottom:10px;">
-        Choose Payment Method / भुगतान का तरीका चुनें
+      <div style="font-family:var(--fd);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--tl);margin-bottom:8px">Choose Payment Method</div>
+      <div class="pay-grid">
+        <div class="pay-opt" id="po-rzp" onclick="selPay('rzp')"><div class="pic">💳</div><div class="pname">Razorpay</div><div class="psub">Cards, UPI, Netbanking</div></div>
+        <div class="pay-opt" id="po-cf" onclick="selPay('cf')"><div class="pic">🏦</div><div class="pname">Cashfree</div><div class="psub">UPI, Wallets, Cards</div></div>
+        <div class="pay-opt" id="po-upi" onclick="selPay('upi')"><div class="pic">📱</div><div class="pname">UPI Direct</div><div class="psub">GPay, PhonePe, Paytm</div></div>
+        <div class="pay-opt" id="po-qr" onclick="selPay('qr')"><div class="pic">🔲</div><div class="pname">QR Code</div><div class="psub">Scan &amp; Pay</div></div>
       </div>
-
-      <div class="pay-methods">
-        <div class="pay-btn" id="pbtn-razorpay" onclick="selectPay('razorpay')">
-          <div class="p-icon">💳</div>
-          <div class="p-name">Razorpay</div>
-          <div class="p-sub">Cards, UPI, Netbanking</div>
-        </div>
-        <div class="pay-btn" id="pbtn-cashfree" onclick="selectPay('cashfree')">
-          <div class="p-icon">🏦</div>
-          <div class="p-name">Cashfree</div>
-          <div class="p-sub">UPI, Wallets, Cards</div>
-        </div>
-        <div class="pay-btn" id="pbtn-upi" onclick="selectPay('upi')">
-          <div class="p-icon">📱</div>
-          <div class="p-name">UPI Direct</div>
-          <div class="p-sub">GPay, PhonePe, Paytm</div>
-        </div>
-        <div class="pay-btn" id="pbtn-qr" onclick="selectPay('qr')">
-          <div class="p-icon">🔲</div>
-          <div class="p-name">QR Code</div>
-          <div class="p-sub">Scan &amp; Pay</div>
-        </div>
+      <div class="pay-info" id="pay-info" style="display:none"></div>
+      <div class="warn-box">
+        <strong>📌 After payment:</strong> Admin will activate your Premium within 24 hours.<br>
+        <span style="font-family:var(--fh);font-size:.68rem;color:var(--tl)">भुगतान के बाद 24 घंटे में एडमिन प्रीमियम सक्रिय करेगा।</span>
       </div>
-
-      <div id="pay-info-area" style="display:none;" class="pay-info"></div>
-
-      <div style="background:var(--yellow-50); border:1.5px solid var(--yellow); border-radius:var(--radius-sm); padding:11px 13px; font-size:0.77rem; margin-bottom:12px;">
-        <strong>📌 After payment:</strong> Your plan will be activated by admin within 24 hours after payment verification.<br>
-        <span style="font-family:var(--font-hindi); font-size:0.7rem; color:var(--text-light);">भुगतान के बाद 24 घंटे में एडमिन द्वारा प्रीमियम सक्रिय किया जाएगा।</span>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Payment Reference / UTR Number</label>
-        <input type="text" id="pay-ref" placeholder="Enter transaction ID / UTR for faster activation">
-        <div class="form-hint">भुगतान का UTR नंबर डालें — जल्दी सक्रिय होगा</div>
+      <div class="fgrp">
+        <label class="flbl">Payment Reference / UTR (optional)</label>
+        <input class="finp" type="text" id="pay-ref" placeholder="Transaction ID for faster activation">
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline btn-sm" onclick="closeModal('upgrade-modal')">Cancel</button>
-      <button class="btn btn-yellow" onclick="submitUpgrade()">📩 Submit Payment Request</button>
+    <div class="modal-foot">
+      <button class="btn btn-out btn-sm" onclick="closeMod('mod-upg')">Cancel</button>
+      <button class="btn btn-y btn-sm" onclick="submitUpgrade()">📩 Submit Payment Request</button>
     </div>
   </div>
 </div>
 
-<script src="shared.js"></script>
+<!-- TOAST -->
+<div id="toast"></div>
+
 <script>
+// ─────────────────────────────────────────────────────────────
+//  DATA LAYER  (localStorage — shared with admin.html)
+// ─────────────────────────────────────────────────────────────
+const DATA_VER = '4';
+if (localStorage.getItem('bb_data_ver') !== DATA_VER) {
+  ['bb_stylists','bb_recruiters'].forEach(k => localStorage.removeItem(k));
+  try { sessionStorage.removeItem('bb_recruiter'); } catch(e){}
+  localStorage.setItem('bb_data_ver', DATA_VER);
+}
 
-// ── GLOBALS ───────────────────────────────────────────────────
-let CR = null;
-let RCA = {};
-let detailId = null;
-let selPay = null;
+function getRecruiters() {
+  const raw = localStorage.getItem('bb_recruiters');
+  if (raw) { try { return JSON.parse(raw); } catch(e){} }
+  const def = defaultRecruiters();
+  localStorage.setItem('bb_recruiters', JSON.stringify(def));
+  return def;
+}
+function saveRecruiters(a) { localStorage.setItem('bb_recruiters', JSON.stringify(a)); }
 
-// ── LIGHTBOX ──────────────────────────────────────────────────
+function getStylests() {
+  const raw = localStorage.getItem('bb_stylists');
+  if (raw) { try { return JSON.parse(raw); } catch(e){} }
+  const def = defaultStylests();
+  localStorage.setItem('bb_stylists', JSON.stringify(def));
+  return def;
+}
+
+function getPayCfg() {
+  try { return JSON.parse(localStorage.getItem('bb_payment_config') || '{}'); } catch(e){ return {}; }
+}
+
+function defaultRecruiters() {
+  const exp30 = new Date(Date.now() + 30*86400000).toISOString();
+  return [
+    { id:'REC-001', salon_name:'Style King Salon', phone:'9876543000', pin:'123456',
+      location:'Hyderabad', franchise:'yes', address:'Banjara Hills, Hyderabad',
+      plan:'premium', plan_expiry:exp30, plan_requested:false, created_at:'2024-10-01T09:00:00Z' },
+    { id:'REC-002', salon_name:'Trim Masters', phone:'9876543001', pin:'123456',
+      location:'Bangalore', franchise:'no', address:'Koramangala, Bangalore',
+      plan:'basic', plan_expiry:null, plan_requested:false, created_at:'2024-10-05T11:00:00Z' },
+  ];
+}
+
+function defaultStylests() {
+  return [
+    { id:'BB-2024-0001', name:'Rahul Sharma', phone:'9876543210', age:24,
+      home_location:'Guntur, AP', experience:'2-3 years', max_billing:55000,
+      prev_fixed:15000, prev_incentive:10, exp_fixed:20000, exp_incentive:12, exp_food:800, exp_room:'not_provided',
+      instagram:'https://instagram.com/rahul.cuts', available:true, join_timeline:'immediate',
+      ref_name:'Suresh Kumar',
+      selfie_url:'https://picsum.photos/seed/rahul1/200/200',
+      full_photo_urls:['https://picsum.photos/seed/rahul2/300/400'],
+      work_photo_urls:['https://picsum.photos/seed/rahulw1/300/300','https://picsum.photos/seed/rahulw2/300/300'],
+      no_gutka:true,no_weed:true,no_alcohol:true,wear_uniform:true,stay_neat:true,
+      follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
+      performance_target:true,follow_metrics:true,status:'verified' },
+    { id:'BB-2024-0002', name:'Aakash Reddy', phone:'9876543211', age:27,
+      home_location:'Vijayawada, AP', experience:'3-5 years', max_billing:72000,
+      prev_fixed:18000, prev_incentive:12, exp_fixed:25000, exp_incentive:15, exp_food:1000, exp_room:'required',
+      instagram:'https://instagram.com/aakash.styles', available:true, join_timeline:'1month',
+      ref_name:'Ravi Teja',
+      selfie_url:'https://picsum.photos/seed/aakash1/200/200',
+      full_photo_urls:['https://picsum.photos/seed/aakash2/300/400'],
+      work_photo_urls:['https://picsum.photos/seed/aakashw1/300/300','https://picsum.photos/seed/aakashw2/300/300','https://picsum.photos/seed/aakashw3/300/300'],
+      no_gutka:true,no_weed:true,no_alcohol:true,wear_uniform:true,stay_neat:true,
+      follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
+      performance_target:true,follow_metrics:true,status:'verified' },
+    { id:'BB-2024-0003', name:'Pradeep Singh', phone:'9876543212', age:22,
+      home_location:'Delhi', experience:'1-2 years', max_billing:38000,
+      prev_fixed:12000, prev_incentive:8, exp_fixed:16000, exp_incentive:10, exp_food:500, exp_room:'required',
+      instagram:'', available:false, join_timeline:'2months', ref_name:'',
+      selfie_url:'https://picsum.photos/seed/pradeep1/200/200',
+      full_photo_urls:[], work_photo_urls:['https://picsum.photos/seed/pradeepw1/300/300'],
+      no_gutka:true,no_weed:false,no_alcohol:true,wear_uniform:true,stay_neat:true,
+      follow_timing:false,respect_customers:true,keep_clean:true,no_nuisance:true,
+      performance_target:true,follow_metrics:true,status:'pending' },
+    { id:'BB-2024-0004', name:'Kiran Kumar', phone:'9876543213', age:30,
+      home_location:'Mumbai', experience:'5+ years', max_billing:95000,
+      prev_fixed:25000, prev_incentive:15, exp_fixed:30000, exp_incentive:18, exp_food:1200, exp_room:'required',
+      instagram:'https://instagram.com/kiran.mastercuts', available:true, join_timeline:'immediate',
+      ref_name:'Master Ramesh',
+      selfie_url:'https://picsum.photos/seed/kiran1/200/200',
+      full_photo_urls:['https://picsum.photos/seed/kiran2/300/400'],
+      work_photo_urls:['https://picsum.photos/seed/kiranw1/300/300','https://picsum.photos/seed/kiranw2/300/300','https://picsum.photos/seed/kiranw3/300/300','https://picsum.photos/seed/kiranw4/300/300'],
+      no_gutka:true,no_weed:true,no_alcohol:true,wear_uniform:true,stay_neat:true,
+      follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
+      performance_target:true,follow_metrics:true,status:'verified' },
+    { id:'BB-2024-0005', name:'Venkat Rao', phone:'9876543214', age:26,
+      home_location:'Chennai', experience:'2-3 years', max_billing:48000,
+      prev_fixed:14000, prev_incentive:10, exp_fixed:18000, exp_incentive:12, exp_food:600, exp_room:'not_required',
+      instagram:'', available:true, join_timeline:'1month', ref_name:'',
+      selfie_url:'https://picsum.photos/seed/venkat1/200/200',
+      full_photo_urls:[], work_photo_urls:['https://picsum.photos/seed/venkatw1/300/300'],
+      no_gutka:true,no_weed:true,no_alcohol:false,wear_uniform:true,stay_neat:true,
+      follow_timing:true,respect_customers:true,keep_clean:true,no_nuisance:true,
+      performance_target:true,follow_metrics:true,status:'pending' },
+  ];
+}
+
+// ─────────────────────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────────────────────
+let CR  = null;   // current recruiter
+let RCA = {};     // { stylistId: 'shortlisted'|'rejected' }
+let curDetailId = null;
+let curPayMethod = null;
+
+function loadRCA() {
+  try { RCA = JSON.parse(localStorage.getItem('bb_rca_' + CR.id) || '{}'); } catch(e){ RCA = {}; }
+}
+function saveRCA() { localStorage.setItem('bb_rca_' + CR.id, JSON.stringify(RCA)); }
+
+function rupee(v) { return v && !isNaN(v) ? '₹' + Number(v).toLocaleString('en-IN') : '—'; }
+
+// ─────────────────────────────────────────────────────────────
+//  UI HELPERS
+// ─────────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg, type='ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'on ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.className = '', 3500);
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function switchTab(btn) {
+  const bar  = btn.closest('.tab-bar');
+  const pane = btn.dataset.pane;
+  bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  // find sibling panes — all tab-panes inside same parent element
+  const parent = bar.nextElementSibling?.parentElement || bar.parentElement;
+  parent.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('on'));
+  document.getElementById(pane)?.classList.add('on');
+}
+
+function openMod(id)  { document.getElementById(id).classList.add('on'); }
+function closeMod(id) { document.getElementById(id).classList.remove('on'); }
+
 function openLB(src, cap) {
-  const lb = document.getElementById('lightbox');
   document.getElementById('lb-img').src = src;
   document.getElementById('lb-cap').textContent = cap || '';
-  lb.style.display = 'flex';
-  lb.style.pointerEvents = 'all';
-  lb.classList.add('open');
+  document.getElementById('lb').classList.add('on');
 }
-function closeLightbox() {
-  const lb = document.getElementById('lightbox');
-  lb.style.display = 'none';
-  lb.style.pointerEvents = 'none';
-  lb.classList.remove('open');
-}
+function closeLB() { document.getElementById('lb').classList.remove('on'); }
 
-// ── VIEW HELPERS ──────────────────────────────────────────────
-function show(id) {
-  ['view-login','view-register','view-dashboard'].forEach(v =>
-    document.getElementById(v).style.display = v === id ? 'block' : 'none');
-}
+// ─────────────────────────────────────────────────────────────
+//  BOOT
+// ─────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+  // Force-ensure recruiters are in localStorage right now
+  getRecruiters();
 
-// ── BOOT ─────────────────────────────────────────────────────
-window.addEventListener('load', () => {
-  ensureDemoRecruiters(); // always seed phone+pin on demo data
-  const saved = getRecruiterSession();
+  const saved = sessionStorage.getItem('bb_recruiter');
   if (saved) {
-    // Re-read from storage so we get latest plan/phone data
-    const latest = getRecruiters().find(r => r.id === saved.id);
-    CR = latest || saved;
-    loadRCA(); showDash();
-  } else {
-    show('view-login');
+    try {
+      const s = JSON.parse(saved);
+      const fresh = getRecruiters().find(r => r.id === s.id);
+      if (fresh) { CR = fresh; loadRCA(); showDash(); return; }
+    } catch(e){}
   }
+  showPage('pg-login');
 });
 
-// ── AUTH ─────────────────────────────────────────────────────
-
-function ensureDemoRecruiters() {
-  const recs = getRecruiters();
-  let changed = false;
-  recs.forEach(r => {
-    if (!r.phone) { r.phone = r.id === 'REC-001' ? '9876543000' : '9876543001'; changed = true; }
-    if (!r.pin)   { r.pin = '123456'; changed = true; }
-    if (r.plan_requested === undefined) { r.plan_requested = false; changed = true; }
-  });
-  if (changed) saveRecruiters(recs);
-  return recs;
-}
-
+// ─────────────────────────────────────────────────────────────
+//  AUTH
+// ─────────────────────────────────────────────────────────────
 function doLogin() {
-  const phone = (document.getElementById('l_phone').value || '').trim();
-  const pin   = (document.getElementById('l_pin').value   || '').trim();
+  const phone = document.getElementById('l_phone').value.replace(/\D/g,'').trim();
+  const pin   = document.getElementById('l_pin').value.replace(/\D/g,'').trim();
 
-  if (phone.length < 10) {
-    showToast('Enter 10-digit phone number / फ़ोन नंबर डालें', 'error'); return;
-  }
-  if (pin.length < 4) {
-    showToast('Enter your PIN / PIN डालें', 'error'); return;
-  }
+  if (phone.length < 10) { toast('Enter 10-digit phone number', 'er'); return; }
+  if (pin.length < 4)    { toast('Enter your PIN', 'er'); return; }
 
-  const recs = ensureDemoRecruiters();
-  const rec  = recs.find(r => String(r.phone).trim() === phone && String(r.pin).trim() === pin);
+  const recs = getRecruiters();
+  const rec  = recs.find(r => String(r.phone) === phone && String(r.pin) === pin);
 
   if (!rec) {
-    showToast('Wrong phone or PIN. Demo: 9876543000 / 123456', 'error');
+    toast('Wrong phone or PIN — Demo: 9876543000 / 123456', 'er');
     return;
   }
   CR = rec;
-  setRecruiterSession(rec);
+  sessionStorage.setItem('bb_recruiter', JSON.stringify(rec));
   loadRCA();
   showDash();
 }
 
 function doRegister() {
-  const salon = (document.getElementById('reg_salon').value || '').trim();
-  const phone = (document.getElementById('reg_phone').value || '').trim();
-  const loc   = (document.getElementById('reg_loc').value   || '').trim();
-  const pin   = (document.getElementById('reg_pin').value   || '').trim();
+  const salon = document.getElementById('r_salon').value.trim();
+  const phone = document.getElementById('r_phone').value.replace(/\D/g,'').trim();
+  const loc   = document.getElementById('r_loc').value.trim();
+  const pin   = document.getElementById('r_pin').value.replace(/\D/g,'').trim();
 
-  if (!salon)            { showToast('Enter salon name', 'error'); return; }
-  if (phone.length < 10) { showToast('Enter 10-digit phone number', 'error'); return; }
-  if (pin.length < 6)    { showToast('PIN must be 6 digits', 'error'); return; }
+  if (!salon)            { toast('Enter salon name', 'er'); return; }
+  if (phone.length < 10) { toast('Enter 10-digit phone number', 'er'); return; }
+  if (!loc)              { toast('Enter city / location', 'er'); return; }
+  if (pin.length < 6)    { toast('PIN must be exactly 6 digits', 'er'); return; }
 
-  const recs = ensureDemoRecruiters();
-  if (recs.find(r => String(r.phone).trim() === phone)) {
-    showToast('Phone already registered / पहले से पंजीकृत है', 'error'); return;
-  }
+  const recs = getRecruiters();
+  if (recs.find(r => String(r.phone) === phone)) { toast('Phone already registered', 'er'); return; }
+
   const nr = {
     id: 'REC-' + Date.now(), salon_name: salon, phone, pin,
-    location: loc, address: (document.getElementById('reg_addr').value || '').trim(),
-    franchise: document.getElementById('reg_franchise').value,
+    location: loc, address: document.getElementById('r_addr').value.trim(),
+    franchise: document.getElementById('r_fran').value,
     plan: 'basic', plan_expiry: null, plan_requested: false,
     created_at: new Date().toISOString()
   };
-  recs.push(nr); saveRecruiters(recs);
-  CR = nr; setRecruiterSession(nr); loadRCA();
-  showToast('Account created! Welcome 🎉', 'success'); showDash();
+  recs.push(nr);
+  saveRecruiters(recs);
+  CR = nr;
+  sessionStorage.setItem('bb_recruiter', JSON.stringify(nr));
+  loadRCA();
+  toast('Account created! Welcome 🎉', 'ok');
+  showDash();
 }
 
 function doLogout() {
-  clearRecruiterSession(); CR = null; RCA = {};
-  ['hdr-name','hdr-plan','btn-logout'].forEach(id => document.getElementById(id).style.display = 'none');
-  show('view-login');
+  sessionStorage.removeItem('bb_recruiter');
+  CR = null; RCA = {};
+  document.getElementById('hdr-salon').style.display = 'none';
+  document.getElementById('hdr-plan').style.display  = 'none';
+  document.getElementById('btn-logout').style.display = 'none';
+  // Clear inputs
+  ['l_phone','l_pin'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  showPage('pg-login');
 }
 
-// ── RECRUITER CANDIDATE ACTIONS ───────────────────────────────
-function loadRCA() {
-  try { RCA = JSON.parse(localStorage.getItem('bb_rca_' + CR.id) || '{}'); } catch { RCA = {}; }
-}
-function saveRCA() { localStorage.setItem('bb_rca_' + CR.id, JSON.stringify(RCA)); }
-
-function setAction(sid, action) {
-  if (RCA[sid] === action) delete RCA[sid]; else RCA[sid] = action;
-  saveRCA(); refreshAll();
-  if (detailId === sid) rebuildModalFooter(sid);
-}
-
-// ── DASHBOARD ────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+//  DASHBOARD
+// ─────────────────────────────────────────────────────────────
 function showDash() {
-  show('view-dashboard');
-  document.getElementById('hdr-name').textContent = CR.salon_name;
-  document.getElementById('hdr-name').style.display = 'inline';
-  const pe = document.getElementById('hdr-plan');
-  pe.innerHTML = CR.plan === 'premium'
-    ? `<span class="badge badge-premium">⭐ PREMIUM</span>`
-    : `<span class="badge badge-basic">BASIC</span>`;
-  pe.style.display = 'inline'; pe.style.marginLeft = '6px';
-  document.getElementById('btn-logout').style.display = 'inline-flex';
-  refreshAll();
-}
+  // Header
+  document.getElementById('hdr-salon').textContent = CR.salon_name;
+  document.getElementById('hdr-salon').style.display = 'inline';
+  document.getElementById('hdr-plan').innerHTML = CR.plan === 'premium'
+    ? '<span class="badge badge-pm">⭐ PREMIUM</span>'
+    : '<span class="badge badge-bs">BASIC</span>';
+  document.getElementById('hdr-plan').style.display = 'inline';
+  document.getElementById('btn-logout').style.display = 'inline-block';
 
-function refreshAll() { renderAll(); renderShortlisted(); renderRejected(); updateCounts(); }
+  showPage('pg-dash');
+  renderAll(); renderSL(); renderRJ(); updateCounts();
+}
 
 function updateCounts() {
   const all = getStylests().filter(s => s.status !== 'rejected');
@@ -638,508 +655,386 @@ function updateCounts() {
   document.getElementById('cnt-rj').textContent  = all.filter(s => RCA[s.id] === 'rejected').length;
 }
 
-// ── FILTER ────────────────────────────────────────────────────
-function applyFilters(list, prefix) {
-  const search  = document.getElementById(prefix + '_search')?.value.toLowerCase() || '';
-  const exp     = document.getElementById(prefix + '_exp')?.value || '';
-  const avail   = document.getElementById(prefix + '_avail')?.value || '';
-  const join    = document.getElementById(prefix + '_join')?.value || '';
-  const billing = document.getElementById(prefix + '_billing')?.value || '';
-  if (search)  list = list.filter(s => s.name.toLowerCase().includes(search) || (s.home_location||'').toLowerCase().includes(search));
-  if (exp)     list = list.filter(s => s.experience === exp);
-  if (avail)   list = list.filter(s => String(s.available) === avail);
-  if (join)    list = list.filter(s => s.join_timeline === join);
-  if (billing) list = list.filter(s => Number(s.max_billing) >= Number(billing));
+function setAction(sid, action) {
+  if (RCA[sid] === action) delete RCA[sid]; else RCA[sid] = action;
+  saveRCA();
+  renderAll(); renderSL(); renderRJ(); updateCounts();
+  if (curDetailId === sid) rebuildModalFoot(sid);
+}
+
+// ─────────────────────────────────────────────────────────────
+//  RENDER GRIDS
+// ─────────────────────────────────────────────────────────────
+function filter(list, sid, aid, jid, eid) {
+  const s = (document.getElementById(sid)?.value || '').toLowerCase();
+  const a = document.getElementById(aid)?.value || '';
+  const j = jid ? (document.getElementById(jid)?.value || '') : '';
+  const e = eid ? (document.getElementById(eid)?.value || '') : '';
+  if (s) list = list.filter(x => x.name.toLowerCase().includes(s) || (x.home_location||'').toLowerCase().includes(s));
+  if (a) list = list.filter(x => String(x.available) === a);
+  if (j) list = list.filter(x => x.join_timeline === j);
+  if (e) list = list.filter(x => x.experience === e);
   return list;
 }
 
 function renderAll() {
-  const base = getStylests().filter(s => s.status !== 'rejected' && RCA[s.id] !== 'rejected');
-  render(applyFilters(base, 'f'), 'grid-all', 'all');
+  let list = getStylests().filter(s => s.status !== 'rejected' && RCA[s.id] !== 'rejected');
+  list = filter(list, 'fa_s', 'fa_a', 'fa_j', 'fa_e');
+  renderGrid(list, 'grid-all', 'No candidates found', 'फ़िल्टर बदलें या बाद में देखें');
 }
-function renderShortlisted() {
-  const base = getStylests().filter(s => s.status !== 'rejected' && RCA[s.id] === 'shortlisted');
-  render(applyFilters(base, 'sl'), 'grid-sl', 'sl');
+function renderSL() {
+  let list = getStylests().filter(s => s.status !== 'rejected' && RCA[s.id] === 'shortlisted');
+  list = filter(list, 'fs_s', 'fs_a', null, null);
+  renderGrid(list, 'grid-sl', 'No shortlisted candidates', '★ बटन दबाकर शॉर्टलिस्ट करें');
 }
-function renderRejected() {
-  const base = getStylests().filter(s => RCA[s.id] === 'rejected');
-  render(applyFilters(base, 'rj'), 'grid-rj', 'rj');
+function renderRJ() {
+  let list = getStylests().filter(s => RCA[s.id] === 'rejected');
+  list = filter(list, 'fr_s', null, null, null);
+  renderGrid(list, 'grid-rj', 'No rejected candidates', 'कोई अस्वीकृत उम्मीदवार नहीं');
 }
 
-// ── CARD BUILDER ──────────────────────────────────────────────
-function render(list, gridId, mode) {
-  const grid  = document.getElementById(gridId);
+function renderGrid(list, gridId, emptyH, emptyP) {
+  const grid   = document.getElementById(gridId);
   const isPrem = CR?.plan === 'premium';
   if (!list.length) {
-    const msgs = {
-      all: ['🔍','No candidates found','फ़िल्टर बदलें या बाद में दोबारा देखें'],
-      sl:  ['★','No shortlisted candidates','किसी को शॉर्टलिस्ट नहीं किया — use ★ button'],
-      rj:  ['✗','No rejected candidates','कोई अस्वीकृत उम्मीदवार नहीं'],
-    };
-    const [ic,h,p] = msgs[mode] || msgs.all;
-    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">${ic}</div><h3>${h}</h3><p>${p}</p></div>`;
+    grid.innerHTML = `<div class="empty"><div class="empty-ic">🔍</div><h3>${emptyH}</h3><p>${emptyP}</p></div>`;
     return;
   }
   grid.innerHTML = list.map(s => buildCard(s, isPrem)).join('');
 }
 
 function buildCard(s, isPrem) {
-  const sl  = RCA[s.id] === 'shortlisted';
-  const rj  = RCA[s.id] === 'rejected';
-
-  // ── Photos strip ──
+  const sl = RCA[s.id] === 'shortlisted';
+  const rj = RCA[s.id] === 'rejected';
   const selfie = s.selfie_url || '';
-  const fp     = s.full_photo_urls || [];
-  const wp     = s.work_photo_urls || [];
+  const fp = s.full_photo_urls || [];
+  const wp = s.work_photo_urls || [];
 
-  let pStrip = `<span class="photos-label">Photos</span>`;
-  // Selfie
-  pStrip += selfie
-    ? `<img class="photo-thumb" src="${selfie}" title="Selfie" onclick="event.stopPropagation();openLB('${selfie}','Selfie — ${s.name}')">`
-    : `<div class="photo-placeholder" title="No selfie">🤳</div>`;
-  // Full photos (2)
-  if (fp.length) {
-    fp.slice(0,2).forEach((u,i) => {
-      pStrip += `<img class="photo-thumb" src="${u}" title="Full photo" onclick="event.stopPropagation();openLB('${u}','Full Photo ${i+1} — ${s.name}')">`;
-    });
-  } else {
-    pStrip += `<div class="photo-placeholder" title="No full photos">📷</div>`;
-  }
-  // Work photos (3)
-  if (wp.length) {
-    wp.slice(0,3).forEach((u,i) => {
-      pStrip += `<img class="photo-thumb" src="${u}" title="Work photo" onclick="event.stopPropagation();openLB('${u}','Work ${i+1} — ${s.name}')">`;
-    });
-    if (wp.length > 3) {
-      pStrip += `<div class="photo-placeholder" style="cursor:pointer;font-size:0.8rem;font-weight:800;color:var(--green-700);" onclick="viewCand('${s.id}')">+${wp.length-3}<br><span style="font-size:0.6rem;">more</span></div>`;
-    }
-  } else {
-    pStrip += `<div class="photo-placeholder" title="No work photos">💈</div>`;
-  }
+  // Photos strip
+  let ps = `<span class="ptlbl">Photos</span>`;
+  ps += selfie
+    ? `<img class="pthumb" src="${selfie}" onclick="openLB('${selfie}','Selfie — ${s.name}')" title="Selfie">`
+    : `<div class="pph">🤳</div>`;
+  (fp.length ? fp.slice(0,2) : []).forEach((u,i) =>
+    ps += `<img class="pthumb" src="${u}" onclick="openLB('${u}','Full ${i+1} — ${s.name}')" title="Full photo">`
+  );
+  if (!fp.length) ps += `<div class="pph">📷</div>`;
+  (wp.length ? wp.slice(0,3) : []).forEach((u,i) =>
+    ps += `<img class="pthumb" src="${u}" onclick="openLB('${u}','Work ${i+1} — ${s.name}')" title="Work photo">`
+  );
+  if (!wp.length) ps += `<div class="pph">💈</div>`;
+  if (wp.length > 3) ps += `<div class="pph" style="cursor:pointer;font-size:.75rem;font-weight:800;color:var(--g7)" onclick="viewCand('${s.id}')">+${wp.length-3}<br>more</div>`;
 
-  // ── Sensitive rows ──
-  const phoneRow = `<div class="cand-row"><span class="cand-key">Phone / फ़ोन</span><span class="cand-val">${isPrem ? `<a href="tel:${s.phone}" style="color:var(--green-700);font-weight:700;">${s.phone}</a>` : `<span class="locked">98XXXXXXXX</span>`}</span></div>`;
-  const aadharRow = `<div class="cand-row"><span class="cand-key">Aadhaar</span><span class="cand-val">${isPrem ? `<span style="color:var(--success);font-weight:700;font-size:0.72rem;">✅ On File</span>` : `<span class="locked">🔒 Hidden</span>`}</span></div>`;
-  const instaRow = s.instagram
-    ? `<div class="cand-row"><span class="cand-key">Instagram</span><span class="cand-val">${isPrem ? `<a href="${s.instagram}" target="_blank" style="color:var(--green-700);font-weight:600;">View ↗</a>` : `<span class="locked">🔒 Hidden</span>`}</span></div>`
-    : '';
-  const premLock = !isPrem
-    ? `<div class="premium-cta-strip">🔒 Phone, Aadhaar &amp; Instagram require Premium<small>प्रीमियम में अपग्रेड करें — ₹1,000/month</small></div>`
-    : '';
+  const phoneVal = isPrem
+    ? `<a href="tel:${s.phone}" style="color:var(--g7);font-weight:700">${s.phone}</a>`
+    : `<span class="locked">98XXXXXXXX</span>`;
+  const aadharVal = isPrem ? `<span style="color:var(--ok);font-weight:700;font-size:.7rem">✅ On File</span>` : `<span class="locked">🔒 Hidden</span>`;
+  const instaVal  = isPrem && s.instagram
+    ? `<a href="${s.instagram}" target="_blank" style="color:var(--g7);font-weight:600">View ↗</a>`
+    : (isPrem ? '—' : `<span class="locked">🔒 Hidden</span>`);
 
-  return `
-  <div class="cand-card anim">
-    <div class="cand-top">
-      <div class="cand-avatar" onclick="viewCand('${s.id}')">
+  const slStyle = sl ? 'background:#D1FAE5;color:#065F46;border-color:#6EE7B7' : 'background:var(--bg2);color:#3A5A40;border-color:var(--bd)';
+  const rjStyle = rj ? 'background:#FEE2E2;color:#991B1B;border-color:#FCA5A5' : 'background:var(--bg2);color:#3A5A40;border-color:var(--bd)';
+
+  return `<div class="ccard">
+    <div class="ctop">
+      <div class="cav" onclick="viewCand('${s.id}')">
         ${selfie ? `<img src="${selfie}" alt="${s.name}">` : s.name.charAt(0).toUpperCase()}
       </div>
-      <div style="flex:1;min-width:0;">
-        <div class="cand-name">${s.name}</div>
-        <div class="cand-meta">📍 ${s.home_location||'—'} · ${s.experience||'—'}</div>
-        <div class="cand-badges">
-          <span class="badge ${s.available?'badge-available':'badge-busy'}">${s.available?'✅ Available':'⏳ Not Available'}</span>
-          <span class="badge ${s.status==='verified'?'badge-verified':'badge-pending'}">${s.status==='verified'?'✓ Verified':'Pending'}</span>
-          ${sl  ? `<span class="badge badge-sl">★ Shortlisted</span>` : ''}
-          ${rj  ? `<span class="badge badge-rej">✗ Rejected</span>` : ''}
+      <div style="flex:1;min-width:0">
+        <div class="cname">${s.name}</div>
+        <div class="cmeta">📍 ${s.home_location||'—'} · ${s.experience||'—'}</div>
+        <div class="cbadges">
+          <span class="badge ${s.available?'badge-av':'badge-na'}">${s.available?'✅ Available':'⏳ Not Available'}</span>
+          <span class="badge ${s.status==='verified'?'badge-vf':'badge-pd'}">${s.status==='verified'?'✓ Verified':'Pending'}</span>
+          ${sl?'<span class="badge badge-sl">★ Shortlisted</span>':''}
+          ${rj?'<span class="badge badge-rj">✗ Rejected</span>':''}
         </div>
       </div>
     </div>
-
-    <div class="photos-strip">${pStrip}</div>
-
-    <div class="cand-body">
-      <div class="cand-row"><span class="cand-key">Age</span><span class="cand-val">${s.age||'—'} yrs</span></div>
-      <div class="cand-row"><span class="cand-key">Experience</span><span class="cand-val">${s.experience||'—'}</span></div>
-      <div class="cand-row"><span class="cand-key">Max Billing</span><span class="cand-val">${rupee(s.max_billing)}/mo</span></div>
-      <div class="cand-row"><span class="cand-key">Expected Salary</span><span class="cand-val">${rupee(s.exp_fixed)}/mo + ${s.exp_incentive||'—'}%</span></div>
-      <div class="cand-row"><span class="cand-key">Room / Food Exp.</span><span class="cand-val">${s.exp_room||'—'} / ${rupee(s.exp_food)}</span></div>
-      <div class="cand-row"><span class="cand-key">Join In</span><span class="cand-val">${s.join_timeline||'—'}</span></div>
-      ${phoneRow}${aadharRow}${instaRow}
+    <div class="pstrip">${ps}</div>
+    <div class="cbody">
+      <div class="crow"><span class="ck">Age</span><span class="cv">${s.age||'—'} yrs</span></div>
+      <div class="crow"><span class="ck">Experience</span><span class="cv">${s.experience||'—'}</span></div>
+      <div class="crow"><span class="ck">Max Billing</span><span class="cv">${rupee(s.max_billing)}/mo</span></div>
+      <div class="crow"><span class="ck">Expected Salary</span><span class="cv">${rupee(s.exp_fixed)}/mo + ${s.exp_incentive||'—'}%</span></div>
+      <div class="crow"><span class="ck">Join In</span><span class="cv">${s.join_timeline||'—'}</span></div>
+      <div class="crow"><span class="ck">Phone</span><span class="cv">${phoneVal}</span></div>
+      <div class="crow"><span class="ck">Aadhaar</span><span class="cv">${aadharVal}</span></div>
+      ${s.instagram!==undefined?`<div class="crow"><span class="ck">Instagram</span><span class="cv">${instaVal}</span></div>`:''}
     </div>
-
-    ${premLock}
-
-    <div class="cand-actions">
-      <button class="btn btn-primary btn-sm" style="flex:1;" onclick="viewCand('${s.id}')">Full Profile</button>
-      <button class="btn btn-sm" style="background:${sl?'#D1FAE5':'var(--bg2)'};color:${sl?'#065F46':'var(--text-mid)'};border:1.5px solid ${sl?'#6EE7B7':'var(--border)'};font-weight:800;"
-        onclick="setAction('${s.id}','shortlisted')">
-        ${sl ? '★ SL' : '☆ SL'}
-      </button>
-      <button class="btn btn-sm" style="background:${rj?'#FEE2E2':'var(--bg2)'};color:${rj?'#991B1B':'var(--text-mid)'};border:1.5px solid ${rj?'#FCA5A5':'var(--border)'};font-weight:800;"
-        onclick="setAction('${s.id}','rejected')">
-        ✗
-      </button>
+    ${!isPrem?`<div class="pcta">🔒 Phone, Aadhaar &amp; Instagram require Premium<small>प्रीमियम अकाउंट लें — ₹1,000/month</small></div>`:''}
+    <div class="cact">
+      <button class="btn btn-g btn-sm" style="flex:1" onclick="viewCand('${s.id}')">Full Profile</button>
+      <button class="act-btn" style="${slStyle}" onclick="setAction('${s.id}','shortlisted')">${sl?'★ SL':'☆ SL'}</button>
+      <button class="act-btn" style="${rjStyle}" onclick="setAction('${s.id}','rejected')">✗</button>
     </div>
   </div>`;
 }
 
-// ── DETAIL MODAL ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+//  DETAIL MODAL
+// ─────────────────────────────────────────────────────────────
 function viewCand(id) {
-  detailId = id;
-  const s     = getStylests().find(h => h.id === id);
+  curDetailId = id;
+  const s = getStylests().find(h => h.id === id);
   if (!s) return;
   const isPrem = CR?.plan === 'premium';
   const selfie = s.selfie_url || '';
-  const fp     = s.full_photo_urls || [];
-  const wp     = s.work_photo_urls || [];
-
-  document.getElementById('cm-title').textContent = `${s.name} — ${s.id}`;
-
-  // Photo gallery
+  const fp = s.full_photo_urls || [];
+  const wp = s.work_photo_urls || [];
   const allPh = [
     ...(selfie ? [{u:selfie,l:'Selfie'}] : []),
-    ...fp.map((u,i)=>({u,l:`Full ${i+1}`})),
-    ...wp.map((u,i)=>({u,l:`Work ${i+1}`})),
+    ...fp.map((u,i) => ({u,l:`Full ${i+1}`})),
+    ...wp.map((u,i) => ({u,l:`Work ${i+1}`})),
   ];
-  const gallery = allPh.length
-    ? `<div style="margin-bottom:14px;">
-        <div style="font-size:0.65rem;font-weight:800;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Photos / फ़ोटो</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          ${allPh.map(p=>`<div style="text-align:center;">
-            <img src="${p.u}" onclick="openLB('${p.u}','${p.l} — ${s.name}')"
-              style="width:72px;height:72px;border-radius:8px;object-fit:cover;border:2px solid var(--border);cursor:pointer;" title="${p.l}">
-            <div style="font-size:0.58rem;color:var(--text-light);margin-top:2px;">${p.l}</div>
-          </div>`).join('')}
-        </div>
-      </div>` : '';
 
-  document.getElementById('cm-body').innerHTML = `
+  document.getElementById('mod-cand-title').textContent = `${s.name} — ${s.id}`;
+
+  const gallery = allPh.length ? `
+    <div style="margin-bottom:14px">
+      <div style="font-size:.63rem;font-weight:800;color:var(--tl);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px">Photos</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${allPh.map(p=>`<div style="text-align:center">
+          <img src="${p.u}" onclick="openLB('${p.u}','${p.l} — ${s.name}')"
+            style="width:68px;height:68px;border-radius:8px;object-fit:cover;border:2px solid var(--bd);cursor:pointer">
+          <div style="font-size:.58rem;color:var(--tl);margin-top:2px">${p.l}</div>
+        </div>`).join('')}
+      </div>
+    </div>` : '';
+
+  const rows = [
+    ['Name', s.name],
+    ['Phone', isPrem ? `<a href="tel:${s.phone}" style="color:var(--g7);font-weight:700">${s.phone}</a>` : '🔒 Premium Only'],
+    ['Age', (s.age||'—') + ' yrs'],
+    ['Home Location', s.home_location||'—'],
+    ['Aadhaar', isPrem ? '✅ Verified (on file)' : '🔒 Premium Only'],
+    ['Instagram', isPrem ? (s.instagram?`<a href="${s.instagram}" target="_blank" style="color:var(--g7)">View ↗</a>`:'—') : '🔒 Premium Only'],
+    ['Experience', s.experience||'—'],
+    ['Max Billing', rupee(s.max_billing)+'/mo'],
+    ['Expected Fixed', rupee(s.exp_fixed)+'/mo'],
+    ['Expected Incentive', (s.exp_incentive||'—')+'%'],
+    ['Food Allowance Exp.', rupee(s.exp_food)],
+    ['Room', s.exp_room||'—'],
+    ['Available', s.available?'✅ Yes':'⏳ No'],
+    ['Join Timeline', s.join_timeline||'—'],
+    ['Reference', s.ref_name||'—'],
+  ];
+
+  document.getElementById('mod-cand-body').innerHTML = `
     ${gallery}
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-      ${[
-        ['Name', s.name],
-        ['Phone', isPrem ? `<a href="tel:${s.phone}" style="color:var(--green-700);font-weight:700;">${s.phone}</a>` : '🔒 Premium Only'],
-        ['Age', (s.age||'—')+' yrs'],
-        ['Home Location', s.home_location||'—'],
-        ['Aadhaar', isPrem ? '✅ Verified (on file)' : '🔒 Premium Only'],
-        ['Instagram', isPrem ? (s.instagram?`<a href="${s.instagram}" target="_blank" style="color:var(--green-700);">View ↗</a>`:'—') : '🔒 Premium Only'],
-        ['Experience', s.experience||'—'],
-        ['Max Billing', rupee(s.max_billing)+'/mo'],
-        ['Expected Fixed', rupee(s.exp_fixed)+'/mo'],
-        ['Expected Incentive', (s.exp_incentive||'—')+'%'],
-        ['Room Required', s.exp_room||'—'],
-        ['Food Allowance Exp.', rupee(s.exp_food)],
-        ['Prev Fixed', rupee(s.prev_fixed)+'/mo'],
-        ['Prev Incentive', (s.prev_incentive||'—')+'%'],
-        ['Prev Food Allowance', rupee(s.prev_pfood)],
-        ['Available', s.available?'✅ Yes':'⏳ No'],
-        ['Join Timeline', s.join_timeline||'—'],
-        ['Prev Location', s.prev_location||'—'],
-        ['Reference', s.ref_name||'—'],
-        ['Status', s.status],
-      ].map(([k,v])=>`<div style="background:var(--bg);padding:8px 10px;border-radius:6px;font-size:0.78rem;">
-        <div style="font-size:0.61rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">${k}</div>
-        <div style="font-weight:600;margin-top:2px;">${v}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px">
+      ${rows.map(([k,v])=>`<div style="background:var(--bg);padding:7px 9px;border-radius:6px;font-size:.77rem">
+        <div style="font-size:.61rem;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:.4px">${k}</div>
+        <div style="font-weight:600;margin-top:1px">${v}</div>
       </div>`).join('')}
     </div>
-    <div style="background:var(--bg2);border-radius:var(--radius-sm);padding:10px;font-size:0.75rem;margin-bottom:${isPrem?0:10}px;">
-      <strong>Commitments:</strong>&nbsp;
-      ${s.no_gutka?'✅ No Gutka':'❌ Gutka'}&nbsp;
-      ${s.no_weed?'✅ No Weed':'❌ Weed'}&nbsp;
-      ${s.no_alcohol?'✅ No Alcohol':'❌ Alcohol'}&nbsp;
-      ${s.performance_target?'✅ ₹60k Target':'❌ No Target'}&nbsp;
-      ${[s.wear_uniform,s.stay_neat,s.follow_timing,s.respect_customers,s.keep_clean,s.no_nuisance].every(Boolean)?'✅ All Rules':'⚠️ Partial Rules'}
+    <div style="background:var(--bg2);border-radius:6px;padding:9px;font-size:.72rem;margin-bottom:${isPrem?0:10}px">
+      <strong>Commitments:</strong> &nbsp;
+      ${s.no_gutka?'✅ No Gutka':'❌ Gutka'} &nbsp;
+      ${s.no_weed?'✅ No Weed':'❌ Weed'} &nbsp;
+      ${s.no_alcohol?'✅ No Alcohol':'❌ Alcohol'} &nbsp;
+      ${s.performance_target?'✅ ₹60k Target':'❌ No Target'}
     </div>
-    ${!isPrem?`<div style="background:var(--yellow-50);border:1.5px dashed var(--yellow);border-radius:var(--radius-sm);padding:11px;text-align:center;">
-      <div style="font-weight:800;color:var(--green-800);">🔒 Upgrade for full contact access</div>
-      <div style="font-family:var(--font-hindi);font-size:0.7rem;color:var(--text-light);margin-top:3px;">फ़ोन, आधार और इंस्टाग्राम के लिए प्रीमियम लें</div>
-      <button class="btn btn-yellow btn-sm" style="margin-top:10px;" onclick="closeModal('cand-modal');openUpgrade()">⭐ Upgrade — ₹1,000/month</button>
+    ${!isPrem?`<div style="background:var(--y0);border:1.5px dashed #FBBF24;border-radius:var(--r2);padding:11px;text-align:center;margin-top:10px">
+      <div style="font-weight:800;color:var(--g8)">🔒 Upgrade for full contact access</div>
+      <button class="btn btn-y" style="width:auto;margin-top:9px;padding:7px 18px;font-size:.8rem" onclick="closeMod('mod-cand');openUpgrade()">⭐ Upgrade — ₹1,000/month</button>
     </div>`:''}
   `;
-  rebuildModalFooter(id);
-  openModal('cand-modal');
+
+  rebuildModalFoot(id);
+  openMod('mod-cand');
 }
 
-function rebuildModalFooter(id) {
+function rebuildModalFoot(id) {
   const sl = RCA[id] === 'shortlisted';
   const rj = RCA[id] === 'rejected';
-  document.getElementById('cm-footer').innerHTML = `
-    <button class="btn btn-sm" style="background:${sl?'#D1FAE5':'var(--bg2)'};color:${sl?'#065F46':'var(--text-mid)'};border:1.5px solid ${sl?'#6EE7B7':'var(--border)'};font-weight:800;"
-      onclick="setAction('${id}','shortlisted')">
-      ${sl ? '★ Shortlisted' : '☆ Shortlist'}
-    </button>
-    <button class="btn btn-sm" style="background:${rj?'#FEE2E2':'var(--bg2)'};color:${rj?'#991B1B':'var(--text-mid)'};border:1.5px solid ${rj?'#FCA5A5':'var(--border)'};font-weight:800;"
-      onclick="setAction('${id}','rejected')">
-      ${rj ? '✗ Rejected' : '✗ Reject'}
-    </button>
-    <button class="btn btn-outline btn-sm" onclick="closeModal('cand-modal')" style="margin-left:auto;">Close</button>
+  document.getElementById('mod-cand-foot').innerHTML = `
+    <button class="act-btn" style="${sl?'background:#D1FAE5;color:#065F46;border-color:#6EE7B7':'background:var(--bg2);color:#3A5A40;border-color:var(--bd)'}"
+      onclick="setAction('${id}','shortlisted')">${sl?'★ Shortlisted':'☆ Shortlist'}</button>
+    <button class="act-btn" style="${rj?'background:#FEE2E2;color:#991B1B;border-color:#FCA5A5':'background:var(--bg2);color:#3A5A40;border-color:var(--bd)'}"
+      onclick="setAction('${id}','rejected')">${rj?'✗ Rejected':'✗ Reject'}</button>
+    <button class="btn btn-out btn-sm" onclick="closeMod('mod-cand')" style="margin-left:auto">Close</button>
   `;
 }
 
-// ── PROFILE ───────────────────────────────────────────────────
-
-// Always re-read CR from storage before rendering so admin plan changes show immediately
-function refreshCRAndProfile() {
-  if (!CR) return;
-  const latest = getRecruiters().find(r => r.id === CR.id);
-  if (latest) {
-    CR = latest;
-    setRecruiterSession(CR);
-    // Refresh header plan badge too
-    const pe = document.getElementById('hdr-plan');
-    if (pe) {
-      pe.innerHTML = CR.plan === 'premium'
-        ? `<span class="badge badge-premium">⭐ PREMIUM</span>`
-        : `<span class="badge badge-basic">BASIC</span>`;
-    }
-  }
-  renderProfile();
-}
-
+// ─────────────────────────────────────────────────────────────
+//  PROFILE
+// ─────────────────────────────────────────────────────────────
 function renderProfile() {
-  const wrap = document.getElementById('profile-wrap');
-  if (!wrap || !CR) return;
+  if (!CR) return;
+  // Always refresh from storage
+  const fresh = getRecruiters().find(r => r.id === CR.id);
+  if (fresh) { CR = fresh; sessionStorage.setItem('bb_recruiter', JSON.stringify(CR)); }
 
   const isPrem  = CR.plan === 'premium';
   const slCount = Object.values(RCA).filter(v => v === 'shortlisted').length;
   const rjCount = Object.values(RCA).filter(v => v === 'rejected').length;
 
-  // ── Validity block ──────────────────────────────────────────
   let validHtml = '';
   if (isPrem && CR.plan_expiry) {
     const exp  = new Date(CR.plan_expiry);
     const days = Math.ceil((exp - new Date()) / 86400000);
-    const isExp = days <= 7;
-    validHtml = `
-      <div style="background:white;border:1px solid var(--border);border-radius:var(--radius-sm);
-                  padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-top:14px;">
-        <div>
-          <div style="font-size:0.68rem;font-weight:800;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">Plan Valid Until</div>
-          <div style="font-weight:700;font-size:0.88rem;color:${isExp?'var(--red)':'var(--success)'};">
-            ${exp.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}
-            &nbsp;<span style="font-size:0.8rem;">(${days} days left)</span>
-          </div>
-        </div>
-        <span class="badge ${isExp?'badge-pending':'badge-verified'}">${isExp?'⚠️ Expiring Soon':'✓ Active'}</span>
-      </div>`;
-  }
-
-  // ── Renew button (show if <15 days left or already expired) ─
-  let renewBtn = '';
-  if (isPrem && CR.plan_expiry) {
-    const daysLeft = Math.ceil((new Date(CR.plan_expiry) - new Date()) / 86400000);
-    if (daysLeft < 15) {
-      renewBtn = `<button class="btn btn-primary btn-block" style="margin-top:12px;" onclick="openUpgrade()">🔄 Renew Premium Plan</button>`;
-    }
-  }
-
-  wrap.innerHTML = `
-
-    <!-- ── SALON PROFILE CARD ── -->
-    <div class="card anim" style="margin-bottom:16px;">
-      <div class="card-header">
-        <span style="font-size:1.3rem;">🏪</span>
-        <div><h2>Salon Profile</h2><span>सैलून प्रोफ़ाइल</span></div>
+    const col  = days <= 7 ? 'var(--red)' : 'var(--ok)';
+    validHtml = `<div style="background:#fff;border:1px solid var(--bd);border-radius:var(--r2);padding:10px 12px;display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+      <div>
+        <div style="font-size:.65rem;font-weight:800;color:var(--tl);text-transform:uppercase;letter-spacing:.5px">Valid Until</div>
+        <div style="font-weight:700;color:${col}">${exp.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})} (${days} days left)</div>
       </div>
+      <span class="badge ${days<=7?'badge-pd':'badge-vf'}">${days<=7?'⚠️ Expiring':'✓ Active'}</span>
+    </div>`;
+  }
+
+  document.getElementById('pro-wrap').innerHTML = `
+    <div class="card">
+      <div class="card-hdr"><span style="font-size:1.2rem">🏪</span><div><h2>Salon Profile</h2><span>सैलून प्रोफ़ाइल</span></div></div>
       <div class="card-body">
-        <div class="info-row">
-          <span class="info-key">Salon Name</span>
-          <span class="info-val"><strong>${CR.salon_name || '—'}</strong></span>
-        </div>
-        <div class="info-row">
-          <span class="info-key">Phone / फ़ोन</span>
-          <span class="info-val">${CR.phone || '—'}</span>
-        </div>
-        <div class="info-row">
-          <span class="info-key">Location</span>
-          <span class="info-val">${CR.location || '—'}</span>
-        </div>
-        <div class="info-row">
-          <span class="info-key">Franchise</span>
-          <span class="info-val">${CR.franchise === 'yes' ? 'Yes / हाँ' : 'No / नहीं'}</span>
-        </div>
-        <div class="info-row">
-          <span class="info-key">Address</span>
-          <span class="info-val">${CR.address || '—'}</span>
-        </div>
-        <div class="info-row">
-          <span class="info-key">Member Since</span>
-          <span class="info-val">${CR.created_at ? new Date(CR.created_at).toLocaleDateString('en-IN') : '—'}</span>
-        </div>
-        <div class="info-row">
-          <span class="info-key">Shortlisted ★</span>
-          <span class="info-val" style="color:var(--success);font-weight:700;">${slCount} candidates</span>
-        </div>
-        <div class="info-row">
-          <span class="info-key">Rejected ✗</span>
-          <span class="info-val" style="color:var(--red);font-weight:700;">${rjCount} candidates</span>
-        </div>
+        <div class="irow"><span class="ik">Salon Name</span><span class="iv"><strong>${CR.salon_name||'—'}</strong></span></div>
+        <div class="irow"><span class="ik">Phone</span><span class="iv">${CR.phone||'—'}</span></div>
+        <div class="irow"><span class="ik">Location</span><span class="iv">${CR.location||'—'}</span></div>
+        <div class="irow"><span class="ik">Franchise</span><span class="iv">${CR.franchise==='yes'?'Yes / हाँ':'No / नहीं'}</span></div>
+        <div class="irow"><span class="ik">Address</span><span class="iv">${CR.address||'—'}</span></div>
+        <div class="irow"><span class="ik">Member Since</span><span class="iv">${CR.created_at?new Date(CR.created_at).toLocaleDateString('en-IN'):'—'}</span></div>
+        <div class="irow"><span class="ik">Shortlisted ★</span><span class="iv" style="color:var(--ok);font-weight:700">${slCount} candidates</span></div>
+        <div class="irow"><span class="ik">Rejected ✗</span><span class="iv" style="color:var(--red);font-weight:700">${rjCount} candidates</span></div>
       </div>
     </div>
 
-    <!-- ── PLAN CARD ── -->
-    <div class="card anim anim-d1">
-      <div class="card-header">
-        <span style="font-size:1.3rem;">⭐</span>
-        <div><h2>Current Plan &amp; Billing</h2><span>वर्तमान प्लान और बिलिंग</span></div>
-      </div>
+    <div class="card">
+      <div class="card-hdr"><span style="font-size:1.2rem">⭐</span><div><h2>Current Plan</h2><span>वर्तमान प्लान</span></div></div>
       <div class="card-body">
-
         ${isPrem ? `
-        <!-- PREMIUM -->
-        <div style="background:#ECFDF5;border:2px solid #6EE7B7;border-radius:var(--radius);padding:18px;">
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-            <span style="font-size:2rem;">⭐</span>
+        <div class="plan-box prem">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <span style="font-size:1.8rem">⭐</span>
             <div>
-              <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:900;color:#065F46;">Premium Account Active</div>
-              <div style="font-family:var(--font-display);font-size:1.6rem;font-weight:900;color:var(--green-800);line-height:1.1;">
-                ₹1,000<span style="font-size:0.9rem;font-weight:500;color:var(--text-light);">/month</span>
-              </div>
+              <div class="plan-title" style="color:#065F46">Premium Active</div>
+              <div class="plan-price">₹1,000<span style="font-size:.9rem;font-weight:500;color:var(--tl)">/month</span></div>
             </div>
           </div>
-          <ul style="list-style:none;margin:0 0 4px;">
-            <li style="font-size:0.82rem;padding:3px 0;">✅ Full phone number access for all available staff</li>
-            <li style="font-size:0.82rem;padding:3px 0;">✅ Aadhaar card details visible</li>
-            <li style="font-size:0.82rem;padding:3px 0;">✅ Instagram profile links visible</li>
-            <li style="font-size:0.82rem;padding:3px 0;">✅ Shortlist &amp; manage candidates</li>
-            <li style="font-size:0.82rem;padding:3px 0;">✅ Direct call option on candidate cards</li>
+          <ul class="plan-features">
+            <li>✅ Full phone number access for all available staff</li>
+            <li>✅ Aadhaar card details visible</li>
+            <li>✅ Instagram profile links visible</li>
+            <li>✅ Shortlist &amp; manage candidates</li>
           </ul>
           ${validHtml}
-          ${renewBtn}
-        </div>
-        ` : `
-        <!-- BASIC -->
-        <div style="background:var(--yellow-50);border:2px dashed var(--yellow);border-radius:var(--radius);padding:18px;">
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-            <span style="font-size:2rem;">🔓</span>
+          ${CR.plan_expiry && new Date(CR.plan_expiry) - new Date() < 15*86400000
+            ? `<button class="btn btn-g" style="margin-top:12px" onclick="openUpgrade()">🔄 Renew Plan</button>` : ''}
+        </div>` : `
+        <div class="plan-box basic">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <span style="font-size:1.8rem">🔓</span>
             <div>
-              <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:900;color:var(--green-800);">Basic Plan</div>
-              <div style="font-size:0.78rem;color:var(--text-light);margin-top:2px;">Free — limited access, contact details hidden</div>
+              <div class="plan-title" style="color:var(--g8)">Basic Plan</div>
+              <div style="font-size:.76rem;color:var(--tl);margin-top:2px">Free — contact details hidden</div>
             </div>
           </div>
-          <ul style="list-style:none;margin:0 0 12px;">
-            <li style="font-size:0.82rem;padding:3px 0;">✅ Browse all registered hairstylists</li>
-            <li style="font-size:0.82rem;padding:3px 0;">✅ View photos, experience &amp; salary info</li>
-            <li style="font-size:0.82rem;padding:3px 0;">✅ Shortlist &amp; reject candidates</li>
-            <li style="font-size:0.82rem;padding:3px 0;color:var(--red);">❌ Phone numbers hidden</li>
-            <li style="font-size:0.82rem;padding:3px 0;color:var(--red);">❌ Aadhaar details hidden</li>
-            <li style="font-size:0.82rem;padding:3px 0;color:var(--red);">❌ Instagram profiles hidden</li>
+          <ul class="plan-features">
+            <li>✅ Browse all registered hairstylists</li>
+            <li>✅ View photos, experience &amp; salary info</li>
+            <li>✅ Shortlist &amp; reject candidates</li>
+            <li style="color:var(--red)">❌ Phone numbers hidden</li>
+            <li style="color:var(--red)">❌ Aadhaar details hidden</li>
+            <li style="color:var(--red)">❌ Instagram profiles hidden</li>
           </ul>
           ${CR.plan_requested ? `
-            <div style="background:#FEF3C7;border:1.5px solid #FBBF24;border-radius:var(--radius-sm);
-                        padding:12px 14px;font-size:0.8rem;font-weight:700;color:#92400E;">
-              ⏳ Upgrade request submitted!
-              <div style="font-weight:400;color:#78350F;margin-top:3px;font-family:var(--font-hindi);">
-                24 घंटे में Admin द्वारा प्रीमियम सक्रिय किया जाएगा
-              </div>
-              <div style="font-size:0.72rem;margin-top:4px;color:#92400E;">
-                Ref: ${CR.plan_request_ref || '—'} &nbsp;|&nbsp; Method: ${(CR.plan_request_method||'manual').toUpperCase()}
-              </div>
-            </div>
-          ` : `
-            <button class="btn btn-yellow btn-block btn-lg" onclick="openUpgrade()">
-              ⭐ Upgrade to Premium — ₹1,000/month
-            </button>
-            <div style="font-family:var(--font-hindi);font-size:0.72rem;color:var(--text-light);
-                        text-align:center;margin-top:8px;">
-              प्रीमियम में अपग्रेड करें — सभी संपर्क विवरण देखें
-            </div>
-          `}
-        </div>
-        `}
-
+            <div style="background:#FEF3C7;border:1.5px solid #FBBF24;border-radius:var(--r2);padding:11px;font-size:.78rem;font-weight:700;color:#92400E">
+              ⏳ Upgrade request submitted — Admin will activate within 24 hrs
+              <div style="font-family:var(--fh);font-weight:400;color:#78350F;margin-top:3px">अनुरोध जमा हो गया है</div>
+              ${CR.plan_request_ref ? `<div style="font-size:.7rem;margin-top:4px">Ref: ${CR.plan_request_ref}</div>` : ''}
+            </div>` : `
+            <button class="btn btn-y" onclick="openUpgrade()">⭐ Upgrade to Premium — ₹1,000/month</button>
+            <div style="font-family:var(--fh);font-size:.7rem;color:var(--tl);text-align:center;margin-top:6px">प्रीमियम में अपग्रेड करें</div>`}
+        </div>`}
       </div>
     </div>`;
 }
-}
 
-// ── PAYMENT ───────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+//  PAYMENT / UPGRADE
+// ─────────────────────────────────────────────────────────────
 function openUpgrade() {
-  selPay = null;
-  document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('pay-info-area').style.display = 'none';
+  curPayMethod = null;
+  document.querySelectorAll('.pay-opt').forEach(b => b.classList.remove('on'));
+  document.getElementById('pay-info').style.display = 'none';
   document.getElementById('pay-ref').value = '';
-  // Show/hide Razorpay & Cashfree based on admin config
   const cfg = getPayCfg();
-  document.getElementById('pbtn-razorpay').style.display = cfg.razorpay_key  ? 'block' : 'none';
-  document.getElementById('pbtn-cashfree').style.display = cfg.cashfree_appid ? 'block' : 'none';
-  openModal('upgrade-modal');
+  document.getElementById('po-rzp').style.display = cfg.razorpay_key  ? '' : 'none';
+  document.getElementById('po-cf').style.display  = cfg.cashfree_appid ? '' : 'none';
+  openMod('mod-upg');
 }
 
-function getPayCfg() {
-  try { return JSON.parse(localStorage.getItem('bb_payment_config') || '{}'); } catch { return {}; }
-}
-
-function selectPay(method) {
-  selPay = method;
-  document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('pbtn-' + method)?.classList.add('active');
+function selPay(method) {
+  curPayMethod = method;
+  document.querySelectorAll('.pay-opt').forEach(b => b.classList.remove('on'));
+  document.getElementById('po-' + method)?.classList.add('on');
   const cfg  = getPayCfg();
-  const area = document.getElementById('pay-info-area');
+  const area = document.getElementById('pay-info');
   area.style.display = 'block';
 
-  if (method === 'razorpay') {
+  if (method === 'rzp') {
     area.innerHTML = cfg.razorpay_key
-      ? `<div style="text-align:center;"><div style="font-weight:700;margin-bottom:10px;">💳 Pay via Razorpay</div><button class="btn btn-primary" onclick="launchRazorpay()">Pay ₹1,000 Now</button></div>`
-      : `<div style="color:var(--text-light);font-size:0.78rem;text-align:center;">Razorpay not yet configured by admin. Use UPI or QR Code.</div>`;
-  } else if (method === 'cashfree') {
-    area.innerHTML = cfg.cashfree_appid
-      ? `<div style="text-align:center;"><div style="font-weight:700;margin-bottom:10px;">🏦 Pay via Cashfree</div><button class="btn btn-primary" onclick="launchCashfree()">Pay ₹1,000 Now</button></div>`
-      : `<div style="color:var(--text-light);font-size:0.78rem;text-align:center;">Cashfree not yet configured by admin. Use UPI or QR Code.</div>`;
+      ? `<div style="text-align:center"><div style="font-weight:700;margin-bottom:9px">💳 Pay via Razorpay</div><button class="btn btn-g" style="width:auto" onclick="launchRzp()">Pay ₹1,000 Now</button></div>`
+      : `<div style="color:var(--tl);font-size:.76rem;text-align:center">Razorpay not configured by admin yet.</div>`;
+  } else if (method === 'cf') {
+    area.innerHTML = `<div style="color:var(--tl);font-size:.76rem;text-align:center">Cashfree requires backend — contact admin to set up.</div>`;
   } else if (method === 'upi') {
     const uid = cfg.upi_id || '';
     area.innerHTML = uid
-      ? `<div style="text-align:center;">
-          <div style="font-weight:700;margin-bottom:6px;">📱 Pay via UPI</div>
-          <div class="upi-id-box">${uid}</div>
-          <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:8px;">Pay ₹1,000 using any UPI app (GPay, PhonePe, Paytm, etc.)</div>
-          <button class="btn btn-yellow btn-sm" onclick="navigator.clipboard.writeText('${uid}').then(()=>showToast('UPI ID copied! / कॉपी हो गया','success'))">📋 Copy UPI ID</button>
+      ? `<div style="text-align:center">
+          <div style="font-weight:700;margin-bottom:6px">📱 Pay via UPI</div>
+          <div class="upi-box">${uid}</div>
+          <div style="font-size:.7rem;color:var(--tl);margin-bottom:8px">Pay ₹1,000 using any UPI app</div>
+          <button class="btn btn-y" style="width:auto" onclick="navigator.clipboard?.writeText('${uid}').then(()=>toast('UPI ID copied!','ok'))">📋 Copy UPI ID</button>
         </div>`
-      : `<div style="color:var(--text-light);font-size:0.78rem;text-align:center;">UPI ID not configured by admin yet. Please use QR code or contact admin.</div>`;
+      : `<div style="color:var(--tl);font-size:.76rem;text-align:center">UPI ID not configured by admin yet.</div>`;
   } else if (method === 'qr') {
     const qr = cfg.qr_image_url || '';
     area.innerHTML = `<div class="qr-wrap">
-      <div style="font-weight:700;margin-bottom:10px;">🔲 Scan &amp; Pay ₹1,000</div>
-      ${qr
-        ? `<img src="${qr}" alt="Payment QR Code">`
-        : `<div class="qr-empty">📷 QR Code will be shown here once admin uploads it</div>`}
-      <div style="font-size:0.7rem;color:var(--text-light);margin-top:10px;font-family:var(--font-hindi);">QR कोड स्कैन करके ₹1,000 का भुगतान करें</div>
+      <div style="font-weight:700;margin-bottom:9px">🔲 Scan &amp; Pay ₹1,000</div>
+      ${qr ? `<img src="${qr}" alt="QR Code">` : `<div class="qr-empty">📷 QR code will appear here once admin uploads it</div>`}
+      <div style="font-size:.68rem;color:var(--tl);margin-top:8px;font-family:var(--fh)">QR कोड स्कैन करके ₹1,000 भेजें</div>
     </div>`;
   }
 }
 
-function launchRazorpay() {
+function launchRzp() {
   const cfg = getPayCfg();
-  if (typeof Razorpay === 'undefined') {
-    const s = document.createElement('script');
-    s.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    s.onload = () => _openRzp(cfg); document.head.appendChild(s);
-  } else { _openRzp(cfg); }
-}
-function _openRzp(cfg) {
-  const opts = {
-    key: cfg.razorpay_key,
-    amount: 100000, currency: 'INR',
-    name: 'Budget Barber', description: 'Premium Recruiter — 1 Month',
-    handler: r => { document.getElementById('pay-ref').value = r.razorpay_payment_id; submitUpgrade(); },
-    prefill: { contact: CR?.phone || '' },
-    theme: { color: '#0D3B2E' }
+  const go = () => {
+    const opts = {
+      key: cfg.razorpay_key, amount: 100000, currency: 'INR',
+      name: 'Budget Barber', description: 'Premium Recruiter — 1 Month',
+      handler: r => { document.getElementById('pay-ref').value = r.razorpay_payment_id; submitUpgrade(); },
+      prefill: { contact: CR?.phone || '' },
+      theme: { color: '#0D3B2E' }
+    };
+    new Razorpay(opts).open();
   };
-  new Razorpay(opts).open();
-}
-
-function launchCashfree() {
-  showToast('Cashfree requires backend integration — contact admin', 'info');
+  if (typeof Razorpay !== 'undefined') { go(); return; }
+  const s = document.createElement('script');
+  s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+  s.onload = go; document.head.appendChild(s);
 }
 
 function submitUpgrade() {
   if (!CR) return;
-  const ref = document.getElementById('pay-ref')?.value.trim() || '';
+  const ref  = document.getElementById('pay-ref').value.trim();
   const recs = getRecruiters();
   const idx  = recs.findIndex(r => r.id === CR.id);
   if (idx !== -1) {
     recs[idx].plan_requested      = true;
     recs[idx].plan_request_ref    = ref;
-    recs[idx].plan_request_method = selPay || 'manual';
+    recs[idx].plan_request_method = curPayMethod || 'manual';
     recs[idx].plan_request_date   = new Date().toISOString();
     saveRecruiters(recs);
-    CR = recs[idx]; setRecruiterSession(CR);
+    CR = recs[idx];
+    sessionStorage.setItem('bb_recruiter', JSON.stringify(CR));
   }
-  closeModal('upgrade-modal');
-  showToast('Upgrade request submitted! Admin will activate within 24 hrs 🎉', 'success');
+  closeMod('mod-upg');
+  toast('Upgrade request submitted! Admin will activate within 24 hrs 🎉', 'ok');
   renderProfile();
 }
-
 </script>
 </body>
 </html>
