@@ -237,21 +237,23 @@
         <div class="grid-2">
           <div class="form-group">
             <label class="form-label">Aadhaar Front Side <span class="hn">आधार का अगला भाग</span> <span class="req">*</span></label>
-            <div class="upload-zone" style="padding:18px 12px;">
+            <div class="upload-zone" style="padding:18px 12px;" onclick="document.getElementById('f_aadhaar_front').click()">
               <input type="file" id="f_aadhaar_front" accept="image/*" onchange="handleUpload('aadhaar_front',this)">
               <div class="upload-icon">🪪</div>
               <p style="font-size:0.8rem;"><strong>Front Side / अगला भाग</strong></p>
               <small>Name &amp; photo side — JPG, PNG Max 5MB</small>
+              <button type="button" class="upload-btn" onclick="event.stopPropagation();document.getElementById('f_aadhaar_front').click()">📷 Choose / Camera</button>
             </div>
             <div class="upload-preview" id="prev-aadhaar_front"></div>
           </div>
           <div class="form-group">
             <label class="form-label">Aadhaar Back Side <span class="hn">आधार का पिछला भाग</span> <span class="req">*</span></label>
-            <div class="upload-zone" style="padding:18px 12px;">
+            <div class="upload-zone" style="padding:18px 12px;" onclick="document.getElementById('f_aadhaar_back').click()">
               <input type="file" id="f_aadhaar_back" accept="image/*" onchange="handleUpload('aadhaar_back',this)">
               <div class="upload-icon">🔄</div>
               <p style="font-size:0.8rem;"><strong>Back Side / पिछला भाग</strong></p>
               <small>Address side — JPG, PNG Max 5MB</small>
+              <button type="button" class="upload-btn" onclick="event.stopPropagation();document.getElementById('f_aadhaar_back').click()">📷 Choose / Camera</button>
             </div>
             <div class="upload-preview" id="prev-aadhaar_back"></div>
           </div>
@@ -262,7 +264,13 @@
     <div class="card mt-16 anim anim-d1">
       <div class="card-header"><span style="font-size:1.5rem">🤳</span><div><h2>Personal Selfie</h2><span>अपनी सेल्फी अपलोड करें</span></div></div>
       <div class="card-body">
-        <div class="upload-zone"><input type="file" id="f_selfie" accept="image/*" onchange="handleUpload('selfie',this)"><div class="upload-icon">🤳</div><p><strong>Upload Your Selfie / सेल्फी अपलोड करें</strong></p><small>Clear face photo — अपना स्पष्ट फ़ोटो लगाएं</small></div>
+        <div class="upload-zone" onclick="document.getElementById('f_selfie').click()">
+          <input type="file" id="f_selfie" accept="image/*" onchange="handleUpload('selfie',this)">
+          <div class="upload-icon">🤳</div>
+          <p><strong>Upload Your Selfie / सेल्फी अपलोड करें</strong></p>
+          <small>Clear face photo — अपना स्पष्ट फ़ोटो लगाएं</small>
+          <button type="button" class="upload-btn" onclick="event.stopPropagation();document.getElementById('f_selfie').click()">📷 Choose / Camera</button>
+        </div>
         <div class="upload-preview" id="prev-selfie"></div>
       </div>
     </div>
@@ -270,7 +278,13 @@
     <div class="card mt-16 anim anim-d2">
       <div class="card-header"><span style="font-size:1.5rem">📷</span><div><h2>Full Body Photos</h2><span>पूर्ण फ़ोटो अपलोड करें</span></div></div>
       <div class="card-body">
-        <div class="upload-zone"><input type="file" id="f_fullphotos" accept="image/*" multiple onchange="handleUpload('full_photos',this)"><div class="upload-icon">📷</div><p><strong>Upload Full Body Photos</strong></p><small>पूरे शरीर की फ़ोटो — Multiple files allowed</small></div>
+        <div class="upload-zone" onclick="document.getElementById('f_fullphotos').click()">
+          <input type="file" id="f_fullphotos" accept="image/*" multiple onchange="handleUpload('full_photos',this)">
+          <div class="upload-icon">📷</div>
+          <p><strong>Upload Full Body Photos</strong></p>
+          <small>पूरे शरीर की फ़ोटो — Multiple files allowed</small>
+          <button type="button" class="upload-btn" onclick="event.stopPropagation();document.getElementById('f_fullphotos').click()">📷 Choose / Camera</button>
+        </div>
         <div class="upload-preview" id="prev-full_photos"></div>
       </div>
     </div>
@@ -279,7 +293,13 @@
       <div class="card-header"><span style="font-size:1.5rem">💈</span><div><h2>Work Portfolio</h2><span>काम के फ़ोटो अपलोड करें</span></div></div>
       <div class="card-body">
         <p style="font-size:0.78rem; color:var(--text-light); margin-bottom:12px; font-family: var(--font-hindi);">जितने चाहें उतने काम के फ़ोटो अपलोड करें — Upload as many work photos as you have (haircuts, styles, etc.)</p>
-        <div class="upload-zone"><input type="file" id="f_workphotos" accept="image/*" multiple onchange="handleUpload('work_photos',this)"><div class="upload-icon">💈</div><p><strong>Upload Your Best Work</strong></p><small>Haircuts, color, styling — all welcome</small></div>
+        <div class="upload-zone" onclick="document.getElementById('f_workphotos').click()">
+          <input type="file" id="f_workphotos" accept="image/*" multiple onchange="handleUpload('work_photos',this)">
+          <div class="upload-icon">💈</div>
+          <p><strong>Upload Your Best Work</strong></p>
+          <small>Haircuts, color, styling — all welcome</small>
+          <button type="button" class="upload-btn" onclick="event.stopPropagation();document.getElementById('f_workphotos').click()">📷 Choose / Camera</button>
+        </div>
         <div class="upload-preview" id="prev-work_photos"></div>
       </div>
     </div>
