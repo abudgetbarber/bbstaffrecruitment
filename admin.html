@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Budget Barber</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g9:#0A2E1E;--g8:#0D3B2E;--g7:#1A5C44;--g6:#2E7D5A;
+  --g1:#E8F5EE;--g0:#F0FAF4;
+  --y:#F5D800;--y0:#FFFDE7;
+  --bg:#F3F7F4;--bg2:#E6EFE9;
+  --white:#fff;--text:#152018;--tl:#6B8F71;
+  --bd:#C5DAC8;--red:#C0392B;--ok:#1E8449;--or:#E67E22;
+  --sh:0 2px 16px rgba(10,46,30,.08);
+  --shb:0 8px 40px rgba(10,46,30,.14);
+  --r:12px;--r2:8px;
+  --fd:'Barlow Condensed',sans-serif;
+  --fb:'Barlow',sans-serif;
+  --fh:'Noto Sans Devanagari',sans-serif;
+}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100vh}
+
+/* HEADER */
+.hdr{background:var(--g8);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.hdr-logo{display:inline-flex;flex-direction:column;background:var(--y);border-radius:5px;overflow:hidden;line-height:1}
+.hdr-logo .b1{font-family:var(--fd);font-weight:900;font-size:.9rem;color:var(--g8);padding:3px 8px 1px;letter-spacing:1px}
+.hdr-logo .b2{background:var(--g8);font-family:var(--fd);font-weight:800;font-size:.55rem;color:var(--y);padding:2px 8px 3px;letter-spacing:3px;text-align:center}
+.hdr-mid h1{color:#fff;font-family:var(--fd);font-size:1rem;font-weight:700;line-height:1.1}
+.hdr-mid span{color:var(--y);font-size:.62rem;font-family:var(--fh)}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.btn-ghost{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;padding:5px 12px;border-radius:20px;cursor:pointer;font-size:.78rem;font-family:var(--fb)}
+.back-a{color:rgba(255,255,255,.7);font-size:.78rem;text-decoration:none}
+.back-a:hover{color:#fff}
+
+/* PAGES */
+.page{display:none;min-height:calc(100vh - 58px)}
+.page.active{display:block}
+
+/* AUTH */
+.auth-wrap{min-height:calc(100vh - 58px);display:flex;align-items:center;justify-content:center;padding:28px 16px;background:linear-gradient(145deg,var(--g9),var(--g8))}
+.auth-card{background:#fff;border-radius:18px;padding:36px 32px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.auth-icon{text-align:center;font-size:2.8rem;margin-bottom:8px}
+.auth-h{font-family:var(--fd);font-size:1.8rem;font-weight:900;color:var(--g8);text-align:center;margin-bottom:4px}
+.auth-sub{text-align:center;color:var(--tl);font-size:.78rem;margin-bottom:24px}
+.fgrp{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.flbl{font-family:var(--fd);font-size:.7rem;font-weight:700;color:#3A5A40;text-transform:uppercase;letter-spacing:.8px}
+.finp{padding:10px 14px;border:1.5px solid var(--bd);border-radius:var(--r2);font-size:.88rem;font-family:var(--fb);color:var(--text);background:#fff;width:100%;outline:none;transition:border-color .15s}
+.finp:focus{border-color:var(--g7);box-shadow:0 0 0 3px rgba(46,125,90,.1)}
+select.finp{appearance:auto;-webkit-appearance:auto;cursor:pointer}
+textarea.finp{resize:vertical;min-height:60px}
+.demo-hint{background:var(--bg);border-radius:var(--r2);padding:10px;text-align:center;font-size:.72rem;color:var(--tl);margin-top:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:30px;font-family:var(--fd);font-size:.88rem;font-weight:700;letter-spacing:.5px;border:none;cursor:pointer;transition:all .18s;white-space:nowrap}
+.btn-g{background:var(--g8);color:#fff}
+.btn-g:hover{background:var(--g7);transform:translateY(-1px)}
+.btn-y{background:var(--y);color:var(--g8)}
+.btn-y:hover{background:#E5C800}
+.btn-out{background:transparent;color:var(--g8);border:2px solid var(--g8)}
+.btn-out:hover{background:var(--g8);color:#fff}
+.btn-red{background:var(--red);color:#fff}
+.btn-sm{padding:5px 14px;font-size:.75rem}
+.btn-block{width:100%;justify-content:center}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;padding:18px 20px}
+.stat-card{background:#fff;border-radius:var(--r);padding:16px 18px;border:1px solid var(--bd);box-shadow:var(--sh)}
+.stat-icon{font-size:1.5rem;margin-bottom:6px}
+.stat-num{font-family:var(--fd);font-size:2rem;font-weight:900;color:var(--g8);line-height:1}
+.stat-lbl{font-size:.68rem;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+
+/* TABS */
+.tab-bar{background:#fff;border-bottom:2px solid var(--bd);display:flex;padding:0 20px;overflow-x:auto}
+.tab-btn{padding:13px 18px;font-family:var(--fd);font-size:.82rem;font-weight:700;background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--tl);white-space:nowrap;transition:all .15s}
+.tab-btn:hover{color:var(--g8)}
+.tab-btn.on{color:var(--g8);border-bottom-color:var(--y)}
+.tab-pane{display:none}
+.tab-pane.on{display:block}
+.tbadge{background:var(--red);color:#fff;font-size:.6rem;padding:1px 6px;border-radius:10px;margin-left:4px;font-weight:900;vertical-align:middle}
+
+/* FILTER BAR */
+.fbar{background:#fff;padding:12px 18px;border-bottom:1px solid var(--bd);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.fbar .finp{padding:7px 10px;font-size:.8rem;width:auto}
+.fbar select.finp{min-width:140px}
+.fsearch{flex:1;min-width:180px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;padding:0 20px 28px}
+.dtbl{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.dtbl th{background:var(--g8);color:#fff;padding:11px 14px;font-family:var(--fd);font-size:.7rem;font-weight:700;letter-spacing:1px;text-align:left;white-space:nowrap}
+.dtbl td{padding:9px 14px;font-size:.78rem;border-bottom:1px solid var(--bg2);vertical-align:middle}
+.dtbl tr:last-child td{border-bottom:none}
+.dtbl tr:hover td{background:var(--g0)}
+.dtbl td code{font-size:.7rem;background:var(--bg);padding:2px 6px;border-radius:4px}
+.tbl-acts{display:flex;gap:4px;flex-wrap:wrap}
+.ta{padding:3px 9px;border:none;border-radius:4px;font-size:.67rem;font-weight:700;cursor:pointer;font-family:var(--fd);letter-spacing:.3px;transition:opacity .15s}
+.ta:hover{opacity:.85}
+.ta-view{background:var(--g8);color:#fff}
+.ta-ok{background:var(--ok);color:#fff}
+.ta-rj{background:var(--or);color:#fff}
+.ta-del{background:#888;color:#fff}
+.ta-prem{background:var(--y);color:var(--g8)}
+.ta-basic{background:var(--bg2);color:#3A5A40}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:700;font-family:var(--fd);letter-spacing:.3px}
+.badge-vf{background:#D1FAE5;color:#065F46}
+.badge-pd{background:#FEF3C7;color:#92400E}
+.badge-rj{background:#FEE2E2;color:#991B1B}
+.badge-pm{background:var(--y);color:var(--g8)}
+.badge-bs{background:var(--bg2);color:#3A5A40}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;pointer-events:none}
+.modal-bg.on{display:flex;pointer-events:all}
+.modal{background:#fff;border-radius:var(--r);max-width:600px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-hdr{padding:18px 20px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.modal-hdr h3{font-family:var(--fd);font-size:1.05rem;font-weight:800;color:var(--g8)}
+.modal-x{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--tl);line-height:1;padding:2px 6px}
+.modal-body{padding:18px 20px}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end}
+
+/* DETAIL GRID */
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
+.dc{background:var(--bg);padding:7px 9px;border-radius:6px;font-size:.77rem}
+.dk{font-size:.61rem;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:.4px}
+.dv{font-weight:600;margin-top:1px}
+
+/* FORM GRID */
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg2 .full{grid-column:1/-1}
+@media(max-width:480px){.fg2{grid-template-columns:1fr}.fg2 .full{grid-column:1}}
+
+/* LIGHTBOX */
+#lb{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:2000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px}
+#lb.on{display:flex}
+#lb img{max-width:88vw;max-height:78vh;border-radius:8px;object-fit:contain}
+#lb-cap{color:rgba(255,255,255,.6);font-size:.8rem}
+#lb-x{position:absolute;top:16px;right:20px;font-size:2rem;color:#fff;cursor:pointer;background:none;border:none;line-height:1}
+
+/* PHOTO STRIP in modal */
+.photo-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.pthumb{width:68px;height:68px;border-radius:8px;object-fit:cover;border:2px solid var(--bd);cursor:pointer;transition:transform .15s}
+.pthumb:hover{transform:scale(1.08)}
+.pthumb-lbl{font-size:.58rem;color:var(--tl);text-align:center;margin-top:2px}
+
+/* PAYMENT CONFIG */
+.pay-section{padding:20px;max-width:560px}
+.card{background:#fff;border-radius:var(--r);border:1px solid var(--bd);box-shadow:var(--sh);margin-bottom:16px}
+.card-hdr{background:linear-gradient(100deg,var(--g8),var(--g7));color:#fff;padding:13px 18px;border-radius:var(--r) var(--r) 0 0;display:flex;align-items:center;gap:10px}
+.card-hdr h2{font-family:var(--fd);font-size:.95rem;font-weight:700}
+.card-hdr span{font-size:.65rem;opacity:.75;font-family:var(--fh);display:block;margin-top:2px}
+.card-body{padding:18px}
+.sec-lbl{font-family:var(--fd);font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--tl);border-bottom:2px solid var(--y);padding-bottom:6px;margin:16px 0 12px}
+.qr-prev img{max-width:160px;border-radius:8px;border:1px solid var(--bd)}
+#qr-dropzone:hover{border-color:var(--g7);background:var(--g0)}
+
+/* TOAST */
+#toast{position:fixed;bottom:20px;right:20px;z-index:3000;padding:12px 18px;border-radius:var(--r);font-weight:600;font-size:.83rem;box-shadow:var(--shb);transform:translateY(80px);opacity:0;transition:all .3s;max-width:300px;pointer-events:none}
+#toast.on{transform:translateY(0);opacity:1}
+#toast.ok{background:var(--g8);color:#fff}
+#toast.er{background:var(--red);color:#fff}
+#toast.in{background:var(--g7);color:#fff}
+
+/* IROW */
+.irow{display:flex;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--bg2);font-size:.8rem}
+.irow:last-child{border-bottom:none}
+.ik{font-weight:700;color:var(--tl);min-width:130px;font-size:.73rem;flex-shrink:0}
+.iv{font-weight:500;color:var(--text)}
+
+/* COMMIT TAGS */
+.ctag{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:.68rem;font-weight:700;margin:2px}
+.ctag-ok{background:#D1FAE5;color:#065F46}
+.ctag-no{background:#FEE2E2;color:#991B1B}
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div id="lb">
+  <button id="lb-x" onclick="closeLB()">×</button>
+  <img id="lb-img" src="" alt="">
+  <div id="lb-cap"></div>
+</div>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="hdr-logo"><span class="b1">BUDGET</span><span class="b2">BARBER</span></div>
+    <div class="hdr-mid"><h1>Admin Panel</h1><span>प्रशासन पैनल</span></div>
+  </div>
+  <div class="hdr-right">
+    <button class="btn-ghost" id="btn-logout" style="display:none" onclick="doLogout()">Logout</button>
+    <a href="index.html" class="back-a">← Home</a>
+  </div>
+</header>
+
+<!-- ══════ LOGIN ══════ -->
+<div class="page active" id="pg-login">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-icon">⚙️</div>
+      <div class="auth-h">Admin Access</div>
+      <div class="auth-sub">Authorized Personnel Only · केवल अधिकृत कर्मी</div>
+      <div class="fgrp">
+        <label class="flbl">Username</label>
+        <input class="finp" type="text" id="a_user" placeholder="admin" onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Password</label>
+        <input class="finp" type="password" id="a_pass" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+      <button class="btn btn-g btn-block" style="margin-top:4px" onclick="doLogin()">Login</button>
+      <div class="demo-hint">Demo: <strong>admin</strong> / <strong>admin123</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ DASHBOARD ══════ -->
+<div class="page" id="pg-dash">
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-icon">✂️</div><div class="stat-num" id="st-total">0</div><div class="stat-lbl">Total Stylists</div></div>
+    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-num" id="st-verified">0</div><div class="stat-lbl">Verified</div></div>
+    <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-num" id="st-pending">0</div><div class="stat-lbl">Pending</div></div>
+    <div class="stat-card"><div class="stat-icon">🟢</div><div class="stat-num" id="st-avail">0</div><div class="stat-lbl">Available Now</div></div>
+    <div class="stat-card"><div class="stat-icon">🏪</div><div class="stat-num" id="st-recs">0</div><div class="stat-lbl">Recruiters</div></div>
+    <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-num" id="st-prem">0</div><div class="stat-lbl">Premium Recs</div></div>
+    <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-num" id="st-upgr">0</div><div class="stat-lbl">Upgrade Reqs</div></div>
+  </div>
+
+  <!-- MAIN TABS -->
+  <div class="tab-bar">
+    <button class="tab-btn on" data-pane="tp-stylists" onclick="switchTab(this)">✂️ Hairstylists</button>
+    <button class="tab-btn" data-pane="tp-recruiters" onclick="switchTab(this)">🏪 Recruiters</button>
+    <button class="tab-btn" data-pane="tp-payments" onclick="switchTab(this);loadPayConfig()">💳 Payment Config</button>
+  </div>
+
+  <!-- ── HAIRSTYLISTS ── -->
+  <div class="tab-pane on" id="tp-stylists">
+    <div class="fbar">
+      <input class="finp fsearch" type="text" id="f_s_search" placeholder="🔍 Search name, phone, location…" oninput="renderStylists()">
+      <input class="finp" type="text" id="f_s_loc" placeholder="📍 Home Location" oninput="renderStylists()" style="min-width:140px;width:auto">
+      <select class="finp" id="f_s_status" onchange="renderStylists()">
+        <option value="">All Status</option>
+        <option value="pending">Pending</option>
+        <option value="verified">Verified</option>
+        <option value="rejected">Rejected</option>
+      </select>
+      <select class="finp" id="f_s_avail" onchange="renderStylists()">
+        <option value="">All Availability</option>
+        <option value="true">Available</option>
+        <option value="false">Not Available</option>
+      </select>
+      <select class="finp" id="f_s_exp" onchange="renderStylists()">
+        <option value="">All Experience</option>
+        <option value="less1">Less than 1 yr</option>
+        <option value="1-2">1–2 years</option>
+        <option value="2-4">2–4 years</option>
+        <option value="4-6">4–6 years</option>
+        <option value="6-8">6–8 years</option>
+        <option value="8-10">8–10 years</option>
+        <option value="10+">10+ years</option>
+      </select>
+      <button class="btn btn-y btn-sm" onclick="exportCSV()">📥 CSV</button>
+    </div>
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead>
+          <tr>
+            <th>Reg ID</th><th>Name</th><th>Phone</th><th>Age</th><th>Home Location</th>
+            <th>Experience</th><th>Max Billing</th><th>Exp Salary</th>
+            <th>Avail</th><th>Commits</th><th>Status</th><th>Registered</th><th>Profile Link</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="styl-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── RECRUITERS ── -->
+  <div class="tab-pane" id="tp-recruiters">
+    <div class="tab-bar" style="border-bottom:1px solid var(--bd);padding:0 16px;margin-bottom:0">
+      <button class="tab-btn on" data-pane="tp-rec-all" onclick="switchTab(this)">All Recruiters</button>
+      <button class="tab-btn" data-pane="tp-rec-pending" onclick="switchTab(this)">
+        ⏳ Upgrade Requests <span class="tbadge" id="upg-badge"></span>
+      </button>
+    </div>
+
+    <!-- All Recruiters -->
+    <div class="tab-pane on" id="tp-rec-all">
+      <div class="fbar">
+        <input class="finp fsearch" type="text" id="f_r_search" placeholder="🔍 Search salon, phone, location…" oninput="renderRecruiters()">
+        <select class="finp" id="f_r_plan" onchange="renderRecruiters()">
+          <option value="">All Plans</option>
+          <option value="basic">Basic</option>
+          <option value="premium">Premium</option>
+        </select>
+        <button class="btn btn-g btn-sm" onclick="openMod('mod-create-rec')">+ Create Account</button>
+      </div>
+      <div class="tbl-wrap">
+        <table class="dtbl">
+          <thead>
+            <tr>
+              <th>ID</th><th>Salon Name</th><th>Phone</th><th>PIN</th><th>Location</th>
+              <th>Franchise</th><th>Plan</th><th>Expiry</th><th>Registered</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="rec-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Upgrade Requests -->
+    <div class="tab-pane" id="tp-rec-pending">
+      <div class="tbl-wrap" style="padding-top:16px">
+        <table class="dtbl">
+          <thead>
+            <tr>
+              <th>Salon Name</th><th>Phone</th><th>Location</th>
+              <th>Pay Method</th><th>UTR / Ref</th><th>Request Date</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="upg-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PAYMENT CONFIG ── -->
+  <div class="tab-pane" id="tp-payments">
+    <div class="pay-section">
+      <div class="card">
+        <div class="card-hdr"><span style="font-size:1.2rem">💳</span><div><h2>Payment Configuration</h2><span>भुगतान सेटअप — Recruiter upgrade payments</span></div></div>
+        <div class="card-body">
+
+          <div class="sec-lbl">📱 UPI ID</div>
+          <div class="fgrp">
+            <label class="flbl">UPI ID / VPA</label>
+            <input class="finp" type="text" id="cfg_upi" placeholder="yourname@upi  or  9876543210@paytm">
+            <span style="font-size:.68rem;color:var(--tl);margin-top:3px">Recruiters will see this and can copy to pay via any UPI app (GPay, PhonePe, Paytm…)</span>
+          </div>
+
+          <div class="sec-lbl" style="margin-top:20px">🔲 QR Code Image</div>
+          <div class="fgrp">
+            <label class="flbl">Upload QR Code Image</label>
+            <div style="border:2px dashed var(--bd);border-radius:var(--r2);padding:20px;text-align:center;background:var(--bg);position:relative;cursor:pointer;transition:border-color .2s" id="qr-dropzone">
+              <input type="file" id="cfg_qr_file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
+              <div style="font-size:1.8rem;margin-bottom:6px">🔲</div>
+              <div style="font-weight:700;font-size:.85rem;color:var(--g8)">Click to upload QR code image</div>
+              <div style="font-size:.7rem;color:var(--tl);margin-top:3px">JPG, PNG — Max 2MB · क्यूआर कोड इमेज अपलोड करें</div>
+            </div>
+            <span style="font-size:.68rem;color:var(--tl);margin-top:4px">Recruiters will scan this QR code to pay ₹1,000 for Premium upgrade</span>
+          </div>
+
+          <!-- QR Preview -->
+          <div id="qr-prev" style="display:none;margin:12px 0;text-align:center">
+            <div style="font-size:.7rem;font-weight:800;color:var(--tl);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Current QR Code</div>
+            <img id="qr-prev-img" src="" alt="QR Preview" style="max-width:200px;border-radius:var(--r2);border:1.5px solid var(--bd);box-shadow:var(--sh)">
+            <div style="margin-top:8px">
+              <button class="btn btn-red btn-sm" id="btn-remove-qr">✕ Remove QR</button>
+            </div>
+          </div>
+
+          <button class="btn btn-g" id="btn-save-pay" style="margin-top:12px">💾 Save Payment Config</button>
+          <div style="font-size:.72rem;color:var(--tl);margin-top:8px;font-family:var(--fh)">सेव करने के बाद भर्तीकर्ताओं को तुरंत दिखेगा</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════ MODAL: STYLIST DETAIL ══════ -->
+<div class="modal-bg" id="mod-stylist">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-hdr">
+      <h3 id="mod-s-title">Hairstylist Profile</h3>
+      <button class="modal-x" onclick="closeMod('mod-stylist')">×</button>
+    </div>
+    <div class="modal-body" id="mod-s-body"></div>
+    <div class="modal-foot">
+      <button class="btn btn-sm ta-ok"  id="mod-btn-verify"  onclick="quickStatus('verified')">✅ Verify</button>
+      <button class="btn btn-sm"        id="mod-btn-pending" onclick="quickStatus('pending')"  style="background:#FEF3C7;color:#92400E;border:none;cursor:pointer">⏳ Pending</button>
+      <button class="btn btn-sm ta-rj"  id="mod-btn-reject"  onclick="quickStatus('rejected')">✗ Reject</button>
+      <button class="btn btn-sm ta-del" onclick="deleteStylest(curStylestId);closeMod('mod-stylist')">🗑 Delete</button>
+      <button class="btn btn-out btn-sm" onclick="closeMod('mod-stylist')" style="margin-left:auto">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODAL: CREATE RECRUITER ══════ -->
+<div class="modal-bg" id="mod-create-rec">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3>Create Recruiter Account</h3>
+      <button class="modal-x" onclick="closeMod('mod-create-rec')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="fg2">
+        <div class="fgrp full">
+          <label class="flbl">Salon Name *</label>
+          <input class="finp" type="text" id="nr_salon" placeholder="Salon Name">
+        </div>
+        <div class="fgrp">
+          <label class="flbl">Phone Number *</label>
+          <input class="finp" type="tel" id="nr_phone" placeholder="10-digit mobile" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'')">
+        </div>
+        <div class="fgrp">
+          <label class="flbl">6-Digit PIN *</label>
+          <input class="finp" type="password" id="nr_pin" placeholder="Set 6-digit PIN" maxlength="6" inputmode="numeric">
+        </div>
+        <div class="fgrp">
+          <label class="flbl">Location</label>
+          <input class="finp" type="text" id="nr_loc" placeholder="City, State">
+        </div>
+        <div class="fgrp">
+          <label class="flbl">Franchise?</label>
+          <select class="finp" id="nr_fran">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+        <div class="fgrp full">
+          <label class="flbl">Address</label>
+          <textarea class="finp" id="nr_addr" placeholder="Full salon address"></textarea>
+        </div>
+        <div class="fgrp">
+          <label class="flbl">Plan</label>
+          <select class="finp" id="nr_plan" onchange="toggleExpiry()">
+            <option value="basic">Basic — Contact details hidden</option>
+            <option value="premium">Premium — Full access</option>
+          </select>
+        </div>
+        <div class="fgrp" id="expiry-grp" style="display:none">
+          <label class="flbl">Premium Expiry Date</label>
+          <input class="finp" type="date" id="nr_expiry">
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-out btn-sm" onclick="closeMod('mod-create-rec')">Cancel</button>
+      <button class="btn btn-g" id="btn-create-rec">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ─────────────────────────────────────────────────────────────
+//  SUPABASE — paste your keys here
+// ─────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://ccdaqcpllhqonkdkrdlq.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_lKG0FnCMjfoTShRUorTH4w_da4SZ7RZ';
+
+let _sb = null;
+function getSupabase() {
+  if (_sb) return _sb;
+  try {
+    if (SUPABASE_URL.includes('YOUR_PROJECT')) return null;
+    _sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  } catch(e) { console.warn('Supabase not available'); }
+  return _sb;
+}
+
+// ─────────────────────────────────────────────────────────────
+//  DATA LAYER — same localStorage keys as recruiter.html
+// ─────────────────────────────────────────────────────────────
+function getStylests() {
+  try { return JSON.parse(localStorage.getItem('bb_stylists')) || []; } catch(e){ return []; }
+}
+function saveStylests(a) { localStorage.setItem('bb_stylists', JSON.stringify(a)); }
+
+function getRecruiters() {
+  try {
+    const raw = localStorage.getItem('bb_recruiters');
+    if (raw) return JSON.parse(raw);
+    const def = defaultRecruiters();
+    localStorage.setItem('bb_recruiters', JSON.stringify(def));
+    return def;
+  } catch(e){ return []; }
+}
+function saveRecruiters(a) { localStorage.setItem('bb_recruiters', JSON.stringify(a)); }
+
+function getPayCfg() {
+  try { return JSON.parse(localStorage.getItem('bb_payment_config') || '{}'); } catch(e){ return {}; }
+}
+
+function defaultRecruiters() {
+  const exp30 = new Date(Date.now() + 30*86400000).toISOString();
+  return [
+    { id:'REC-001', salon_name:'Style King Salon', phone:'9876543000', pin:'123456',
+      location:'Hyderabad', franchise:'yes', address:'Banjara Hills, Hyderabad',
+      plan:'premium', plan_expiry:exp30, plan_requested:false, created_at:'2024-10-01T09:00:00Z' },
+    { id:'REC-002', salon_name:'Trim Masters', phone:'9876543001', pin:'123456',
+      location:'Bangalore', franchise:'no', address:'Koramangala, Bangalore',
+      plan:'basic', plan_expiry:null, plan_requested:false, created_at:'2024-10-05T11:00:00Z' },
+  ];
+}
+
+function rupee(v) { return v && !isNaN(v) ? '₹' + Number(v).toLocaleString('en-IN') : '—'; }
+function fmtDate(d) { return d ? new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) : '—'; }
+
+// ─────────────────────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────────────────────
+let curStylestId = null;
+
+// ─────────────────────────────────────────────────────────────
+//  UI HELPERS
+// ─────────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg, type='ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'on ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.className = '', 3500);
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function switchTab(btn) {
+  const bar  = btn.closest('.tab-bar');
+  const pane = btn.dataset.pane;
+  bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const parent = bar.parentElement;
+  parent.querySelectorAll(':scope > .tab-pane').forEach(p => p.classList.remove('on'));
+  document.getElementById(pane)?.classList.add('on');
+}
+
+function openMod(id)  { document.getElementById(id).classList.add('on'); }
+function closeMod(id) { document.getElementById(id).classList.remove('on'); }
+
+function openLB(src, cap) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-cap').textContent = cap || '';
+  document.getElementById('lb').classList.add('on');
+}
+function closeLB() { document.getElementById('lb').classList.remove('on'); }
+
+// ─────────────────────────────────────────────────────────────
+//  AUTH
+// ─────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('bb_admin') === '1') { showDash(); }
+  else showPage('pg-login');
+
+  // Bind create-rec button after DOM ready
+  document.getElementById('btn-create-rec').addEventListener('click', createRecruiter);
+});
+
+function doLogin() {
+  const u = document.getElementById('a_user').value.trim();
+  const p = document.getElementById('a_pass').value.trim();
+  if (!u || !p) { toast('Enter username and password', 'er'); return; }
+
+  const btn = document.querySelector('#pg-login .btn-g');
+  btn.textContent = 'Logging in…';
+  btn.disabled = true;
+
+  function loginSuccess() {
+    sessionStorage.setItem('bb_admin', '1');
+    btn.textContent = 'Login';
+    btn.disabled = false;
+    showDash();
+  }
+
+  function loginFail(msg) {
+    toast(msg || 'Invalid username or password', 'er');
+    btn.textContent = 'Login';
+    btn.disabled = false;
+  }
+
+  const sb = getSupabase();
+  if (sb) {
+    sb.from('admin_users')
+      .select('username, password_hash')
+      .eq('username', u)
+      .single()
+      .then(({ data, error }) => {
+        if (error || !data) {
+          // If Supabase fails (RLS block, network, etc.) fall back to hardcoded
+          if (u === 'admin' && p === 'admin123') { loginSuccess(); return; }
+          loginFail('Invalid username or password');
+          return;
+        }
+        if (data.password_hash === p) {
+          loginSuccess();
+        } else {
+          loginFail('Invalid username or password');
+        }
+      })
+      .catch(() => {
+        // Network error — fall back to hardcoded
+        if (u === 'admin' && p === 'admin123') { loginSuccess(); return; }
+        loginFail('Connection error — check Supabase keys');
+      });
+  } else {
+    // Supabase not configured — use hardcoded
+    if (u === 'admin' && p === 'admin123') { loginSuccess(); return; }
+    loginFail('Invalid credentials');
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('bb_admin');
+  showPage('pg-login');
+  document.getElementById('btn-logout').style.display = 'none';
+}
+
+// ─────────────────────────────────────────────────────────────
+//  DASHBOARD
+// ─────────────────────────────────────────────────────────────
+function showDash() {
+  document.getElementById('btn-logout').style.display = 'inline-block';
+  showPage('pg-dash');
+  refreshAll(); // Instant render from localStorage
+  syncFromSupabase().then(() => refreshAll()); // Then sync from DB and re-render
+}
+
+// Fetch fresh data from Supabase and update localStorage
+async function syncFromSupabase() {
+  const sb = getSupabase();
+  if (!sb) return;
+  try {
+    // Sync hairstylists
+    const { data: stylists, error: se } = await sb
+      .from('hairstylists')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (!se && stylists) {
+      localStorage.setItem('bb_stylists', JSON.stringify(stylists));
+      console.log(`✅ Admin: loaded ${stylists.length} hairstylists from Supabase`);
+    }
+
+    // Sync recruiters
+    const { data: recruiters, error: re } = await sb
+      .from('recruiters')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (!re && recruiters) {
+      localStorage.setItem('bb_recruiters', JSON.stringify(recruiters));
+      console.log(`✅ Admin: loaded ${recruiters.length} recruiters from Supabase`);
+    }
+  } catch(e) {
+    console.warn('Supabase sync error:', e);
+  }
+}
+
+function refreshAll() {
+  updateStats();
+  renderStylists();
+  renderRecruiters();
+  renderUpgradeRequests();
+}
+
+function updateStats() {
+  const ss = getStylests();
+  const rr = getRecruiters();
+  const upgr = rr.filter(r => r.plan_requested && r.plan !== 'premium').length;
+  document.getElementById('st-total').textContent   = ss.length;
+  document.getElementById('st-verified').textContent= ss.filter(s=>s.status==='verified').length;
+  document.getElementById('st-pending').textContent = ss.filter(s=>s.status==='pending').length;
+  document.getElementById('st-avail').textContent   = ss.filter(s=>s.available).length;
+  document.getElementById('st-recs').textContent    = rr.length;
+  document.getElementById('st-prem').textContent    = rr.filter(r=>r.plan==='premium').length;
+  document.getElementById('st-upgr').textContent    = upgr;
+  const badge = document.getElementById('upg-badge');
+  if (badge) badge.textContent = upgr > 0 ? upgr : '';
+}
+
+// ─────────────────────────────────────────────────────────────
+//  HAIRSTYLISTS TABLE
+// ─────────────────────────────────────────────────────────────
+function renderStylists() {
+  const search = (document.getElementById('f_s_search')?.value||'').toLowerCase();
+  const loc    = (document.getElementById('f_s_loc')?.value||'').toLowerCase();
+  const status = document.getElementById('f_s_status')?.value||'';
+  const avail  = document.getElementById('f_s_avail')?.value||'';
+  const exp    = document.getElementById('f_s_exp')?.value||'';
+
+  let all = getStylests();
+  if (search) all = all.filter(s => s.name.toLowerCase().includes(search) || (s.phone||'').includes(search));
+  if (loc)    all = all.filter(s => (s.home_location||'').toLowerCase().includes(loc));
+  if (status) all = all.filter(s => s.status === status);
+  if (avail)  all = all.filter(s => String(s.available) === avail);
+  if (exp)    all = all.filter(s => s.experience === exp);
+
+  const tbody = document.getElementById('styl-tbody');
+
+  if (!all.length) {
+    tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:28px;color:var(--tl)">No records found</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = all.map(s => {
+    const commits = [s.no_gutka,s.no_weed,s.no_alcohol,s.wear_uniform,s.stay_neat,
+                     s.follow_timing,s.respect_customers,s.keep_clean,s.no_nuisance,
+                     s.performance_target,s.follow_metrics];
+    const score = commits.filter(Boolean).length;
+    const scoreCol = score >= 9 ? 'color:var(--ok)' : score >= 6 ? 'color:var(--or)' : 'color:var(--red)';
+    return `<tr>
+      <td><code>${s.id}</code></td>
+      <td><strong>${s.name}</strong></td>
+      <td>${s.phone||'—'}</td>
+      <td>${s.age||'—'}</td>
+      <td>${s.home_location||'—'}</td>
+      <td>${s.experience||'—'}</td>
+      <td>${rupee(s.max_billing)}/mo</td>
+      <td>${rupee(s.exp_fixed)}/mo</td>
+      <td>${s.available?'<span style="color:var(--ok);font-weight:700">✅ Yes</span>':'<span style="color:var(--tl)">No</span>'}</td>
+      <td style="font-size:.72rem;font-weight:700;${scoreCol}">${score}/11</td>
+      <td><span class="badge badge-${s.status}">${s.status.toUpperCase()}</span></td>
+      <td style="font-size:.7rem;color:var(--tl)">${fmtDate(s.created_at)}</td>
+      <td style="white-space:nowrap">
+        <button class="ta ta-view" onclick="copyProfileLink('${s.id}',this)" title="Copy shareable link">🔗 Copy</button>
+        <a class="ta ta-view" href="register.html?id=${s.id}" target="_blank" title="Open profile link" style="text-decoration:none;margin-left:2px">↗ Open</a>
+      </td>
+      <td>
+        <div class="tbl-acts">
+          <button class="ta ta-view" onclick="viewStylest('${s.id}')">View</button>
+          <button class="ta ta-ok"   onclick="changeStatus('${s.id}','verified')">✅ Verify</button>
+          <button class="ta"         onclick="changeStatus('${s.id}','pending')"  style="background:#FEF3C7;color:#92400E">⏳ Pending</button>
+          <button class="ta ta-rj"   onclick="changeStatus('${s.id}','rejected')">✗ Reject</button>
+          <button class="ta ta-del"  onclick="deleteStylest('${s.id}')">🗑</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function viewStylest(id) {
+  const s = getStylests().find(h => h.id === id);
+  if (!s) return;
+  curStylestId = id;
+  document.getElementById('mod-s-title').textContent = `${s.name} — ${s.id}`;
+
+  // Photos
+  const allPh = [
+    ...(s.selfie_url      ? [{u:s.selfie_url,        l:'Selfie'}]          : []),
+    ...(s.aadhaar_front_url ? [{u:s.aadhaar_front_url, l:'Aadhaar Front'}] : []),
+    ...(s.aadhaar_back_url  ? [{u:s.aadhaar_back_url,  l:'Aadhaar Back'}]  : []),
+    ...(s.full_photo_urls||[]).map((u,i)=>({u,l:`Full ${i+1}`})),
+    ...(s.work_photo_urls||[]).map((u,i)=>({u,l:`Work ${i+1}`})),
+  ];
+
+  const gallery = allPh.length ? `
+    <div class="photo-row">
+      ${allPh.map(p=>`<div style="text-align:center">
+        <img class="pthumb" src="${p.u}" onclick="openLB('${p.u}','${p.l} — ${s.name}')" title="${p.l}">
+        <div class="pthumb-lbl">${p.l}</div>
+      </div>`).join('')}
+    </div>` : '';
+
+  const commits = [
+    ['No Gutka',s.no_gutka],['No Weed',s.no_weed],['No Alcohol',s.no_alcohol],
+    ['Uniform',s.wear_uniform],['Neat & Tidy',s.stay_neat],['Timings',s.follow_timing],
+    ['Respect Cust.',s.respect_customers],['Clean Room',s.keep_clean],['No Nuisance',s.no_nuisance],
+    ['₹60k Target',s.performance_target],['Follow Metrics',s.follow_metrics],
+  ];
+
+  document.getElementById('mod-s-body').innerHTML = `
+    ${gallery}
+    <div class="dg">
+      ${[
+        ['Name',s.name],['Phone',s.phone||'—'],['Age',(s.age||'—')+' yrs'],
+        ['Home Location',s.home_location||'—'],['Address',s.address||'—'],
+        ['Experience',s.experience||'—'],['Max Billing',rupee(s.max_billing)+'/mo'],
+        ['Exp Fixed',rupee(s.exp_fixed)+'/mo'],['Exp Incentive',(s.exp_incentive||'—')+'%'],
+        ['Food Allowance Exp.',rupee(s.exp_food)],['Room',s.exp_room||'—'],
+        ['Prev Fixed',rupee(s.prev_fixed)+'/mo'],['Prev Incentive',(s.prev_incentive||'—')+'%'],
+        ['Prev Location',s.prev_location||'—'],['Available',s.available?'✅ Yes':'⏳ No'],
+        ['Join Timeline',s.join_timeline||'—'],['Reference',s.ref_name||'—'],
+        ['Ref Phone',s.ref_phone||'—'],['Instagram',s.instagram?`<a href="${s.instagram}" target="_blank" style="color:var(--g7)">View ↗</a>`:'—'],
+        ['Status',`<span class="badge badge-${s.status}">${s.status.toUpperCase()}</span>`],
+        ['Registered',fmtDate(s.created_at)],
+      ].map(([k,v])=>`<div class="dc"><div class="dk">${k}</div><div class="dv">${v}</div></div>`).join('')}
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:.68rem;font-weight:800;color:var(--tl);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Commitments / प्रतिबद्धताएं</div>
+      <div>
+        ${commits.map(([l,v])=>`<span class="ctag ${v?'ctag-ok':'ctag-no'}">${v?'✅':'❌'} ${l}</span>`).join('')}
+      </div>
+    </div>
+    ${s.all_locations?`<div style="font-size:.78rem"><strong>All Previous Locations:</strong> ${s.all_locations}</div>`:''}
+  `;
+
+  openMod('mod-stylist');
+}
+
+function changeStatus(id, status) {
+  const all = getStylests();
+  const s   = all.find(h => h.id === id);
+  if (!s) return;
+  s.status = status;
+  saveStylests(all);
+  const sb = getSupabase();
+  if (sb) sb.from('hairstylists').update({ status }).eq('id', id).then(() => {});
+  refreshAll();
+  toast(`Status → ${status}`, 'ok');
+}
+
+function quickStatus(status) {
+  if (curStylestId) changeStatus(curStylestId, status);
+}
+
+function deleteStylest(id) {
+  if (!confirm('Delete this profile? / इस प्रोफ़ाइल को हटाएं?\nThis cannot be undone.')) return;
+  saveStylests(getStylests().filter(h => h.id !== id));
+  const sb = getSupabase();
+  if (sb) sb.from('hairstylists').delete().eq('id', id).then(() => {});
+  refreshAll();
+  toast('Profile deleted', 'in');
+}
+
+function exportCSV() {
+  const ss = getStylests();
+  const headers = ['ID','Name','Phone','Age','Home Location','Experience','Max Billing',
+    'Exp Fixed','Exp Incentive%','Food Allowance','Room','Available','Join Timeline',
+    'Status','Reference','Registered'];
+  const rows = ss.map(s => [
+    s.id,s.name,s.phone,s.age,s.home_location,s.experience,s.max_billing,
+    s.exp_fixed,s.exp_incentive,s.exp_food,s.exp_room,
+    s.available?'Yes':'No',s.join_timeline,s.status,s.ref_name,
+    s.created_at?new Date(s.created_at).toLocaleDateString('en-IN'):''
+  ]);
+  const csv = [headers,...rows].map(r => r.map(v=>`"${v||''}"`).join(',')).join('\n');
+  const a = Object.assign(document.createElement('a'),{
+    href: URL.createObjectURL(new Blob([csv],{type:'text/csv'})),
+    download: `bb-hairstylists-${new Date().toISOString().slice(0,10)}.csv`
+  });
+  a.click();
+  toast('CSV exported / CSV डाउनलोड हो गई', 'ok');
+}
+
+function copyProfileLink(id, btn) {
+  const url = window.location.origin + window.location.pathname.replace('admin.html','') + 'register.html?id=' + id;
+  navigator.clipboard.writeText(url).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+  }).catch(() => {
+    prompt('Copy this link:', url);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────
+//  RECRUITERS TABLE
+// ─────────────────────────────────────────────────────────────
+function renderRecruiters() {
+  const search = (document.getElementById('f_r_search')?.value||'').toLowerCase();
+  const plan   = document.getElementById('f_r_plan')?.value||'';
+  let all = getRecruiters();
+  if (search) all = all.filter(r =>
+    r.salon_name.toLowerCase().includes(search)||
+    (r.phone||'').includes(search)||
+    (r.location||'').toLowerCase().includes(search)
+  );
+  if (plan) all = all.filter(r => r.plan === plan);
+
+  const tbody = document.getElementById('rec-tbody');
+  tbody.innerHTML = all.length ? all.map(r => {
+    const exp      = r.plan_expiry ? new Date(r.plan_expiry) : null;
+    const daysLeft = exp ? Math.ceil((exp - new Date()) / 86400000) : null;
+    const expTxt   = exp ? `${fmtDate(r.plan_expiry)} (${daysLeft}d)` : '—';
+    const expCol   = daysLeft !== null && daysLeft <= 7 ? 'color:var(--red);font-weight:700' : '';
+    return `<tr>
+      <td><code>${r.id}</code></td>
+      <td><strong>${r.salon_name}</strong></td>
+      <td>${r.phone||'—'}</td>
+      <td>
+        <span id="pin-${r.id}" style="filter:blur(4px);cursor:pointer;font-family:monospace;font-weight:700;font-size:.85rem;user-select:none" title="Click to reveal" onclick="revealPin('${r.id}','${r.pin||'—'}')">
+          ●●●●●●
+        </span>
+      </td>
+      <td>${r.location||'—'}</td>
+      <td>${r.franchise==='yes'?'Yes':'No'}</td>
+      <td><span class="badge badge-${r.plan==='premium'?'pm':'bs'}">${r.plan.toUpperCase()}</span></td>
+      <td style="font-size:.7rem;${expCol}">${expTxt}</td>
+      <td style="font-size:.7rem;color:var(--tl)">${fmtDate(r.created_at)}</td>
+      <td>
+        <div class="tbl-acts">
+          <button class="ta ${r.plan==='premium'?'ta-basic':'ta-prem'}" onclick="togglePlan('${r.id}')">
+            ${r.plan==='premium'?'Downgrade':'⭐ Premium'}
+          </button>
+          <button class="ta ta-del" onclick="deleteRecruiter('${r.id}')">🗑</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="10" style="text-align:center;padding:28px;color:var(--tl)">No recruiters found</td></tr>`;
+
+  renderUpgradeRequests();
+}
+
+// Click to reveal PIN — blurred by default, click shows it, click again hides
+function revealPin(id, pin) {
+  const el = document.getElementById('pin-' + id);
+  if (!el) return;
+  if (el.dataset.revealed === '1') {
+    el.textContent = '●●●●●●';
+    el.style.filter = 'blur(4px)';
+    el.title = 'Click to reveal';
+    el.dataset.revealed = '0';
+  } else {
+    el.textContent = pin;
+    el.style.filter = 'none';
+    el.title = 'Click to hide';
+    el.dataset.revealed = '1';
+    // Auto-hide after 10 seconds
+    setTimeout(() => {
+      if (el.dataset.revealed === '1') {
+        el.textContent = '●●●●●●';
+        el.style.filter = 'blur(4px)';
+        el.title = 'Click to reveal';
+        el.dataset.revealed = '0';
+      }
+    }, 10000);
+  }
+}
+
+function renderUpgradeRequests() {
+  const pending = getRecruiters().filter(r => r.plan_requested && r.plan !== 'premium');
+  const badge   = document.getElementById('upg-badge');
+  if (badge) badge.textContent = pending.length > 0 ? pending.length : '';
+
+  const tbody = document.getElementById('upg-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = pending.length ? pending.map(r => `
+    <tr>
+      <td><strong>${r.salon_name}</strong></td>
+      <td>${r.phone||'—'}</td>
+      <td>${r.location||'—'}</td>
+      <td><span class="badge badge-bs">${(r.plan_request_method||'manual').toUpperCase()}</span></td>
+      <td style="font-family:monospace;font-size:.75rem">${r.plan_request_ref||'—'}</td>
+      <td style="font-size:.7rem">${r.plan_request_date?new Date(r.plan_request_date).toLocaleString('en-IN'):'—'}</td>
+      <td>
+        <div class="tbl-acts">
+          <button class="ta ta-prem" onclick="activatePremium('${r.id}')">⭐ Activate</button>
+          <button class="ta ta-del"  onclick="dismissRequest('${r.id}')">✗ Dismiss</button>
+        </div>
+      </td>
+    </tr>
+  `).join('') : `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--tl)">No pending upgrade requests</td></tr>`;
+
+  document.getElementById('st-upgr').textContent = pending.length;
+}
+
+function togglePlan(id) {
+  const all = getRecruiters();
+  const r   = all.find(rec => rec.id === id);
+  if (!r) return;
+  if (r.plan === 'premium') {
+    r.plan = 'basic'; r.plan_expiry = null;
+  } else {
+    r.plan = 'premium';
+    r.plan_expiry = new Date(Date.now() + 30*86400000).toISOString();
+    r.plan_requested = false;
+  }
+  saveRecruiters(all);
+  const sb = getSupabase();
+  if (sb) sb.from('recruiters').update({ plan: r.plan, plan_expiry: r.plan_expiry, plan_requested: r.plan_requested }).eq('id', id).then(() => {});
+  refreshAll();
+  toast(`Plan → ${r.plan.toUpperCase()} ${r.plan==='premium'?'(30 days)':''}`, 'ok');
+}
+
+function activatePremium(id) {
+  const all = getRecruiters();
+  const r   = all.find(rec => rec.id === id);
+  if (!r) return;
+  r.plan = 'premium';
+  r.plan_expiry = new Date(Date.now() + 30*86400000).toISOString();
+  r.plan_requested = false;
+  saveRecruiters(all);
+  const sb = getSupabase();
+  if (sb) sb.rpc('activate_premium', { p_recruiter_id: id, p_days: 30 }).then(() => {});
+  refreshAll();
+  toast(`⭐ Premium activated for ${r.salon_name} — 30 days`, 'ok');
+}
+
+function dismissRequest(id) {
+  const all = getRecruiters();
+  const r   = all.find(rec => rec.id === id);
+  if (!r) return;
+  r.plan_requested = false;
+  saveRecruiters(all);
+  const sb = getSupabase();
+  if (sb) sb.from('recruiters').update({ plan_requested: false }).eq('id', id).then(() => {});
+  refreshAll();
+  toast('Request dismissed', 'in');
+}
+
+function deleteRecruiter(id) {
+  if (!confirm('Delete this recruiter account?')) return;
+  saveRecruiters(getRecruiters().filter(r => r.id !== id));
+  const sb = getSupabase();
+  if (sb) sb.from('recruiters').delete().eq('id', id).then(() => {});
+  refreshAll();
+  toast('Recruiter deleted', 'in');
+}
+
+function toggleExpiry() {
+  const plan = document.getElementById('nr_plan')?.value;
+  const grp  = document.getElementById('expiry-grp');
+  if (!grp) return;
+  grp.style.display = plan === 'premium' ? 'flex' : 'none';
+  if (plan === 'premium' && !document.getElementById('nr_expiry').value) {
+    document.getElementById('nr_expiry').value = new Date(Date.now()+30*86400000).toISOString().slice(0,10);
+  }
+}
+
+function createRecruiter() {
+  const salon = document.getElementById('nr_salon').value.trim();
+  const phone = document.getElementById('nr_phone').value.trim();
+  const pin   = document.getElementById('nr_pin').value.trim();
+  if (!salon)            { toast('Enter salon name', 'er'); return; }
+  if (phone.length < 10) { toast('Enter valid 10-digit phone', 'er'); return; }
+  if (pin.length !== 6)  { toast('Enter 6-digit PIN', 'er'); return; }
+
+  const plan   = document.getElementById('nr_plan').value;
+  const expVal = document.getElementById('nr_expiry')?.value;
+  const expiry = plan === 'premium'
+    ? (expVal ? new Date(expVal).toISOString() : new Date(Date.now()+30*86400000).toISOString())
+    : null;
+
+  const nr = {
+    id: 'REC-' + Date.now(), salon_name: salon, phone, pin,
+    location: document.getElementById('nr_loc').value.trim(),
+    address:  document.getElementById('nr_addr').value.trim(),
+    franchise: document.getElementById('nr_fran').value,
+    plan, plan_expiry: expiry, plan_requested: false,
+    created_at: new Date().toISOString()
+  };
+
+  const btn = document.getElementById('btn-create-rec');
+  btn.textContent = 'Creating…'; btn.disabled = true;
+
+  function onSuccess() {
+    btn.textContent = 'Create Account'; btn.disabled = false;
+    const all = getRecruiters();
+    // Only add if not already there (Supabase might have added it)
+    if (!all.find(r => r.phone === phone)) { all.push(nr); saveRecruiters(all); }
+    refreshAll(); closeMod('mod-create-rec');
+    toast('Recruiter account created! ✅', 'ok');
+    ['nr_salon','nr_phone','nr_pin','nr_loc','nr_addr'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.value='';
+    });
+  }
+
+  function onError(msg) {
+    btn.textContent = 'Create Account'; btn.disabled = false;
+    toast(msg, 'er');
+  }
+
+  const sb = getSupabase();
+  if (sb) {
+    sb.from('recruiters').insert(nr).then(({ error }) => {
+      if (error) {
+        if (error.code === '23505') onError('Phone already registered');
+        else onError('Error: ' + error.message);
+        return;
+      }
+      onSuccess();
+    });
+  } else {
+    // No Supabase — localStorage only
+    const all = getRecruiters();
+    if (all.find(r => r.phone === phone)) { onError('Phone already registered'); return; }
+    onSuccess();
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+//  PAYMENT CONFIG
+// ─────────────────────────────────────────────────────────────
+function loadPayConfig() {
+  const cfg = getPayCfg();
+  const upiEl = document.getElementById('cfg_upi');
+  if (upiEl) upiEl.value = cfg.upi_id || '';
+
+  // Show existing QR if saved
+  if (cfg.qr_image_url) showQRPreview(cfg.qr_image_url);
+  else hideQRPreview();
+
+  // File input handler — convert to base64 and preview immediately
+  const fileInput = document.getElementById('cfg_qr_file');
+  const dropzone  = document.getElementById('qr-dropzone');
+  if (fileInput) {
+    fileInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) { toast('Image too large — max 2MB', 'er'); return; }
+      const reader = new FileReader();
+      reader.onload = e => {
+        showQRPreview(e.target.result);
+        dropzone.style.borderColor = 'var(--g7)';
+        dropzone.style.background  = 'var(--g0)';
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Remove QR button
+  const removeBtn = document.getElementById('btn-remove-qr');
+  if (removeBtn) {
+    removeBtn.addEventListener('click', () => {
+      hideQRPreview();
+      if (fileInput) fileInput.value = '';
+      if (dropzone) { dropzone.style.borderColor=''; dropzone.style.background=''; }
+    });
+  }
+
+  // Save button
+  const saveBtn = document.getElementById('btn-save-pay');
+  if (saveBtn) saveBtn.addEventListener('click', savePayConfig);
+}
+
+function showQRPreview(src) {
+  const pv  = document.getElementById('qr-prev');
+  const img = document.getElementById('qr-prev-img');
+  if (pv && img) { img.src = src; pv.style.display = 'block'; }
+}
+
+function hideQRPreview() {
+  const pv = document.getElementById('qr-prev');
+  if (pv) pv.style.display = 'none';
+}
+
+function savePayConfig() {
+  const upi  = (document.getElementById('cfg_upi')?.value || '').trim();
+  const img  = document.getElementById('qr-prev-img');
+  // Use the previewed image src (base64 from upload, or existing URL)
+  const qrSrc = (img && img.src && img.src !== window.location.href) ? img.src : '';
+
+  const cfg = {
+    upi_id:        upi,
+    qr_image_url:  qrSrc,
+    // Keep any existing gateway keys intact (don't wipe them)
+    razorpay_key:   getPayCfg().razorpay_key   || '',
+    cashfree_appid: getPayCfg().cashfree_appid || '',
+  };
+  localStorage.setItem('bb_payment_config', JSON.stringify(cfg));
+  toast('Payment config saved! / भुगतान सेटअप सहेजा गया ✅', 'ok');
+}
+</script>
+</body>
+</html>
