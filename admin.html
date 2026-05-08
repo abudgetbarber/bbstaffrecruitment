@@ -272,7 +272,7 @@ textarea.finp{resize:vertical;min-height:60px}
           <tr>
             <th>Reg ID</th><th>Name</th><th>Phone</th><th>Age</th><th>Home Location</th>
             <th>Experience</th><th>Max Billing</th><th>Exp Salary</th>
-            <th>Avail</th><th>Commits</th><th>Status</th><th>Registered</th><th>Actions</th>
+            <th>Avail</th><th>Commits</th><th>Status</th><th>Registered</th><th>Profile Link</th><th>Actions</th>
           </tr>
         </thead>
         <tbody id="styl-tbody"></tbody>
@@ -700,7 +700,7 @@ function renderStylists() {
   const tbody = document.getElementById('styl-tbody');
 
   if (!all.length) {
-    tbody.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:28px;color:var(--tl)">No records found</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:28px;color:var(--tl)">No records found</td></tr>`;
     return;
   }
 
@@ -723,6 +723,10 @@ function renderStylists() {
       <td style="font-size:.72rem;font-weight:700;${scoreCol}">${score}/11</td>
       <td><span class="badge badge-${s.status}">${s.status.toUpperCase()}</span></td>
       <td style="font-size:.7rem;color:var(--tl)">${fmtDate(s.created_at)}</td>
+      <td style="white-space:nowrap">
+        <button class="ta ta-view" onclick="copyProfileLink('${s.id}',this)" title="Copy shareable link">🔗 Copy</button>
+        <a class="ta ta-view" href="register.html?id=${s.id}" target="_blank" title="Open profile link" style="text-decoration:none;margin-left:2px">↗ Open</a>
+      </td>
       <td>
         <div class="tbl-acts">
           <button class="ta ta-view" onclick="viewStylest('${s.id}')">View</button>
@@ -838,6 +842,17 @@ function exportCSV() {
   });
   a.click();
   toast('CSV exported / CSV डाउनलोड हो गई', 'ok');
+}
+
+function copyProfileLink(id, btn) {
+  const url = window.location.origin + window.location.pathname.replace('admin.html','') + 'register.html?id=' + id;
+  navigator.clipboard.writeText(url).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+  }).catch(() => {
+    prompt('Copy this link:', url);
+  });
 }
 
 // ─────────────────────────────────────────────────────────────
