@@ -270,7 +270,7 @@ textarea.finp{resize:vertical;min-height:60px}
       <table class="dtbl">
         <thead>
           <tr>
-            <th>Reg ID</th><th>Profile Link</th><th>Name</th><th>Phone</th><th>Age</th><th>Home Location</th>
+            <th>Reg ID</th><th>Profile Link</th><th>Name</th><th>Phone</th><th>PIN</th><th>Age</th><th>Home Location</th>
             <th>Experience</th><th>Max Billing</th><th>Exp Salary</th>
             <th>Avail</th><th>Commits</th><th>Status</th><th>Registered</th><th>Actions</th>
           </tr>
@@ -700,7 +700,7 @@ function renderStylists() {
   const tbody = document.getElementById('styl-tbody');
 
   if (!all.length) {
-    tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:28px;color:var(--tl)">No records found</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="15" style="text-align:center;padding:28px;color:var(--tl)">No records found</td></tr>`;
     return;
   }
 
@@ -718,6 +718,7 @@ function renderStylists() {
       </td>
       <td><strong>${s.name}</strong></td>
       <td>${s.phone||'—'}</td>
+      <td><span style="filter:blur(4px);cursor:pointer;font-family:monospace;font-weight:700;font-size:.85rem;user-select:none" title="Click to reveal" onclick="this.style.filter='none'">${s.pin||'—'}</span></td>
       <td>${s.age||'—'}</td>
       <td>${s.home_location||'—'}</td>
       <td>${s.experience||'—'}</td>
